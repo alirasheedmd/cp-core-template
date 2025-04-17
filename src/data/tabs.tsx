@@ -14,24 +14,24 @@ export const adminTabs: IAdminTab[] = [
   {
     name: "Dashboard",
     icon: <GoHome className="text-xl" />,
-    href: "/dashboard",
+    href: "/admin/dashboard",
   },
   // {
   //   name: "Orders",
   //   icon: <BiCart className="text-xl" />,
-  //   href: "/orders",
+  //   href: "/admin/orders",
   // },
   {
     name: "Products",
     icon: <BsTag className="text-xl" />,
-    href: "/products",
+    href: "/admin/products",
   },
 ];
 
 export const adminSettingsTab: IAdminTab = {
   name: "Settings",
   icon: <IoSettingsOutline className="text-xl" />,
-  href: "/settings",
+  href: "/admin/settings",
 };
 
 ///////////////////////////////////// Product tabs //////////////////////////////////////

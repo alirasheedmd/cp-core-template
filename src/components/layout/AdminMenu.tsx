@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { adminTabs } from "@/data/adminTabs";
+import { adminTabs } from "@/data/tabs";
 import { useState } from "react";
 
 export default function AdminMenu() {

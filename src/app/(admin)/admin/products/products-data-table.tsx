@@ -29,7 +29,9 @@ interface DataTableProps<TData, TValue> {
   onRowSelectionChange: (selectedData: TData[]) => void;
   clearSelectionTrigger?: boolean;
   sortConfig?: { type: "date" | "name"; direction: "asc" | "desc" } | null;
-  onSortChange?: (sortConfig: { type: "date" | "name"; direction: "asc" | "desc" } | null) => void;
+  onSortChange?: (
+    sortConfig: { type: "date" | "name"; direction: "asc" | "desc" } | null,
+  ) => void;
 }
 
 export function ProductsDataTable<TData, TValue>({
@@ -37,8 +39,8 @@ export function ProductsDataTable<TData, TValue>({
   data,
   onRowSelectionChange,
   clearSelectionTrigger,
-  sortConfig,
-  onSortChange,
+  // sortConfig,
+  // onSortChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});

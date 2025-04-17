@@ -1,5 +1,5 @@
 "use client";
-import { adminSettingsTab, adminTabs } from "@/data/adminTabs";
+import { adminSettingsTab, adminTabs } from "@/data/tabs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

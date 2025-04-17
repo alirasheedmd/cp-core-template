@@ -1,6 +1,6 @@
 "use client";
 // React imports
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // UI Component imports
 import {
   Dialog,
@@ -21,6 +21,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { productsColumns } from "./products-columns";
 import { productsTabs } from "@/data/tabs";
 import { IProduct } from "@/types";
+import { products as dummyProducts } from "@/data/dummyProducts"; // Import dummy data
 // Next.js
 import Link from "next/link";
 
@@ -35,63 +36,7 @@ export default function AdminProductsPage() {
     type: "date" | "name";
     direction: "asc" | "desc";
   } | null>(null);
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Build API query parameters
-  const buildQueryParams = () => {
-    const params = new URLSearchParams();
-    params.append("page", "1");
-    params.append("limit", "50");
-
-    // Add search query if present
-    if (query) {
-      params.append("search", query);
-    }
-
-    // Add tab filter (except for all-products tab)
-    if (selectedTab && selectedTab !== "all-products") {
-      params.append("status", selectedTab);
-    }
-
-    // Add sorting if configured
-    if (sortConfig) {
-      params.append(
-        "sortBy",
-        sortConfig.type === "name" ? "name" : "createdAt",
-      );
-      params.append("sortOrder", sortConfig.direction);
-    }
-
-    return params;
-  };
-
-  // Fetch products from API
-  const fetchProducts = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const params = buildQueryParams();
-      const response = await fetch(`/api/admin/products?${params.toString()}`);
-      console.log(response);
-      if (!response.ok) {
-        throw new Error("Failed to fetch products");
-      }
-      const data = await response.json();
-      setProducts(data.products || []);
-    } catch (err) {
-      console.error("Error fetching products:", err);
-      setError("Failed to load products. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch products on mount and when filters change
-  useEffect(() => {
-    fetchProducts();
-  }, [query, selectedTab, sortConfig]);
+  const products = dummyProducts; // Initialize products directly
 
   // Handle clearing the search input
   const clearInput = () => {
@@ -148,10 +93,10 @@ export default function AdminProductsPage() {
   const handleAction = async () => {
     setIsDeleting(true);
     try {
-      // await deleteProducts(selectedRows.map((row) => row.id || ""));
+      // await deleteProducts(selectedRows.map((row) => row._id || ""));
 
       // Refetch products after deletion
-      await fetchProducts();
+      // await fetchProducts();
 
       setSelectedRows([]); // Clear the selection
       setClearSelectionTrigger((prev) => !prev); // Toggle the trigger to clear the table selection
@@ -163,7 +108,7 @@ export default function AdminProductsPage() {
     }
   };
 
-  console.log(filteredProducts);
+  // console.log(filteredProducts);
   return (
     <div className="w-full">
       <h1 className="p-6 text-2xl font-semibold lg:mb-4 lg:p-0 lg:text-4xl">
@@ -172,7 +117,7 @@ export default function AdminProductsPage() {
 
       {/* Add Product Button */}
       <div className="my-2 flex justify-end">
-        <Link href="/products/add">
+        <Link href="/admin/products/add">
           <button className="rounded-lg bg-gray-700 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-black">
             Add Product
           </button>
@@ -283,16 +228,16 @@ export default function AdminProductsPage() {
 
       {/* Tab Content */}
       <div className="h-full">
-        {/* Loading state */}
-        {isLoading && (
+        {/* Loading state - Removed as data is static */}
+        {/* {isLoading && (
           <div className="flex h-[40vh] flex-col items-center justify-center gap-3">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-orange-500"></div>
             <p className="text-sm">Loading products...</p>
           </div>
-        )}
+        )} */}
 
-        {/* Error state */}
-        {error && !isLoading && (
+        {/* Error state - Removed as data is static */}
+        {/* {error && !isLoading && (
           <div className="flex h-[40vh] flex-col items-center justify-center gap-3">
             <div className="text-xl text-red-500">⚠️</div>
             <p className="text-sm text-red-500">{error}</p>
@@ -303,38 +248,32 @@ export default function AdminProductsPage() {
               Retry
             </button>
           </div>
-        )}
+        )} */}
 
         {/* No products available */}
-        {!isLoading &&
-          !error &&
-          filteredProducts.length === 0 &&
-          selectedTab === "all-products" && (
-            <div className="flex h-[40vh] flex-col items-center justify-center gap-3">
-              <PiPackageThin className="text-[6rem] text-gray-300" />
-              <p className="text-sm">No products available</p>
-            </div>
-          )}
+        {filteredProducts.length === 0 && selectedTab === "all-products" && (
+          <div className="flex h-[40vh] flex-col items-center justify-center gap-3">
+            <PiPackageThin className="text-[6rem] text-gray-300" />
+            <p className="text-sm">No products available</p>
+          </div>
+        )}
 
         {/* No products in selected tab */}
-        {!isLoading &&
-          !error &&
-          filteredProducts.length === 0 &&
-          selectedTab !== "all-products" && (
-            <div className="flex h-[40vh] flex-col items-center justify-center gap-3">
-              <PiPackageThin className="text-[6rem] text-gray-300" />
-              <p className="text-sm">
-                No{" "}
-                <span className="lowercase">
-                  {productsTabs.find((tab) => tab.id === selectedTab)?.name}
-                </span>{" "}
-                products available
-              </p>
-            </div>
-          )}
+        {filteredProducts.length === 0 && selectedTab !== "all-products" && (
+          <div className="flex h-[40vh] flex-col items-center justify-center gap-3">
+            <PiPackageThin className="text-[6rem] text-gray-300" />
+            <p className="text-sm">
+              No{" "}
+              <span className="lowercase">
+                {productsTabs.find((tab) => tab.id === selectedTab)?.name}
+              </span>{" "}
+              products available
+            </p>
+          </div>
+        )}
 
         {/* Products data table */}
-        {!isLoading && !error && filteredProducts.length > 0 && (
+        {filteredProducts.length > 0 && (
           <>
             <div className="hidden lg:block">
               <ProductsDataTable
@@ -351,7 +290,7 @@ export default function AdminProductsPage() {
               <div className="space-y-4 p-2">
                 {filteredProducts.map((product) => (
                   <div
-                    key={product.id}
+                    key={product._id}
                     className="rounded-lg bg-white p-4 shadow-sm"
                   >
                     <h3 className="text-lg font-semibold">{product.name}</h3>
@@ -373,7 +312,7 @@ export default function AdminProductsPage() {
                       >
                         {product.status === "active" ? "Active" : "Draft"}
                       </span>
-                      <Link href={`/products/edit/${product.id}`}>
+                      <Link href={`/products/edit/${product._id}`}>
                         <button className="text-xs text-orange-600 hover:underline">
                           Edit
                         </button>

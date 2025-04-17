@@ -1,6 +1,6 @@
 "use client";
 
-import { IProduct } from "@/utils/interface";
+import { IProduct } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   Popover,
@@ -54,15 +54,15 @@ export const productsColumns: ColumnDef<IProduct>[] = [
     },
     cell: ({ row }) => {
       const name: string = row.getValue("name");
-      const _id: string = row.original.id || "";
+      const _id: string = row.original._id || "";
       return (
         <Link
-          href={`/products/${_id}`}
+          href={`/admin/products/${_id}`}
           className="ml-4 flex w-fit items-center gap-x-2 transition-colors hover:text-orange-600"
         >
           <div className="relative h-8 w-8 rounded-md bg-white">
             <Image
-              src={row.original.mainImage || (row.original.variants?.[0]?.images?.[0].url || '/placeholder.jpg')}
+              src={row.original.images[0] || "/placeholder.jpg"}
               alt={name}
               fill
               className="object-contain"
@@ -117,7 +117,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
     header: "Category",
     cell: ({ row }) => {
       const category = row.original.category;
-      return <div>{category || "Uncategorized"}</div>;
+      return <div>{category?.name || "Uncategorized"}</div>;
     },
   },
   // Price column
@@ -125,8 +125,10 @@ export const productsColumns: ColumnDef<IProduct>[] = [
     accessorKey: "price",
     header: "Price",
     cell: ({ row }) => {
-      const price = row.original.variants?.[0]?.discountPrice || 
-                    row.original.variants?.[0]?.originalPrice || 0;
+      const price =
+        row.original.variants?.[0]?.discountPrice ||
+        row.original.variants?.[0]?.originalPrice ||
+        0;
       return <div>Rs. {price.toLocaleString("en-PK")}</div>;
     },
   },
@@ -188,7 +190,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
                     className="mt-2 flex h-14 gap-x-1 rounded-lg bg-white p-2 shadow-md"
                   >
                     <Image
-                      src={variant.images?.[0]?.url || '/placeholder.jpg'}
+                      src={variant.images?.[0] || "/placeholder.jpg"}
                       height={40}
                       width={40}
                       className="object-contain"
@@ -201,9 +203,13 @@ export const productsColumns: ColumnDef<IProduct>[] = [
                     <div className="text-right">
                       <p className="whitespace-nowrap">
                         Rs.{" "}
-                        {(variant.discountPrice || variant.originalPrice || 0).toLocaleString("en-PK")}
+                        {(
+                          variant.discountPrice ||
+                          variant.originalPrice ||
+                          0
+                        ).toLocaleString("en-PK")}
                       </p>
-                      <p className="whitespace-nowrap text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-xs whitespace-nowrap">
                         Stock: {variant.stock}
                       </p>
                     </div>
