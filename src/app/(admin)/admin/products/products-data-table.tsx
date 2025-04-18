@@ -28,10 +28,6 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   onRowSelectionChange: (selectedData: TData[]) => void;
   clearSelectionTrigger?: boolean;
-  sortConfig?: { type: "date" | "name"; direction: "asc" | "desc" } | null;
-  onSortChange?: (
-    sortConfig: { type: "date" | "name"; direction: "asc" | "desc" } | null,
-  ) => void;
 }
 
 export function ProductsDataTable<TData, TValue>({
@@ -39,8 +35,6 @@ export function ProductsDataTable<TData, TValue>({
   data,
   onRowSelectionChange,
   clearSelectionTrigger,
-  // sortConfig,
-  // onSortChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -60,7 +54,6 @@ export function ProductsDataTable<TData, TValue>({
     },
   });
 
-  // Compute selected rows as a memoized value
   const selectedRows = useMemo(
     () => table.getSelectedRowModel().rows.map((row) => row.original),
     [rowSelection, table],
@@ -90,13 +83,12 @@ export function ProductsDataTable<TData, TValue>({
   }, [debouncedClearSelection]);
 
   useEffect(() => {
-    onRowSelectionChange(selectedRows); // Notify parent on change
+    onRowSelectionChange(selectedRows);
   }, [selectedRows, onRowSelectionChange]);
 
   return (
     <>
-      {/* Table Container with max height and scrolling */}
-      <div className="scrollbar max-h-[calc(100vh-280px)] overflow-auto rounded-b-xl border shadow-lg">
+      <div className="scrollbar bg-LightWhite max-h-[calc(100vh-280px)] overflow-auto rounded-b-xl border shadow-lg">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -148,8 +140,6 @@ export function ProductsDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
-      {/* Pagination */}
       <DataTablePagination table={table} />
     </>
   );

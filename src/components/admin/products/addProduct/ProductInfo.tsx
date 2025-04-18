@@ -1,49 +1,94 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema, ProductFormValues } from "@/lib/schemas/productSchema";
 import LeftSideForm from "./LeftSideForm";
 import RightSideForm from "./RightSideForm";
 import { FormProvider } from "react-hook-form";
+import { z } from "zod";
+import { useActionState } from "react";
+import { createProduct, type ActionState } from "@/app/actions/product";
+import { useRouter } from "next/navigation";
+import { useRef, startTransition, useEffect } from "react";
+
+export const productSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  sku: z.string().min(1, "SKU is required"),
+  barcode: z.string().optional(),
+  description: z.string().min(1, "Description is required"),
+  status: z.enum(["active", "inactive"]),
+  publishDate: z.string().min(1, "Publish date is required"),
+  images: z.array(z.string()).optional(),
+});
+
+export type ProductFormValues = z.infer<typeof productSchema>;
 
 export default function ProductInfo() {
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction] = useActionState<ActionState, FormData>(
+    async (_prevState, formData) => createProduct(formData),
+    { status: "idle" },
+  );
+
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      status: "draft",
+      status: "active",
       publishDate: new Date().toISOString().split("T")[0],
+      ...(state?.data ?? {}),
     },
   });
 
   const {
     handleSubmit,
+    setError,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data: ProductFormValues) => {
-    console.log(data);
-    // Handle form submission
+  const onSubmit = () => {
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
+    startTransition(() => {
+      formAction(formData);
+    });
   };
+
+  // Handle server-side validation errors
+  useEffect(() => {
+    if (state?.status === "error" && state.errors) {
+      Object.entries(state.errors).forEach(([field, errors]) => {
+        setError(field as keyof ProductFormValues, {
+          type: "server",
+          message: errors[0],
+        });
+      });
+    }
+  }, [state, setError]);
+
+  // Redirect on success
+  useEffect(() => {
+    if (state?.status === "success") {
+      router.push("/admin/products");
+    }
+  }, [state?.status, router]);
+
+  const isPending = state?.status === "submitting";
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
           {/* Left Side */}
           <div className="basis-[70%] space-y-5">
-            <div className="bg-white px-2 py-4 lg:rounded-lg lg:p-4">
-              <div className="mt-4">
-                <LeftSideForm />
-              </div>
+            <div className="rounded-lg bg-white p-3">
+              <LeftSideForm />
             </div>
           </div>
 
           {/* Right Side */}
           <div className="basis-[30%] space-y-5">
-            <div className="bg-white px-2 py-4 lg:rounded-lg lg:p-4">
-              <div className="mt-4">
-                <RightSideForm />
-              </div>
+            <div className="rounded-lg bg-white p-3">
+              <RightSideForm />
             </div>
           </div>
         </div>
@@ -58,12 +103,17 @@ export default function ProductInfo() {
           </button>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isPending || isSubmitting}
             className="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isPending || isSubmitting ? "Saving..." : "Save"}
           </button>
         </div>
+
+        {/* Show general error message */}
+        {state?.status === "error" && state.message && (
+          <p className="mt-2 text-sm text-red-600">{state.message}</p>
+        )}
       </form>
     </FormProvider>
   );

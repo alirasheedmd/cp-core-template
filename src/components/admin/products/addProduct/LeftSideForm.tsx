@@ -1,7 +1,9 @@
 "use client";
 import { useFormContext } from "react-hook-form";
-import { ProductFormValues } from "@/lib/schemas/productSchema";
-// import { CldUploadWidget } from "next-cloudinary";
+import { ProductFormValues } from "./ProductInfo";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function LeftSideForm() {
   const {
@@ -11,45 +13,63 @@ export default function LeftSideForm() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Title</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="title" className="text-sm">
+          Title
+        </Label>
+        <Input
+          id="title"
           {...register("title")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Enter product title"
+          className={`${errors.title ? "border-destructive" : "border-black"}`}
         />
         {errors.title && (
-          <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+          <p className="text-destructive text-sm">{errors.title.message}</p>
         )}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">SKU</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="sku" className="text-sm">
+          SKU
+        </Label>
+        <Input
+          id="sku"
           {...register("sku")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Enter product sku"
+          className={`${errors.sku ? "border-destructive" : "border-black"}`}
         />
         {errors.sku && (
-          <p className="mt-1 text-sm text-red-600">{errors.sku.message}</p>
+          <p className="text-destructive text-sm">{errors.sku.message}</p>
         )}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Barcode (Optional)</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="barcode" className="text-sm">
+          Barcode (Optional)
+        </Label>
+        <Input
+          id="barcode"
           {...register("barcode")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Enter product barcode"
+          className={`${errors.barcode ? "border-destructive" : "border-black"}`}
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
-        <textarea
+      <div className="space-y-2">
+        <Label htmlFor="description" className="text-sm">
+          Description
+        </Label>
+        <Textarea
+          id="description"
           {...register("description")}
+          placeholder="Enter product description"
           rows={4}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className={`${errors.description ? "border-destructive" : "border-black"} h-48`}
         />
         {errors.description && (
-          <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+          <p className="text-destructive text-sm">
+            {errors.description.message}
+          </p>
         )}
       </div>
 
@@ -74,4 +94,4 @@ export default function LeftSideForm() {
       </div> */}
     </div>
   );
-} 
+}

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import Link from "next/link";
+import { format, parseISO } from "date-fns";
 
 export const productsColumns: ColumnDef<IProduct>[] = [
   // Checkbox column
@@ -25,6 +26,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        className="bg-white"
       />
     ),
     cell: ({ row }) => (
@@ -32,6 +34,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        className="bg-white"
       />
     ),
     enableSorting: false,
@@ -45,7 +48,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="font-bold"
+          className="font-semibold"
         >
           Product Name
           <ArrowUpDown className="h-2 w-2" />
@@ -58,7 +61,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return (
         <Link
           href={`/admin/products/${_id}`}
-          className="ml-4 flex w-fit items-center gap-x-2 transition-colors hover:text-orange-600"
+          className="ml-3 flex w-fit items-center gap-x-2 transition-colors hover:text-orange-600"
         >
           <div className="relative h-8 w-8 rounded-md bg-white">
             <Image
@@ -76,12 +79,14 @@ export const productsColumns: ColumnDef<IProduct>[] = [
   // Status column
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => {
+      return <h6 className="font-semibold">Status</h6>;
+    },
     cell: ({ row }) => {
       const status = row.original.status;
       return (
         <div
-          className={`w-14 rounded-full px-2 py-1 text-center text-sm ${
+          className={`w-14 rounded-full px-1 py-0.5 text-center text-sm ${
             status === "active" ? "bg-green-200" : "bg-yellow-200"
           }`}
         >
@@ -93,7 +98,9 @@ export const productsColumns: ColumnDef<IProduct>[] = [
   // Stock column
   {
     accessorKey: "inventory",
-    header: "Inventory",
+    header: () => {
+      return <h6 className="font-semibold">Inventory</h6>;
+    },
     cell: ({ row }) => {
       const variants = row.original.variants;
       const totalStock = variants.reduce(
@@ -114,7 +121,9 @@ export const productsColumns: ColumnDef<IProduct>[] = [
   // Category column
   {
     accessorKey: "category",
-    header: "Category",
+    header: () => {
+      return <h6 className="font-semibold">Category</h6>;
+    },
     cell: ({ row }) => {
       const category = row.original.category;
       return <div>{category?.name || "Uncategorized"}</div>;
@@ -123,7 +132,9 @@ export const productsColumns: ColumnDef<IProduct>[] = [
   // Price column
   {
     accessorKey: "price",
-    header: "Price",
+    header: () => {
+      return <h6 className="font-semibold">Price</h6>;
+    },
     cell: ({ row }) => {
       const price =
         row.original.variants?.[0]?.discountPrice ||
@@ -135,7 +146,9 @@ export const productsColumns: ColumnDef<IProduct>[] = [
   // Vendor column
   {
     accessorKey: "vendor",
-    header: "Vendor",
+    header: () => {
+      return <h6 className="font-semibold">Vendor</h6>;
+    },
     cell: () => {
       return <div>Ali Rasheed</div>;
     },
@@ -148,7 +161,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0 font-bold"
+          className="font-semibold"
         >
           Created At
           <ArrowUpDown className="h-2 w-2" />
@@ -156,19 +169,23 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = new Date(row.getValue("createdAt"));
-      const formatted = date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      });
-      return <div>{formatted}</div>;
+      const dateValue = row.getValue("createdAt") as string; // Explicitly type as string
+      const date = parseISO(dateValue); // Parse ISO string to Date
+      const formatted = format(date, "dd/MM/yyyy");
+      return <div className="ml-3">{formatted}</div>;
+    },
+    sortingFn: (rowA, rowB, columnId) => {
+      const dateA = parseISO(rowA.getValue(columnId));
+      const dateB = parseISO(rowB.getValue(columnId));
+      return dateA.getTime() - dateB.getTime();
     },
   },
   // Variants column
   {
     accessorKey: "variants",
-    header: "Variants",
+    header: () => {
+      return <h6 className="font-semibold">Variants</h6>;
+    },
     cell: ({ row }) => {
       const variants = row.original.variants;
       return (

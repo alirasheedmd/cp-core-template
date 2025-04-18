@@ -16,7 +16,7 @@ export default function AdminLayout({
   return (
     <div className="w-full bg-black">
       <AdminHeader />
-      <div className="h-[calc(100vh-63px)] rounded-t-2xl bg-[#f1f1f1]">
+      <div className="bg-LightWhite h-[calc(100vh-63px)] rounded-t-2xl">
         <div className="flex h-[calc(100vh-63px)] items-start">
           <AdminSidebar />
           <div className="h-[calc(100vh-63px)] w-full overflow-y-scroll rounded-t-2xl lg:p-5">

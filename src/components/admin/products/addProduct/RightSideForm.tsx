@@ -1,41 +1,75 @@
-"use client";	
+"use client";
 import { useFormContext } from "react-hook-form";
-import { ProductFormValues } from "@/lib/schemas/productSchema";
+import { ProductFormValues } from "./ProductInfo";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { DatePicker } from "@/components/common/DatePicker";
 
 export default function RightSideForm() {
   const {
-    register,
     formState: { errors },
+    setValue,
+    watch,
   } = useFormContext<ProductFormValues>();
+
+  const status = watch("status");
+  const publishDate = watch("publishDate");
+
+  // Convert string date to Date object for the DatePicker
+  const dateValue = publishDate ? new Date(publishDate) : undefined;
 
   return (
     <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Status</label>
-        <select
-          {...register("status")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      <div className="space-y-2">
+        <Label htmlFor="status">Status</Label>
+        <Select
+          value={status}
+          onValueChange={(value: "active" | "inactive") =>
+            setValue("status", value)
+          }
         >
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
-          <option value="archived">Archived</option>
-        </select>
+          <SelectTrigger
+            id="status"
+            className={`${errors.status ? "border-destructive" : "border-black"} w-full`}
+          >
+            <SelectValue placeholder="Select status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
+          </SelectContent>
+        </Select>
         {errors.status && (
-          <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
+          <p className="text-destructive text-sm">{errors.status.message}</p>
         )}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Publish Date</label>
-        <input
-          type="date"
-          {...register("publishDate")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      <div className="space-y-2">
+        <Label htmlFor="publishDate">Publish / Restock Date</Label>
+        <DatePicker
+          date={dateValue}
+          onChange={(date) => {
+            if (date) {
+              setValue("publishDate", date.toISOString().split("T")[0]);
+            } else {
+              setValue("publishDate", "");
+            }
+          }}
+          label="Select publish date"
+          className={`${errors.publishDate ? "border-destructive" : "border-black"}`}
         />
         {errors.publishDate && (
-          <p className="mt-1 text-sm text-red-600">{errors.publishDate.message}</p>
+          <p className="text-destructive text-sm">
+            {errors.publishDate.message}
+          </p>
         )}
       </div>
     </div>
   );
-} 
+}
