@@ -20,8 +20,7 @@ import {
 } from "@/components/ui/table";
 
 import { DataTablePagination } from "@/components/admin/orders/orderTable/DataTablePagination";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { debounce } from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -59,28 +58,20 @@ export function ProductsDataTable<TData, TValue>({
     [rowSelection, table],
   );
 
-  const debouncedClearSelection = useRef(
-    debounce(() => {
-      setRowSelection({});
-      onRowSelectionChange([]);
-    }, 100),
-  ).current;
+  const clearSelection = () => {
+    setRowSelection({});
+    onRowSelectionChange([]);
+  };
 
   useEffect(() => {
     if (
       clearSelectionTrigger !== undefined &&
       clearSelectionTrigger !== lastClearTrigger
     ) {
-      debouncedClearSelection();
+      clearSelection();
       setLastClearTrigger(clearSelectionTrigger);
     }
-  }, [clearSelectionTrigger, lastClearTrigger, debouncedClearSelection]);
-
-  useEffect(() => {
-    return () => {
-      debouncedClearSelection.cancel();
-    };
-  }, [debouncedClearSelection]);
+  }, [clearSelectionTrigger, lastClearTrigger]);
 
   useEffect(() => {
     onRowSelectionChange(selectedRows);
@@ -144,3 +135,5 @@ export function ProductsDataTable<TData, TValue>({
     </>
   );
 }
+
+export default ProductsDataTable;
