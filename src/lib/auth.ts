@@ -1,3 +1,5 @@
+'use server'
+
 import { compare, hash } from 'bcrypt'
 import { nanoid } from 'nanoid'
 import { cookies } from 'next/headers'
@@ -46,6 +48,8 @@ export async function createUser(
   email: string,
   password: string,
   isAdmin: boolean = false,
+  firstName: string,
+  lastName: string,
 ) {
   const hashedPassword = await hashPassword(password)
   const id = nanoid()
@@ -56,9 +60,11 @@ export async function createUser(
       email,
       password: hashedPassword,
       isAdmin,
+      firstName,
+      lastName,
     })
 
-    return { id, email, isAdmin }
+    return { id, email, isAdmin, firstName, lastName }
   } catch (error) {
     console.error('Error creating user:', error)
     return null

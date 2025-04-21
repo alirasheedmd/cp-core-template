@@ -1,3 +1,5 @@
+'use server'
+
 import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
