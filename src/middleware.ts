@@ -26,8 +26,6 @@ export async function middleware(request: NextRequest) {
     console.log('Verifying JWT token')
     const { payload } = await jose.jwtVerify(sessionCookie, JWT_SECRET)
 
-    console.log(payload)
-
     if (!payload || !payload.userId) {
       console.log('Invalid token payload')
       throw new Error('Invalid token')
