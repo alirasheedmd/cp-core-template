@@ -6,7 +6,10 @@ import RightSideForm from "./RightSideForm";
 import { FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { useActionState } from "react";
-import { createProduct, type ActionState } from "@/app/actions/product";
+import {
+  createProduct,
+  type ActionState,
+} from "@/app/actions/admin/main/product";
 import { useRouter } from "next/navigation";
 import { useRef, startTransition, useEffect } from "react";
 

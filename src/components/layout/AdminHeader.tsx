@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
 import { FaBell, FaUser, FaSignOutAlt } from "react-icons/fa";
 import AdminMenu from "./AdminMenu";
-import { useState, useRef, useEffect } from 'react';
-import { logout } from '@/app/admin/logout/action';
+import { useState, useRef, useEffect } from "react";
+import { logout } from "@/app/actions/admin/auth/logout";
 
 export default function AdminHeader() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -14,12 +14,15 @@ export default function AdminHeader() {
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -47,15 +50,15 @@ export default function AdminHeader() {
           </button>
           {/* Profile with Dropdown */}
           <div className="relative" ref={dropdownRef}>
-            <button 
+            <button
               className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-600 hover:bg-orange-700 lg:h-10 lg:w-10"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <FaUser className="text-white lg:text-lg" />
             </button>
-            
+
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-md bg-white shadow-lg z-10">
+              <div className="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg">
                 <div className="py-1">
                   <form action={logout}>
                     <button

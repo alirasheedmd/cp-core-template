@@ -1,52 +1,56 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useActionState } from 'react'
-import { useFormStatus } from 'react-dom'
-import { adminSignIn } from './actions'
-import { createNewAdminUser } from './create-user'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Lock, Mail, UserPlus, LogIn } from 'lucide-react'
+import { useState } from "react";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { adminSignIn } from "../../../actions/admin/auth/signin";
+import { createNewAdminUser } from "../../../actions/admin/auth/create-user";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Lock, Mail, UserPlus, LogIn } from "lucide-react";
 
 // Submit button with loading state for signin
 function SignInButton() {
-  const { pending } = useFormStatus()
-  
+  const { pending } = useFormStatus();
+
   return (
-    <Button 
-      type="submit" 
-      className="w-full bg-Orange hover:bg-orange-600"
+    <Button
+      type="submit"
+      className="bg-Orange w-full hover:bg-orange-600"
       disabled={pending}
     >
-      {pending ? 'Signing in...' : (
+      {pending ? (
+        "Signing in..."
+      ) : (
         <span className="flex items-center gap-2">
           <LogIn className="h-4 w-4" />
           Sign in
         </span>
       )}
     </Button>
-  )
+  );
 }
 
 // Submit button with loading state for create user
 function CreateUserButton() {
-  const { pending } = useFormStatus()
-  
+  const { pending } = useFormStatus();
+
   return (
-    <Button 
-      type="submit" 
-      className="w-full bg-blue hover:bg-blue-700"
+    <Button
+      type="submit"
+      className="bg-blue w-full hover:bg-blue-700"
       disabled={pending}
     >
-      {pending ? 'Creating user...' : (
+      {pending ? (
+        "Creating user..."
+      ) : (
         <span className="flex items-center gap-2">
           <UserPlus className="h-4 w-4" />
           Create Admin User
         </span>
       )}
     </Button>
-  )
+  );
 }
 
 // Define types for our state
@@ -69,29 +73,35 @@ interface CreateUserState {
 
 // Initial states
 const initialSignInState: SignInState = {
-  error: '',
-}
+  error: "",
+};
 
 const initialCreateUserState: CreateUserState = {
   success: false,
-  error: '',
+  error: "",
   fields: {
     email: [],
     password: [],
   },
   user: null,
-}
+};
 
 export default function AdminSignInPage() {
-  const [signInState, signInAction] = useActionState<SignInState, FormData>(adminSignIn, initialSignInState)
-  const [createUserState, createUserAction] = useActionState<CreateUserState, FormData>(createNewAdminUser, initialCreateUserState)
-  const [showCreateUser, setShowCreateUser] = useState(false)
-  
+  const [signInState, signInAction] = useActionState<SignInState, FormData>(
+    adminSignIn,
+    initialSignInState,
+  );
+  const [createUserState, createUserAction] = useActionState<
+    CreateUserState,
+    FormData
+  >(createNewAdminUser, initialCreateUserState);
+  const [showCreateUser, setShowCreateUser] = useState(false);
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold">Admin Sign In</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-sm">
           Sign in to access the admin dashboard
         </p>
       </div>
@@ -99,7 +109,7 @@ export default function AdminSignInPage() {
       {/* Sign In Form */}
       <div>
         {signInState.error && (
-          <div className="mb-4 rounded-md bg-destructive/10 border border-destructive/30 p-3 text-sm text-destructive">
+          <div className="bg-destructive/10 border-destructive/30 text-destructive mb-4 rounded-md border p-3 text-sm">
             {signInState.error}
           </div>
         )}
@@ -110,7 +120,7 @@ export default function AdminSignInPage() {
               Email
             </label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <div className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">
                 <Mail className="h-4 w-4" />
               </div>
               <Input
@@ -124,13 +134,13 @@ export default function AdminSignInPage() {
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
               Password
             </label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <div className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">
                 <Lock className="h-4 w-4" />
               </div>
               <Input
@@ -154,25 +164,25 @@ export default function AdminSignInPage() {
         <button
           type="button"
           onClick={() => setShowCreateUser(!showCreateUser)}
-          className="text-sm text-Orange hover:text-orange-500 transition-colors"
+          className="text-Orange text-sm transition-colors hover:text-orange-500"
         >
-          {showCreateUser ? 'Hide Admin User Creation' : 'Create Admin User'}
+          {showCreateUser ? "Hide Admin User Creation" : "Create Admin User"}
         </button>
       </div>
 
       {/* Create User Form */}
       {showCreateUser && (
-        <div className="rounded-lg border p-4 bg-gray-50">
+        <div className="rounded-lg border bg-gray-50 p-4">
           <h2 className="mb-4 text-lg font-semibold">Create Admin User</h2>
-          
+
           {createUserState.error && !createUserState.success && (
-            <div className="mb-4 rounded-md bg-destructive/10 border border-destructive/30 p-3 text-sm text-destructive">
+            <div className="bg-destructive/10 border-destructive/30 text-destructive mb-4 rounded-md border p-3 text-sm">
               {createUserState.error}
             </div>
           )}
-          
+
           {createUserState.success && createUserState.user && (
-            <div className="mb-4 rounded-md bg-green-100 border border-green-300 p-3 text-sm text-green-800">
+            <div className="mb-4 rounded-md border border-green-300 bg-green-100 p-3 text-sm text-green-800">
               Admin user created successfully: {createUserState.user.email}
             </div>
           )}
@@ -183,7 +193,7 @@ export default function AdminSignInPage() {
                 Email
               </label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <div className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">
                   <Mail className="h-4 w-4" />
                 </div>
                 <Input
@@ -195,17 +205,20 @@ export default function AdminSignInPage() {
                   className="pl-10"
                 />
               </div>
-              {createUserState.fields?.email && createUserState.fields.email.length > 0 && (
-                <p className="text-destructive text-sm">{createUserState.fields.email[0]}</p>
-              )}
+              {createUserState.fields?.email &&
+                createUserState.fields.email.length > 0 && (
+                  <p className="text-destructive text-sm">
+                    {createUserState.fields.email[0]}
+                  </p>
+                )}
             </div>
-            
+
             <div className="space-y-2">
               <label htmlFor="create-password" className="text-sm font-medium">
                 Password
               </label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <div className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">
                   <Lock className="h-4 w-4" />
                 </div>
                 <Input
@@ -218,9 +231,12 @@ export default function AdminSignInPage() {
                   className="pl-10"
                 />
               </div>
-              {createUserState.fields?.password && createUserState.fields.password.length > 0 && (
-                <p className="text-destructive text-sm">{createUserState.fields.password[0]}</p>
-              )}
+              {createUserState.fields?.password &&
+                createUserState.fields.password.length > 0 && (
+                  <p className="text-destructive text-sm">
+                    {createUserState.fields.password[0]}
+                  </p>
+                )}
             </div>
 
             <CreateUserButton />
@@ -228,5 +244,5 @@ export default function AdminSignInPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
