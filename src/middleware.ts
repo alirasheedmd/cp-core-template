@@ -33,6 +33,16 @@ export async function middleware(request: NextRequest) {
 
     console.log('JWT verified successfully')
 
+    // For admin routes, check if the user is an admin directly from JWT claim
+    if (pathname.startsWith('/admin')) {
+      if (!payload.isAdmin) {
+        console.log('User is not an admin, redirecting to homepage')
+        return NextResponse.redirect(new URL('/', request.url))
+      }
+
+      console.log('Admin access verified from JWT claim')
+    }
+
     // Inject user ID into request headers
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set('x-user-id', payload.userId as string)

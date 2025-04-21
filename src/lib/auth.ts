@@ -10,6 +10,7 @@ import { getUserById } from './dal'
 // JWT types
 interface JWTPayload {
   userId: string
+  isAdmin?: boolean
   [key: string]: string | number | boolean | null | undefined
 }
 
@@ -18,6 +19,7 @@ export interface VerifiedUser {
   uid: string
   email: string
   verified: boolean
+  isAdmin?: boolean
 }
 
 // Secret key for JWT signing (in a real app, use an environment variable)
@@ -40,7 +42,11 @@ export async function verifyPassword(password: string, hashedPassword: string) {
 }
 
 // Create a new user
-export async function createUser(email: string, password: string) {
+export async function createUser(
+  email: string,
+  password: string,
+  isAdmin: boolean = false,
+) {
   const hashedPassword = await hashPassword(password)
   const id = nanoid()
 
@@ -49,9 +55,10 @@ export async function createUser(email: string, password: string) {
       id,
       email,
       password: hashedPassword,
+      isAdmin,
     })
 
-    return { id, email }
+    return { id, email, isAdmin }
   } catch (error) {
     console.error('Error creating user:', error)
     return null
@@ -105,6 +112,7 @@ export async function verifySession(
       uid: user.id,
       email: user.email,
       verified: true, // This should be from the database in a real application
+      isAdmin: user.isAdmin,
     }
   } catch (error) {
     console.error('Session verification failed:', error)
@@ -132,15 +140,15 @@ export async function shouldRefreshToken(token: string): Promise<boolean> {
 }
 
 // Create a session using JWT
-export async function createSession(userId: string) {
+export async function createSession(userId: string, isAdmin: boolean = false) {
   try {
-    // Create JWT with user data
-    const token = await generateJWT({ userId })
+    // Create JWT with user data including isAdmin claim
+    const token = await generateJWT({ userId, isAdmin })
 
     // Store JWT in a cookie
     const cookieStore = await cookies()
     cookieStore.set({
-      name: 'session', // Changed from 'auth_token' to match middleware
+      name: 'session',
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -160,12 +168,17 @@ export async function createSession(userId: string) {
 export const getSession = cache(async () => {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get('session')?.value // Changed from 'auth_token' to match middleware
+    const token = cookieStore.get('session')?.value
 
     if (!token) return null
     const payload = await verifyJWT(token)
 
-    return payload ? { userId: payload.userId } : null
+    return payload
+      ? {
+          userId: payload.userId,
+          isAdmin: payload.isAdmin,
+        }
+      : null
   } catch (error) {
     // Handle the specific prerendering error
     if (
@@ -186,5 +199,5 @@ export const getSession = cache(async () => {
 // Delete session by clearing the JWT cookie
 export async function deleteSession() {
   const cookieStore = await cookies()
-  cookieStore.delete('session') // Changed from 'auth_token' to match middleware
+  cookieStore.delete('session')
 }

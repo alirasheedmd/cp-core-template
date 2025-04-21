@@ -12,12 +12,12 @@ const signinSchema = z.object({
 })
 
 interface SignInState {
-  error: string;
+  error: string
 }
 
 export async function adminSignIn(
-  prevState: SignInState, 
-  formData: FormData
+  prevState: SignInState,
+  formData: FormData,
 ): Promise<SignInState> {
   // Validate the form data
   const validatedFields = signinSchema.safeParse({
@@ -37,7 +37,7 @@ export async function adminSignIn(
   try {
     // Find user by email
     const user = await getUserByEmail(email)
-    
+
     if (!user) {
       return {
         error: 'Invalid email or password',
@@ -55,8 +55,15 @@ export async function adminSignIn(
       }
     }
 
-    // Create session
-    await createSession(user.id)
+    // Check if user is an admin (for admin signin)
+    if (!user.isAdmin) {
+      return {
+        error: 'You do not have permission to access the admin area',
+      }
+    }
+
+    // Create session with isAdmin flag
+    await createSession(user.id, user.isAdmin)
     success = true
   } catch (error) {
     console.error('Admin signin error:', error)
@@ -69,7 +76,7 @@ export async function adminSignIn(
   if (success) {
     redirect('/admin/dashboard')
   }
-  
+
   // This should never be reached if success is true
   return { error: '' }
-} 
+}

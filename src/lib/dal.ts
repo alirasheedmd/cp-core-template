@@ -60,7 +60,12 @@ export async function createAdminUser(data: {
   password: string
 }) {
   try {
-    const result = await db.insert(users).values(data).returning()
+    const adminData = {
+      ...data,
+      isAdmin: true, // Set isAdmin flag to true for admin users
+    }
+
+    const result = await db.insert(users).values(adminData).returning()
     return result[0] || null
   } catch (error) {
     console.error('Error creating admin user:', error)

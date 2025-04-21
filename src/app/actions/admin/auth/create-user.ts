@@ -16,21 +16,22 @@ const createUserSchema = z.object({
 })
 
 interface CreateUserState {
-  success: boolean;
-  error: string;
+  success: boolean
+  error: string
   fields?: {
-    email?: string[];
-    password?: string[];
-  };
+    email?: string[]
+    password?: string[]
+  }
   user: {
-    id: string;
-    email: string;
-  } | null;
+    id: string
+    email: string
+    isAdmin: boolean
+  } | null
 }
 
 export async function createNewAdminUser(
   prevState: CreateUserState,
-  formData: FormData
+  formData: FormData,
 ): Promise<CreateUserState> {
   // Validate the form data
   const validatedFields = createUserSchema.safeParse({
@@ -43,7 +44,7 @@ export async function createNewAdminUser(
       success: false,
       error: 'Invalid form data. Please check your inputs.',
       fields: validatedFields.error.flatten().fieldErrors,
-      user: null
+      user: null,
     }
   }
 
@@ -56,28 +57,28 @@ export async function createNewAdminUser(
       return {
         success: false,
         error: 'A user with this email already exists',
-        user: null
+        user: null,
       }
     }
 
     // Hash the password
     const hashedPassword = await hashPassword(password)
-    
+
     // Create a new user ID
     const id = nanoid()
-    
+
     // Create the user
     const user = await createAdminUser({
       id,
       email,
       password: hashedPassword,
     })
-    
+
     if (!user) {
       return {
         success: false,
         error: 'Error creating account. Please try again.',
-        user: null
+        user: null,
       }
     }
 
@@ -87,14 +88,15 @@ export async function createNewAdminUser(
       user: {
         id: user.id,
         email: user.email,
-      }
+        isAdmin: user.isAdmin,
+      },
     }
   } catch (error) {
     console.error('Create admin user error:', error)
     return {
       success: false,
       error: 'An unexpected error occurred. Please try again.',
-      user: null
+      user: null,
     }
   }
-} 
+}
