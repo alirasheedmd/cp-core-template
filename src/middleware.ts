@@ -7,8 +7,6 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  console.log('hello from middleware')
-
   // Skip middleware for public and signin routes
   if (pathname.startsWith('/admin/signin')) {
     return NextResponse.next()
@@ -27,6 +25,8 @@ export async function middleware(request: NextRequest) {
     // Verify the JWT token
     console.log('Verifying JWT token')
     const { payload } = await jose.jwtVerify(sessionCookie, JWT_SECRET)
+
+    console.log(payload)
 
     if (!payload || !payload.userId) {
       console.log('Invalid token payload')
