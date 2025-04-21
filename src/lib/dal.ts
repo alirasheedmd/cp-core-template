@@ -2,8 +2,7 @@ import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
 import { cache } from 'react'
-import {  users } from '@/db/schema'
-
+import { users } from '@/db/schema'
 
 // Current user
 export const getCurrentUser = cache(async () => {
@@ -19,7 +18,6 @@ export const getCurrentUser = cache(async () => {
     return null
   }
 
- 
   try {
     const result = await db
       .select()
@@ -44,11 +42,22 @@ export const getUserByEmail = cache(async (email: string) => {
   }
 })
 
+// Get user by ID (non-cached version for use in middleware and server actions)
+export async function getUserById(userId: string) {
+  try {
+    const result = await db.select().from(users).where(eq(users.id, userId))
+    return result[0] || null
+  } catch (error) {
+    console.error('Error getting user by ID:', error)
+    return null
+  }
+}
+
 // Create a new admin user
-export async function createAdminUser(data: { 
-  id: string;
-  email: string;
-  password: string;
+export async function createAdminUser(data: {
+  id: string
+  email: string
+  password: string
 }) {
   try {
     const result = await db.insert(users).values(data).returning()
@@ -58,4 +67,3 @@ export async function createAdminUser(data: {
     return null
   }
 }
-

@@ -5,6 +5,7 @@ import { db } from '@/db'
 import { users } from '@/db/schema'
 import * as jose from 'jose'
 import { cache } from 'react'
+import { getUserById } from './dal'
 
 // JWT types
 interface JWTPayload {
@@ -12,10 +13,15 @@ interface JWTPayload {
   [key: string]: string | number | boolean | null | undefined
 }
 
+// User type for verification result
+export interface VerifiedUser {
+  uid: string
+  email: string
+  verified: boolean
+}
+
 // Secret key for JWT signing (in a real app, use an environment variable)
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-secret-key-min-32-chars-long!!!'
-)
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 
 // JWT expiration time
 const JWT_EXPIRATION = '7d' // 7 days
@@ -72,6 +78,40 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
   }
 }
 
+// Verify a session using the session cookie
+export async function verifySession(
+  sessionCookie?: string,
+): Promise<VerifiedUser | null> {
+  try {
+    if (!sessionCookie) {
+      return null
+    }
+
+    // Verify the JWT token
+    const payload = await verifyJWT(sessionCookie)
+    if (!payload || !payload.userId) {
+      return null
+    }
+
+    // Fetch the user from the database using DAL
+    const user = await getUserById(payload.userId)
+
+    if (!user) {
+      return null
+    }
+
+    // In a real application, you would check if the email is verified
+    return {
+      uid: user.id,
+      email: user.email,
+      verified: true, // This should be from the database in a real application
+    }
+  } catch (error) {
+    console.error('Session verification failed:', error)
+    return null
+  }
+}
+
 // Check if token needs refresh
 export async function shouldRefreshToken(token: string): Promise<boolean> {
   try {
@@ -100,7 +140,7 @@ export async function createSession(userId: string) {
     // Store JWT in a cookie
     const cookieStore = await cookies()
     cookieStore.set({
-      name: 'auth_token',
+      name: 'session', // Changed from 'auth_token' to match middleware
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -120,7 +160,7 @@ export async function createSession(userId: string) {
 export const getSession = cache(async () => {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get('auth_token')?.value
+    const token = cookieStore.get('session')?.value // Changed from 'auth_token' to match middleware
 
     if (!token) return null
     const payload = await verifyJWT(token)
@@ -133,7 +173,7 @@ export const getSession = cache(async () => {
       error.message.includes('During prerendering, `cookies()` rejects')
     ) {
       console.log(
-        'Cookies not available during prerendering, returning null session'
+        'Cookies not available during prerendering, returning null session',
       )
       return null
     }
@@ -146,5 +186,5 @@ export const getSession = cache(async () => {
 // Delete session by clearing the JWT cookie
 export async function deleteSession() {
   const cookieStore = await cookies()
-  cookieStore.delete('auth_token')
+  cookieStore.delete('session') // Changed from 'auth_token' to match middleware
 }
