@@ -1,10 +1,27 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
-import { FaBell } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
+import { FaBell, FaUser, FaSignOutAlt } from "react-icons/fa";
 import AdminMenu from "./AdminMenu";
+import { useState, useRef, useEffect } from 'react';
+import { logout } from '@/app/admin/logout/action';
 
 export default function AdminHeader() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <nav className="h-[63px] w-full bg-black">
       <div className="mx-auto my-auto flex items-center justify-between gap-x-3 px-5 py-4 lg:gap-x-0 lg:px-16 lg:py-2">
@@ -28,10 +45,31 @@ export default function AdminHeader() {
           <button className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-600 hover:bg-orange-700 lg:h-10 lg:w-10">
             <FaBell className="text-white lg:text-lg" />
           </button>
-          {/* Profile */}
-          <button className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-600 hover:bg-orange-700 lg:h-10 lg:w-10">
-            <FaUser className="text-white lg:text-lg" />
-          </button>
+          {/* Profile with Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-600 hover:bg-orange-700 lg:h-10 lg:w-10"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <FaUser className="text-white lg:text-lg" />
+            </button>
+            
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 rounded-md bg-white shadow-lg z-10">
+                <div className="py-1">
+                  <form action={logout}>
+                    <button
+                      type="submit"
+                      className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    >
+                      <FaSignOutAlt className="mr-2 h-4 w-4" />
+                      Logout
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {/* <div className="flex h-full w-full items-center justify-between px-3 lg:justify-center">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
+import "../../globals.css";
 import AdminHeader from "@/components/layout/AdminHeader";
 import AdminSidebar from "@/components/layout/AdminSidebar";
 
