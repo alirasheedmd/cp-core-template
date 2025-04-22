@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FaBell, FaUser, FaSignOutAlt } from "react-icons/fa";
 import AdminMenu from "./AdminMenu";
 import { useState, useRef, useEffect } from "react";
-import { logout } from "@/app/actions/admin/auth/logout";
+import { logout } from "@/app/actions/admin/auth/adminAuth";
 
 export default function AdminHeader() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

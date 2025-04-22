@@ -27,6 +27,12 @@ export function DatePicker({
   className,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState<Date | undefined>(date);
+
+  // Convert the date to UTC to avoid timezone issues
+  const displayDate = date
+    ? new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+    : undefined;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -40,18 +46,34 @@ export function DatePicker({
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>{label}</span>}
+          {displayDate ? format(displayDate, "PPP") : <span>{label}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <CalendarComponent
           mode="single"
-          selected={date}
+          selected={selected}
           onSelect={(selectedDate) => {
-            onChange(selectedDate);
+            if (selectedDate) {
+              // Create a UTC date to avoid timezone issues
+              const newDate = new Date(
+                Date.UTC(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  selectedDate.getDate(),
+                ),
+              );
+              setSelected(newDate);
+              onChange(newDate);
+            } else {
+              setSelected(undefined);
+              onChange(undefined);
+            }
             setOpen(false);
           }}
-          initialFocus
+          disabled={(date) =>
+            date > new Date() || date < new Date("1900-01-01")
+          }
         />
       </PopoverContent>
     </Popover>

@@ -4,6 +4,7 @@ import { ProductFormValues } from "./ProductInfo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import ImageUpload from "./ImageUpload";
 
 export default function LeftSideForm() {
   const {
@@ -73,25 +74,12 @@ export default function LeftSideForm() {
         )}
       </div>
 
-      {/* <div>
-        <label className="block text-sm font-medium text-gray-700">Images</label>
-        <CldUploadWidget
-          uploadPreset="your_upload_preset"
-          onSuccess={(result) => {
-            console.log(result);
-          }}
-        >
-          {({ open }) => (
-            <button
-              type="button"
-              onClick={() => open()}
-              className="mt-1 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Upload Images
-            </button>
-          )}
-        </CldUploadWidget>
-      </div> */}
+      <div className="space-y-2">
+        <Label htmlFor="barcode" className="text-sm">
+          Media
+        </Label>
+        <ImageUpload />
+      </div>
     </div>
   );
 }

@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { adminSignIn } from "../../../actions/admin/auth/signin";
-import { createNewAdminUser } from "../../../actions/admin/auth/create-user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, Mail, UserPlus, LogIn } from "lucide-react";
+import {
+  adminSignIn,
+  createNewAdminUser,
+} from "@/app/actions/admin/auth/adminAuth";
 
 // Submit button with loading state for signin
 function SignInButton() {
