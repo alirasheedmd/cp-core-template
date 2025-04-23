@@ -4,7 +4,7 @@ import { ProductFormValues } from "./ProductInfo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import ImageUpload from "./ImageUpload";
+import MultiImageUploader from "./MultiImageUploader";
 
 export default function LeftSideForm() {
   const {
@@ -78,7 +78,9 @@ export default function LeftSideForm() {
         <Label htmlFor="barcode" className="text-sm">
           Media
         </Label>
-        <ImageUpload />
+        <div className="space-y-6">
+          <MultiImageUploader />
+        </div>
       </div>
     </div>
   );

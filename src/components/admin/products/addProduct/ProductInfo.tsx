@@ -20,7 +20,14 @@ export const productSchema = z.object({
   description: z.string().min(1, "Description is required"),
   status: z.enum(["active", "inactive"]),
   publishDate: z.string().min(1, "Publish date is required"),
-  images: z.array(z.string()).optional(),
+  images: z
+    .array(
+      z.object({
+        src: z.string(),
+        alt: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;
@@ -51,6 +58,8 @@ export default function ProductInfo() {
   const onSubmit = () => {
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
+    const formValues = methods.getValues();
+    console.log("Form Values:", formValues);
     startTransition(() => {
       formAction(formData);
     });
