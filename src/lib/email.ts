@@ -1,13 +1,13 @@
-import { Resend } from 'resend';
+import { Resend } from 'resend'
 
 // Initialize Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Email verification template with OTP
 export async function sendVerificationEmail(email: string, otp: string) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Your Store <sahajfatima@gmail.com>',
+      from: 'Your Store <noreply@paklitz.com>',
       to: email,
       subject: 'Your Verification Code',
       html: `
@@ -27,16 +27,16 @@ export async function sendVerificationEmail(email: string, otp: string) {
           </p>
         </div>
       `,
-    });
+    })
 
     if (error) {
-      console.error('Error sending verification email:', error);
-      return { success: false, error };
+      console.error('Error sending verification email:', error)
+      return { success: false, error }
     }
 
-    return { success: true, data };
+    return { success: true, data }
   } catch (error) {
-    console.error('Error sending verification email:', error);
-    return { success: false, error };
+    console.error('Error sending verification email:', error)
+    return { success: false, error }
   }
 }
