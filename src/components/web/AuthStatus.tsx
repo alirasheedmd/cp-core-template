@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { getUserStatus } from '@/app/actions/web/auth/getUserStatus'
 import { useAuth } from '@/context/AuthContext'
-import { customerLogOut } from '@/app/actions/web/auth/webAuth'
+import { customerSignOut } from '@/app/actions/web/auth/webAuth'
 
 export function AuthStatus() {
   const [status, setStatus] = useState<{
@@ -26,7 +26,7 @@ export function AuthStatus() {
   }, [])
 
   const signOutHandler = async () => {
-    await customerLogOut()
+    await customerSignOut()
   }
   
   return (

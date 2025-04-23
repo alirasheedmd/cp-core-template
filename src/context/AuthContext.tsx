@@ -3,8 +3,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { customerSignIn, customerSignUp } from '@/app/actions/web/auth/webAuth'
+import { VerificationForm } from '@/components/web/auth/VerificationForm'
 
-type AuthMode = 'signin' | 'signup'
+// Add verification to the AuthMode options
+type AuthMode = 'signin' | 'signup' | 'verify'
 
 interface AuthContextType {
   isOpen: boolean
@@ -12,6 +14,8 @@ interface AuthContextType {
   openAuth: (mode?: AuthMode) => void
   closeAuth: () => void
   setMode: (mode: AuthMode) => void
+  userEmail: string
+  setUserEmail: (email: string) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -19,6 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
   const [mode, setMode] = useState<AuthMode>('signin')
+  const [userEmail, setUserEmail] = useState('')
 
   const openAuth = (initialMode: AuthMode = 'signin') => {
     setMode(initialMode)
@@ -30,7 +35,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ isOpen, mode, openAuth, closeAuth, setMode }}>
+    <AuthContext.Provider value={{ 
+      isOpen, 
+      mode, 
+      openAuth, 
+      closeAuth, 
+      setMode,
+      userEmail,
+      setUserEmail
+    }}>
       {children}
       <AuthModal />
     </AuthContext.Provider>
@@ -52,10 +65,16 @@ function AuthModal() {
     <Dialog open={isOpen} onOpenChange={closeAuth}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{mode === 'signin' ? 'Sign In' : 'Create Account'}</DialogTitle>
+          <DialogTitle>
+            {mode === 'signin' ? 'Sign In' : 
+             mode === 'signup' ? 'Create Account' : 
+             'Verify Email'}
+          </DialogTitle>
         </DialogHeader>
         
-        {mode === 'signin' ? <SignInForm /> : <SignUpForm />}
+        {mode === 'signin' ? <SignInForm /> : 
+         mode === 'signup' ? <SignUpForm /> : 
+         <VerificationForm />}
         
         <div className="mt-4 text-center text-sm">
           {mode === 'signin' ? (
@@ -68,7 +87,7 @@ function AuthModal() {
                 Sign up
               </button>
             </p>
-          ) : (
+          ) : mode === 'signup' ? (
             <p>
               Already have an account?{' '}
               <button 
@@ -76,6 +95,18 @@ function AuthModal() {
                 className="text-primary hover:underline"
               >
                 Sign in
+              </button>
+            </p>
+          ) : (
+            <p>
+              Didn't receive a code?{' '}
+              <button 
+                onClick={() => {
+                  // Logic to resend code
+                }}
+                className="text-primary hover:underline"
+              >
+                Resend code
               </button>
             </p>
           )}
@@ -90,7 +121,7 @@ function SignInForm() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { closeAuth } = useAuth()
+  const { closeAuth, setMode, setUserEmail } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -102,11 +133,16 @@ function SignInForm() {
       formData.append('email', email)
       formData.append('password', password)
 
-      // Create a server action for customer sign-in
       const response = await customerSignIn(formData)
       
       if (response.error) {
-        setError(response.error)
+        if (response.needsVerification) {
+          // Switch to verification mode in the auth context
+          setUserEmail(response.email || email)
+          setMode('verify')
+        } else {
+          setError(response.error)
+        }
       } else {
         closeAuth()
         // Optionally refresh the page or update UI
@@ -163,7 +199,7 @@ function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { closeAuth, setMode } = useAuth()
+  const { closeAuth, setMode, setUserEmail } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -189,9 +225,13 @@ function SignUpForm() {
       
       if (response.error) {
         setError(response.error)
+      } else if (response.needsVerification) {
+        // Switch to verification mode in the auth context
+        setUserEmail(response.email || email)
+        setMode('verify')
       } else {
-        // Switch to sign in after successful registration
-        setMode('signin')
+        // Normal flow if no verification needed
+        window.location.reload()
       }
     } catch (error) {
       setError('An unexpected error occurred')

@@ -17,6 +17,8 @@ export const users = pgTable('users', {
   profileImage: text('profile_image'),
   isAdmin: boolean('is_admin').default(false).notNull(),
   isVerified: boolean('is_verified').default(false).notNull(),
+  verificationCode: text('verification_code'),
+  verificationCodeExpiry: timestamp('verification_code_expiry'),
   lastLoginAt: timestamp('last_login_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

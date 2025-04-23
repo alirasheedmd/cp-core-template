@@ -2,7 +2,8 @@
 
 import { z } from 'zod'
 import { getUserByEmail } from '@/lib/dal'
-import { verifyPassword, createSession, createUser, deleteSession } from '@/lib/auth'
+import { verifyPassword, createSession, createUser, storeVerificationOTP, deleteSession } from '@/lib/auth'
+import { sendVerificationEmail } from '@/lib/email'
 
 // Form validation schemas
 const signinSchema = z.object({
@@ -19,6 +20,9 @@ const signupSchema = z.object({
 
 interface AuthState {
   error: string
+  userId?: string
+  email?: string
+  needsVerification?: boolean
 }
 
 export async function customerSignIn(
@@ -45,6 +49,24 @@ export async function customerSignIn(
     if (!user) {
       return {
         error: 'Invalid email or password',
+      }
+    }
+
+    // Check if email is verified
+    if (!user.isVerified) {
+      // Generate new OTP
+      const otp = await storeVerificationOTP(user.id)
+      
+      if (otp) {
+        // Send verification email
+        await sendVerificationEmail(email, otp)
+      }
+      
+      return {
+        error: 'Please verify your email address before signing in',
+        userId: user.id,
+        email: user.email,
+        needsVerification: true
       }
     }
 
@@ -107,7 +129,22 @@ export async function customerSignUp(
       }
     }
 
-    return { error: '' }
+    // Generate OTP and send verification email
+    const otp = await storeVerificationOTP(user.id)
+    
+    if (otp) {
+      await sendVerificationEmail(email, otp)
+      return { 
+        error: '',
+        userId: user.id,
+        email: user.email,
+        needsVerification: true
+      }
+    } else {
+      return {
+        error: 'Failed to generate verification code. Please try again.',
+      }
+    }
   } catch (error) {
     console.error('Customer signup error:', error)
     return {
@@ -116,8 +153,6 @@ export async function customerSignUp(
   }
 }
 
-export async function customerLogOut(
-): Promise<AuthState> {
+export async function customerSignOut() {
   await deleteSession()
-  return { error: '' }
 }

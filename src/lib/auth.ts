@@ -8,6 +8,7 @@ import { users } from '@/db/schema'
 import * as jose from 'jose'
 import { cache } from 'react'
 import { getUserById } from './dal'
+import { eq } from 'drizzle-orm'
 
 // JWT types
 interface JWTPayload {
@@ -206,4 +207,70 @@ export const getSession = cache(async () => {
 export async function deleteSession() {
   const cookieStore = await cookies()
   cookieStore.delete('session')
+}
+
+// Generate a 6-digit OTP
+export async function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Store OTP for a user
+export async function storeVerificationOTP(userId: string) {
+  const otp = await generateOTP();
+  const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+  try {
+    await db.update(users)
+      .set({
+        verificationCode: otp,
+        verificationCodeExpiry: expires
+      })
+      .where(eq(users.id, userId));
+
+    return otp;
+  } catch (error) {
+    console.error('Error storing verification OTP:', error);
+    return null;
+  }
+}
+
+// Verify an OTP and mark user as verified
+export async function verifyOTP(email: string, otp: string) {
+  try {
+    // Find user with the email
+    const userResult = await db.select()
+      .from(users)
+      .where(eq(users.email, email));
+
+    const user = userResult[0];
+
+    if (!user) {
+      return { success: false, error: 'User not found' };
+    }
+
+    // Check if OTP matches and hasn't expired
+    const now = new Date();
+    
+    if (user.verificationCode !== otp) {
+      return { success: false, error: 'Invalid verification code' };
+    }
+    
+    if (!user.verificationCodeExpiry || user.verificationCodeExpiry < now) {
+      return { success: false, error: 'Verification code has expired' };
+    }
+
+    // Update user to mark as verified and clear OTP
+    await db.update(users)
+      .set({
+        isVerified: true,
+        verificationCode: null,
+        verificationCodeExpiry: null
+      })
+      .where(eq(users.id, user.id));
+
+    return { success: true, user };
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    return { success: false, error: 'An unexpected error occurred' };
+  }
 }
