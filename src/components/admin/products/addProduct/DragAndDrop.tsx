@@ -15,10 +15,11 @@ interface DragAndDropProps {
   setIsUploading: (loading: boolean) => void;
   items: ImageItem[];
   setFiles: (validFile: File[]) => void;
+  error: boolean;
 }
 
 export const DragAndDrop = (props: DragAndDropProps) => {
-  const { isUploading, setIsUploading, items, setFiles } = props;
+  const { isUploading, setIsUploading, items, setFiles, error } = props;
   const dropRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [filesRejected, setFilesRejected] = useState<string[]>([]);
@@ -152,7 +153,7 @@ export const DragAndDrop = (props: DragAndDropProps) => {
       <div
         ref={dropRef}
         className={cn(
-          "relative flex h-36 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-black",
+          `${error ? "border-destructive" : "border-black"} relative flex h-36 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed`,
           isError.status && "border-red-500",
           isUploading && "pointer-events-none",
         )}
@@ -180,12 +181,12 @@ export const DragAndDrop = (props: DragAndDropProps) => {
             <span className="text-primary">Upload Files</span>
             <span className="ml-1 text-gray-600">or drag and drop</span>
           </p>
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-gray-500">
             PNG, JPG, WEBP, up to {convertToMb(MAX_IMAGE_SIZE)} each.
           </p>
         </div>
         {isUploading && (
-          <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-white">
+          <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center rounded-md bg-white">
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
         )}

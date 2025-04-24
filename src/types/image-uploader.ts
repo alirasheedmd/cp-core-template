@@ -17,4 +17,5 @@ export interface ImageProgress {
 export interface MultiImageUploaderProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
+  error: boolean;
 }
