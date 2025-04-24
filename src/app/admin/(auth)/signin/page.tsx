@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 
-import { adminSignIn } from '../../../actions/admin/auth/signin'
+import { adminSignIn } from '../../../actions/admin/auth/adminAuth'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
