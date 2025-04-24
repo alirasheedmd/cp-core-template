@@ -17,12 +17,13 @@ const publicPaths = [
 
 // Check if the path is public
 const isPublicPath = (path: string) => {
-  return publicPaths.some(publicPath => 
-    path === publicPath || 
-    path.startsWith(publicPath + '/') ||
-    path.startsWith('/_next/') ||
-    path.startsWith('/api/') ||
-    path.startsWith('/favicon.ico')
+  return publicPaths.some(
+    (publicPath) =>
+      path === publicPath ||
+      path.startsWith(publicPath + '/') ||
+      path.startsWith('/_next/') ||
+      path.startsWith('/api/') ||
+      path.startsWith('/favicon.ico'),
   )
 }
 
@@ -40,12 +41,12 @@ export async function middleware(request: NextRequest) {
   // If no session, redirect based on the route type
   if (!sessionCookie) {
     console.log('No session cookie found')
-    
+
     // For admin routes, redirect to admin signin
     if (pathname.startsWith('/admin')) {
       return NextResponse.redirect(new URL('/admin/signin', request.url))
     }
-    
+
     // For website routes that need auth, we don't redirect - the AuthContext will handle showing the modal
     return NextResponse.next()
   }
@@ -81,7 +82,7 @@ export async function middleware(request: NextRequest) {
     })
   } catch (error) {
     console.error('JWT verification failed:', error)
-    
+
     // For admin routes, redirect to admin signin
     if (pathname.startsWith('/admin')) {
       const response = NextResponse.redirect(
@@ -90,7 +91,7 @@ export async function middleware(request: NextRequest) {
       response.cookies.delete('session')
       return response
     }
-    
+
     // For other routes, just clear the cookie and proceed
     const response = NextResponse.next()
     response.cookies.delete('session')
