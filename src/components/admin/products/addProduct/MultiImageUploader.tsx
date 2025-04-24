@@ -1,5 +1,9 @@
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { ProductFormValues } from "./ProductInfo";
+import {
+  ArrayPath,
+  FieldValues,
+  useFieldArray,
+  UseFormReturn,
+} from "react-hook-form";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { generateThumbHashFromFile } from "@/lib/thumbhash-client";
@@ -10,11 +14,17 @@ import { DragAndDrop } from "./DragAndDrop";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SortableItem } from "./SortableItem";
-import {
-  ImageItem,
-  ImageProgress,
-  MultiImageUploaderProps,
-} from "@/types/image-uploader";
+import { ImageItem, ImageProgress } from "@/types/image-uploader";
+
+interface MultiImageUploaderProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends ArrayPath<TFieldValues> = ArrayPath<TFieldValues>,
+> {
+  name: TName;
+  form: UseFormReturn<TFieldValues>;
+  className?: string;
+  error?: string;
+}
 
 const DragAndDropContext = dynamic(
   () => import("./DragAndDropContext").then((mod) => mod.DragAndDropContext),
@@ -30,16 +40,33 @@ const DragAndDropContext = dynamic(
   },
 );
 
-export default function MultiImageUploader(props: MultiImageUploaderProps) {
-  const { className } = props;
-  const form = useFormContext<ProductFormValues>();
+export default function MultiImageUploader<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends ArrayPath<TFieldValues> = ArrayPath<TFieldValues>,
+>({
+  name,
+  form,
+  className,
+  error,
+}: MultiImageUploaderProps<TFieldValues, TName>) {
+  const { control } = form;
   const { fields, replace } = useFieldArray({
-    control: form.control,
-    name: "images",
-    keyName: "uuid",
+    control,
+    name,
   });
 
-  const [items, setItems] = useState<ImageItem[]>(fields as ImageItem[]);
+  const [items, setItems] = useState<ImageItem[]>(
+    fields.map((field, index) => ({
+      id: index,
+      uuid: field.id,
+      percentage: 100,
+      alt: (field as { alt?: string }).alt || "",
+      key: "",
+      src: (field as { src?: string }).src || "",
+      base64: "",
+      done: true,
+    })),
+  );
   const [progress, setProgress] = useState<ImageProgress[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
@@ -57,7 +84,7 @@ export default function MultiImageUploader(props: MultiImageUploaderProps) {
 
   const handleItemsUpdate = useCallback(
     (newItems: ImageItem[]) => {
-      replace(newItems);
+      replace(newItems as unknown as TFieldValues[TName]);
       setItems(newItems);
     },
     [replace],
@@ -104,7 +131,7 @@ export default function MultiImageUploader(props: MultiImageUploaderProps) {
                 progress: progress.percentage,
               });
 
-              const clone = items.concat(newImageData);
+              const clone = [...items, ...newImageData];
               setItems(clone);
             }
           })
@@ -114,12 +141,18 @@ export default function MultiImageUploader(props: MultiImageUploaderProps) {
           })
           .onComplete(() => {
             data.done = true;
-            const clone = items
-              .concat(newImageData)
-              .map((item) => ({ ...item, percentage: 100 }));
+            const clone = [...items, ...newImageData].map((item) => ({
+              ...item,
+              percentage: 100,
+            }));
 
             setItems(clone);
-            replace(clone.map((item) => ({ src: item.src, alt: item.alt })));
+            replace(
+              clone.map((item) => ({
+                src: item.src,
+                alt: item.alt,
+              })) as unknown as TFieldValues[TName],
+            );
             setIsUploading(false);
           });
 
@@ -131,7 +164,9 @@ export default function MultiImageUploader(props: MultiImageUploaderProps) {
 
   const remove = (i: number) => {
     setItems((prev) => prev.filter((item) => item.id !== i));
-    replace(items.filter((item) => item.id !== i));
+    replace(
+      items.filter((item) => item.id !== i) as unknown as TFieldValues[TName],
+    );
   };
 
   return (
@@ -141,6 +176,7 @@ export default function MultiImageUploader(props: MultiImageUploaderProps) {
         setFiles={setFiles}
         isUploading={isUploading}
         setIsUploading={setIsUploading}
+        error={!!error}
       />
       <div className="relative overflow-hidden rounded-lg">
         <DragAndDropContext

@@ -20,6 +20,7 @@ export const productSchema = z.object({
   description: z.string().min(1, "Description is required"),
   status: z.enum(["active", "inactive"]),
   publishDate: z.string().min(1, "Publish date is required"),
+  categories: z.array(z.string()).min(1, "Select at least one category"),
   images: z
     .array(
       z.object({
@@ -27,7 +28,7 @@ export const productSchema = z.object({
         alt: z.string(),
       }),
     )
-    .optional(),
+    .min(1, "At least one image is required"),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;
@@ -91,10 +92,8 @@ export default function ProductInfo() {
       <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
           {/* Left Side */}
-          <div className="basis-[70%] space-y-5">
-            <div className="rounded-lg bg-white p-3">
-              <LeftSideForm />
-            </div>
+          <div className="basis-[70%]">
+            <LeftSideForm />
           </div>
 
           {/* Right Side */}

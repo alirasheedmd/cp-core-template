@@ -3,6 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* H-full does not work without this */
+/* html,
+body,
+:root {
+  height: 100%;
+} */
+
 @theme {
   /* Custom Colors */
   --color-Orange: #ea590a;
@@ -11,7 +18,7 @@
   --color-MediumGrey: #868686;
   --color-LightMediumGrey: #b8b8b8;
   --color-LightWhite: #f1f1f1;
-  --color-blue: #0f65d6;
+  --color-Blue: #0f65d6;
 }
 
 @layer base {
