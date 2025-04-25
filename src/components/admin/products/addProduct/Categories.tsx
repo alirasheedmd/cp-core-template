@@ -1,35 +1,35 @@
-"use client";
-import { useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { ProductFormValues } from "./ProductInfo";
-import { Button } from "@/components/ui/button";
-import CategoryItem from "./CategoryItem";
-import AddCategory from "./AddCategory";
+'use client'
+import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import { ProductFormValues } from './ProductInfo'
+import { Button } from '@/components/ui/button'
+import CategoryItem from './CategoryItem'
+import AddCategory from './AddCategory'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { dummyCategories } from "@/data/dummyCategories";
+} from '@/components/ui/dialog'
+import { dummyCategories } from '@/data/dummyCategories'
 
 export default function Categories() {
-  const { setValue, watch } = useFormContext<ProductFormValues>();
-  const selectedCategories = watch("categories") || [];
-  const [open, setOpen] = useState(false);
+  const { setValue, watch } = useFormContext<ProductFormValues>()
+  const selectedCategories = watch('categories') || []
+  const [open, setOpen] = useState(false)
 
   const handleCategoryChange = (categoryName: string) => {
-    const currentCategories = selectedCategories || [];
+    const currentCategories = selectedCategories || []
     if (currentCategories.includes(categoryName)) {
       setValue(
-        "categories",
+        'categories',
         currentCategories.filter((cat) => cat !== categoryName),
-      );
+      )
     } else {
-      setValue("categories", [...currentCategories, categoryName]);
+      setValue('categories', [...currentCategories, categoryName])
     }
-  };
+  }
 
   return (
     <div className="relative">
@@ -68,5 +68,5 @@ export default function Categories() {
         ))}
       </ul>
     </div>
-  );
+  )
 }

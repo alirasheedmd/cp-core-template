@@ -1,26 +1,27 @@
-"use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import LeftSideForm from "./LeftSideForm";
-import RightSideForm from "./RightSideForm";
-import { FormProvider } from "react-hook-form";
-import { z } from "zod";
-import { useActionState } from "react";
+'use client'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import LeftSideForm from './LeftSideForm'
+import RightSideForm from './RightSideForm'
+import { FormProvider } from 'react-hook-form'
+import { z } from 'zod'
+import { useActionState } from 'react'
 import {
   createProduct,
   type ActionState,
-} from "@/app/actions/admin/main/product";
-import { useRouter } from "next/navigation";
-import { useRef, startTransition, useEffect } from "react";
+} from '@/app/actions/admin/main/product'
+import { useRouter } from 'next/navigation'
+import { useRef, startTransition, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
 
 export const productSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  sku: z.string().min(1, "SKU is required"),
+  title: z.string().min(1, 'Title is required'),
+  sku: z.string().min(1, 'SKU is required'),
   barcode: z.string().optional(),
-  description: z.string().min(1, "Description is required"),
-  status: z.enum(["active", "inactive"]),
-  publishDate: z.string().min(1, "Publish date is required"),
-  categories: z.array(z.string()).min(1, "Select at least one category"),
+  description: z.string().min(1, 'Description is required'),
+  status: z.enum(['active', 'inactive']),
+  publishDate: z.string().min(1, 'Publish date is required'),
+  categories: z.array(z.string()).min(1, 'Select at least one category'),
   images: z
     .array(
       z.object({
@@ -28,64 +29,81 @@ export const productSchema = z.object({
         alt: z.string(),
       }),
     )
-    .min(1, "At least one image is required"),
-});
+    .min(1, 'At least one image is required'),
+  price: z.string().min(1, 'Price is required'),
+  pricePerItem: z.string().optional(),
+  profit: z.string().optional(),
+  margin: z.string().optional(),
+  defaultPrice: z.string().optional(),
+  customPrice: z.string().optional(),
+  tax: z.string().optional(),
+  currentStock: z.string().optional(),
+  lowStock: z.string().optional(),
+  damageProduct: z.string().optional(),
+  shippingPrice: z.string().optional(),
+  weight: z.string().optional(),
+  width: z.string().optional(),
+  length: z.string().optional(),
+  height: z.string().optional(),
+  country: z.string().optional(),
+  hsCode: z.string().optional(),
+})
 
-export type ProductFormValues = z.infer<typeof productSchema>;
+export type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductInfo() {
-  const router = useRouter();
-  const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter()
+  const formRef = useRef<HTMLFormElement>(null)
   const [state, formAction] = useActionState<ActionState, FormData>(
     async (_prevState, formData) => createProduct(formData),
-    { status: "idle" },
-  );
+    { status: 'idle' },
+  )
 
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      status: "active",
-      publishDate: new Date().toISOString().split("T")[0],
+      status: 'active',
+      publishDate: new Date().toISOString().split('T')[0],
       ...(state?.data ?? {}),
     },
-  });
+  })
 
   const {
     handleSubmit,
     setError,
     formState: { isSubmitting },
-  } = methods;
+  } = methods
 
   const onSubmit = () => {
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
-    const formValues = methods.getValues();
-    console.log("Form Values:", formValues);
+    if (!formRef.current) return
+    const formData = new FormData(formRef.current)
+    const formValues = methods.getValues()
+    console.log('Form Values:', formValues)
     startTransition(() => {
-      formAction(formData);
-    });
-  };
+      formAction(formData)
+    })
+  }
 
   // Handle server-side validation errors
   useEffect(() => {
-    if (state?.status === "error" && state.errors) {
+    if (state?.status === 'error' && state.errors) {
       Object.entries(state.errors).forEach(([field, errors]) => {
         setError(field as keyof ProductFormValues, {
-          type: "server",
+          type: 'server',
           message: errors[0],
-        });
-      });
+        })
+      })
     }
-  }, [state, setError]);
+  }, [state, setError])
 
   // Redirect on success
   useEffect(() => {
-    if (state?.status === "success") {
-      router.push("/admin/products");
+    if (state?.status === 'success') {
+      router.push('/admin/products')
     }
-  }, [state?.status, router]);
+  }, [state?.status, router])
 
-  const isPending = state?.status === "submitting";
+  const isPending = state?.status === 'submitting'
 
   return (
     <FormProvider {...methods}>
@@ -106,26 +124,28 @@ export default function ProductInfo() {
 
         {/* Action Buttons */}
         <div className="mt-6 flex justify-end gap-4">
-          <button
+          <Button
             type="button"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+            className="hover:bg-LightGrey font-normal text-black"
+            variant="outline"
           >
             Discard
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             disabled={isPending || isSubmitting}
-            className="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
+            className="hover:bg-LightGrey font-normal text-black"
+            variant="outline"
           >
-            {isPending || isSubmitting ? "Saving..." : "Save"}
-          </button>
+            {isPending || isSubmitting ? 'Saving...' : 'Save'}
+          </Button>
         </div>
 
         {/* Show general error message */}
-        {state?.status === "error" && state.message && (
+        {state?.status === 'error' && state.message && (
           <p className="mt-2 text-sm text-red-600">{state.message}</p>
         )}
       </form>
     </FormProvider>
-  );
+  )
 }

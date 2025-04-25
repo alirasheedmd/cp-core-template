@@ -1,60 +1,60 @@
-import { ICategory } from "@/types";
+import { ICategory } from '@/types'
 
 export const dummyCategories: ICategory[] = [
   {
-    _id: "1",
-    name: "Shop all",
+    _id: '1',
+    name: 'Shop all',
     slug: {
-      current: "shop-all",
-      _type: "slug",
+      current: 'shop-all',
+      _type: 'slug',
     },
   },
   {
-    _id: "2",
-    name: "Make up",
+    _id: '2',
+    name: 'Make up',
     slug: {
-      current: "make-up",
-      _type: "slug",
+      current: 'make-up',
+      _type: 'slug',
     },
   },
   {
-    _id: "3",
-    name: "Mobile product / tools",
+    _id: '3',
+    name: 'Mobile product / tools',
     slug: {
-      current: "mobile-product-tools",
-      _type: "slug",
+      current: 'mobile-product-tools',
+      _type: 'slug',
     },
   },
   {
-    _id: "4",
-    name: "Garden",
+    _id: '4',
+    name: 'Garden',
     slug: {
-      current: "garden",
-      _type: "slug",
+      current: 'garden',
+      _type: 'slug',
     },
   },
   {
-    _id: "5",
-    name: "Bath",
+    _id: '5',
+    name: 'Bath',
     slug: {
-      current: "bath",
-      _type: "slug",
+      current: 'bath',
+      _type: 'slug',
     },
   },
   {
-    _id: "6",
-    name: "Health and care",
+    _id: '6',
+    name: 'Health and care',
     slug: {
-      current: "health-and-care",
-      _type: "slug",
+      current: 'health-and-care',
+      _type: 'slug',
     },
   },
   {
-    _id: "7",
-    name: "Kitchen",
+    _id: '7',
+    name: 'Kitchen',
     slug: {
-      current: "kitchen",
-      _type: "slug",
+      current: 'kitchen',
+      _type: 'slug',
     },
   },
-];
+]

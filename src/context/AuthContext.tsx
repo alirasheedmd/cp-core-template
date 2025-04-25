@@ -1,7 +1,18 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { customerSignIn, customerSignUp } from '@/app/actions/web/auth/webAuth'
 import { VerificationForm } from '@/components/web/auth/VerificationForm'
 
@@ -35,15 +46,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ 
-      isOpen, 
-      mode, 
-      openAuth, 
-      closeAuth, 
-      setMode,
-      userEmail,
-      setUserEmail
-    }}>
+    <AuthContext.Provider
+      value={{
+        isOpen,
+        mode,
+        openAuth,
+        closeAuth,
+        setMode,
+        userEmail,
+        setUserEmail,
+      }}
+    >
       {children}
       <AuthModal />
     </AuthContext.Provider>
@@ -66,22 +79,28 @@ function AuthModal() {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'signin' ? 'Sign In' : 
-             mode === 'signup' ? 'Create Account' : 
-             'Verify Email'}
+            {mode === 'signin'
+              ? 'Sign In'
+              : mode === 'signup'
+                ? 'Create Account'
+                : 'Verify Email'}
           </DialogTitle>
         </DialogHeader>
-        
-        {mode === 'signin' ? <SignInForm /> : 
-         mode === 'signup' ? <SignUpForm /> : 
-         <VerificationForm />}
-        
+
+        {mode === 'signin' ? (
+          <SignInForm />
+        ) : mode === 'signup' ? (
+          <SignUpForm />
+        ) : (
+          <VerificationForm />
+        )}
+
         <div className="mt-4 text-center text-sm">
           {mode === 'signin' ? (
             <p>
               Don't have an account?{' '}
-              <button 
-                onClick={() => setMode('signup')} 
+              <button
+                onClick={() => setMode('signup')}
                 className="text-primary hover:underline"
               >
                 Sign up
@@ -90,8 +109,8 @@ function AuthModal() {
           ) : mode === 'signup' ? (
             <p>
               Already have an account?{' '}
-              <button 
-                onClick={() => setMode('signin')} 
+              <button
+                onClick={() => setMode('signin')}
                 className="text-primary hover:underline"
               >
                 Sign in
@@ -100,7 +119,7 @@ function AuthModal() {
           ) : (
             <p>
               Didn't receive a code?{' '}
-              <button 
+              <button
                 onClick={() => {
                   // Logic to resend code
                 }}
@@ -134,7 +153,7 @@ function SignInForm() {
       formData.append('password', password)
 
       const response = await customerSignIn(formData)
-      
+
       if (response.error) {
         if (response.needsVerification) {
           // Switch to verification mode in the auth context
@@ -157,33 +176,37 @@ function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {error && <div className="text-sm text-red-500">{error}</div>}
       <div className="space-y-2">
-        <label htmlFor="email" className="text-sm font-medium">Email</label>
+        <label htmlFor="email" className="text-sm font-medium">
+          Email
+        </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <div className="space-y-2">
-        <label htmlFor="password" className="text-sm font-medium">Password</label>
+        <label htmlFor="password" className="text-sm font-medium">
+          Password
+        </label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary-dark transition"
+        className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition"
       >
         {isLoading ? 'Signing in...' : 'Sign In'}
       </button>
@@ -203,12 +226,12 @@ function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (password !== confirmPassword) {
       setError('Passwords do not match')
       return
     }
-    
+
     setIsLoading(true)
     setError('')
 
@@ -221,8 +244,7 @@ function SignUpForm() {
 
       // Create a server action for customer sign-up
       const response = await customerSignUp(formData)
-      
-      
+
       if (response.error) {
         setError(response.error)
       } else if (response.needsVerification) {
@@ -242,67 +264,77 @@ function SignUpForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {error && <div className="text-sm text-red-500">{error}</div>}
 
       <div className="space-y-2">
-        <label htmlFor="firstName" className="text-sm font-medium">First Name</label>
+        <label htmlFor="firstName" className="text-sm font-medium">
+          First Name
+        </label>
         <input
           id="firstName"
           type="text"
-          value={firstName} 
+          value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <div className="space-y-2">
-        <label htmlFor="lastName" className="text-sm font-medium">Last Name</label>
+        <label htmlFor="lastName" className="text-sm font-medium">
+          Last Name
+        </label>
         <input
           id="lastName"
           type="text"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <div className="space-y-2">
-        <label htmlFor="email" className="text-sm font-medium">Email</label>
+        <label htmlFor="email" className="text-sm font-medium">
+          Email
+        </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <div className="space-y-2">
-        <label htmlFor="password" className="text-sm font-medium">Password</label>
+        <label htmlFor="password" className="text-sm font-medium">
+          Password
+        </label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <div className="space-y-2">
-        <label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</label>
+        <label htmlFor="confirmPassword" className="text-sm font-medium">
+          Confirm Password
+        </label>
         <input
           id="confirmPassword"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full p-2 border rounded-md"
+          className="w-full rounded-md border p-2"
           required
         />
       </div>
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary-dark transition"
+        className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition"
       >
         {isLoading ? 'Creating Account...' : 'Create Account'}
       </button>

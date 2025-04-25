@@ -1,22 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Nunito_Sans } from "next/font/google";
-import "../../globals.css";
-
-const NunitoSans = Nunito_Sans({
-  variable: "--font-NunitoSans",
-  subsets: ["latin"],
-});
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function AdminAuthLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <div
-      className={`flex min-h-screen flex-col bg-neutral-950 ${NunitoSans.variable}`}
-    >
+    <div className={`flex min-h-screen flex-col bg-neutral-950`}>
       {/* Header with logo */}
       <header className="bg-black py-6">
         <div className="container mx-auto px-4">
@@ -54,5 +45,5 @@ export default function AdminAuthLayout({
         </div>
       </footer>
     </div>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { useForm, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import MultiImageUploader from "./MultiImageUploader";
-import { Resolver, SubmitHandler } from "react-hook-form";
-import { useTransition } from "react";
-import { createCategory } from "@/app/actions/admin/main/category";
-
+import { useForm, FormProvider } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import MultiImageUploader from './MultiImageUploader'
+import { Resolver, SubmitHandler } from 'react-hook-form'
+import { useTransition } from 'react'
+import { createCategory } from '@/app/actions/admin/main/category'
+import { Button } from '@/components/ui/button'
 const categorySchema = z.object({
-  name: z.string().min(1, "Category name is required"),
+  name: z.string().min(1, 'Category name is required'),
   images: z
     .array(
       z.object({
@@ -20,57 +20,57 @@ const categorySchema = z.object({
         alt: z.string(),
       }),
     )
-    .min(1, "At least one image is required"),
+    .min(1, 'At least one image is required'),
   visibility: z.boolean().default(true),
-});
+})
 
 type CategoryFormValues = {
-  name: string;
-  images: { src: string; alt: string }[];
-  visibility: boolean;
-};
+  name: string
+  images: { src: string; alt: string }[]
+  visibility: boolean
+}
 
 export default function AddCategory({
   setOpen,
 }: {
-  setOpen: (open: boolean) => void;
+  setOpen: (open: boolean) => void
 }) {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition()
   const methods = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema) as Resolver<CategoryFormValues>,
     defaultValues: {
-      name: "",
+      name: '',
       images: [],
       visibility: true,
     },
-  });
+  })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = methods;
+  } = methods
 
   const onSubmit: SubmitHandler<CategoryFormValues> = (data) => {
     startTransition(async () => {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("visibility", data.visibility.toString());
-      formData.append("images", JSON.stringify(data.images));
+      const formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('visibility', data.visibility.toString())
+      formData.append('images', JSON.stringify(data.images))
 
-      const result = await createCategory(formData);
+      const result = await createCategory(formData)
       if (result.success) {
-        setOpen(false);
+        setOpen(false)
       }
-    });
-  };
+    })
+  }
 
   return (
     <FormProvider {...methods}>
       <form
         onSubmit={(e) => {
-          e.stopPropagation();
-          handleSubmit(onSubmit)(e);
+          e.stopPropagation()
+          handleSubmit(onSubmit)(e)
         }}
         className="space-y-4 px-4 pb-4"
       >
@@ -81,9 +81,9 @@ export default function AddCategory({
           </Label>
           <Input
             id="name"
-            {...register("name")}
+            {...register('name')}
             placeholder="Enter category name"
-            className={`${errors.name ? "border-destructive" : "border-black"}`}
+            className={`${errors.name ? 'border-destructive' : 'border-black'}`}
           />
           {errors.name && (
             <p className="text-destructive text-sm">{errors.name.message}</p>
@@ -113,9 +113,9 @@ export default function AddCategory({
         <div className="flex items-center space-x-2">
           <Checkbox
             id="visibility"
-            checked={methods.watch("visibility")}
+            checked={methods.watch('visibility')}
             onCheckedChange={(checked) => {
-              methods.setValue("visibility", checked as boolean);
+              methods.setValue('visibility', checked as boolean)
             }}
           />
           <label htmlFor="visibility" className="text-sm text-gray-800">
@@ -129,22 +129,24 @@ export default function AddCategory({
 
         {/* Buttons */}
         <div className="flex w-full items-center justify-end gap-x-3 pt-2">
-          <button
+          <Button
             type="button"
-            className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
+            className="hover:bg-LightGrey font-normal text-black"
+            variant="outline"
             onClick={() => setOpen(false)}
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
-            className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
+            className="hover:bg-LightGrey font-normal text-black"
+            variant="outline"
             disabled={isPending}
           >
-            {isPending ? "Saving..." : "Save"}
-          </button>
+            {isPending ? 'Saving...' : 'Save'}
+          </Button>
         </div>
       </form>
     </FormProvider>
-  );
+  )
 }

@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import "../../globals.css";
-import AdminHeader from "@/components/layout/AdminHeader";
-import AdminSidebar from "@/components/layout/AdminSidebar";
+import type { Metadata } from 'next'
+import AdminHeader from '@/components/layout/AdminHeader'
+import AdminSidebar from '@/components/layout/AdminSidebar'
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Admin Dashboard",
-};
+  title: 'Admin Dashboard',
+  description: 'Admin Dashboard',
+}
 
 export default function AdminLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="w-full bg-black">
@@ -25,5 +24,5 @@ export default function AdminLayout({
         </div>
       </div>
     </div>
-  );
+  )
 }

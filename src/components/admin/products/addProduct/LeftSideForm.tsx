@@ -1,19 +1,22 @@
-"use client";
-import { useFormContext } from "react-hook-form";
-import { ProductFormValues } from "./ProductInfo";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import MultiImageUploader from "./MultiImageUploader";
-import Categories from "./Categories";
+'use client'
+import { useFormContext } from 'react-hook-form'
+import { ProductFormValues } from './ProductInfo'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import MultiImageUploader from './MultiImageUploader'
+import Categories from './Categories'
+import Pricing from './Pricing'
+import Inventory from './Inventory'
+import Shipping from './Shipping'
 
 export default function LeftSideForm() {
   const {
     register,
     formState: { errors },
-  } = useFormContext<ProductFormValues>();
+  } = useFormContext<ProductFormValues>()
 
-  const form = useFormContext<ProductFormValues>();
+  const form = useFormContext<ProductFormValues>()
   return (
     <div className="space-y-5">
       <div className="space-y-7 rounded-lg bg-white p-3">
@@ -24,9 +27,9 @@ export default function LeftSideForm() {
           </Label>
           <Input
             id="title"
-            {...register("title")}
+            {...register('title')}
             placeholder="Enter product title"
-            className={`${errors.title ? "border-destructive" : "border-black"}`}
+            className={`${errors.title ? 'border-destructive' : 'border-black'}`}
           />
           {errors.title && (
             <p className="text-destructive text-sm">{errors.title.message}</p>
@@ -40,9 +43,9 @@ export default function LeftSideForm() {
           </Label>
           <Input
             id="sku"
-            {...register("sku")}
+            {...register('sku')}
             placeholder="Enter product sku"
-            className={`${errors.sku ? "border-destructive" : "border-black"}`}
+            className={`${errors.sku ? 'border-destructive' : 'border-black'}`}
           />
           {errors.sku && (
             <p className="text-destructive text-sm">{errors.sku.message}</p>
@@ -56,10 +59,13 @@ export default function LeftSideForm() {
           </Label>
           <Input
             id="barcode"
-            {...register("barcode")}
+            {...register('barcode')}
             placeholder="Enter product barcode"
-            className={`${errors.barcode ? "border-destructive" : "border-black"}`}
+            className={`${errors.barcode ? 'border-destructive' : 'border-black'}`}
           />
+          {errors.barcode && (
+            <p className="text-destructive text-sm">{errors.barcode.message}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -69,10 +75,10 @@ export default function LeftSideForm() {
           </Label>
           <Textarea
             id="description"
-            {...register("description")}
+            {...register('description')}
             placeholder="Enter product description"
             rows={4}
-            className={`${errors.description ? "border-destructive" : "border-black"} h-48`}
+            className={`${errors.description ? 'border-destructive' : 'border-black'} h-48`}
           />
           {errors.description && (
             <p className="text-destructive text-sm">
@@ -113,6 +119,15 @@ export default function LeftSideForm() {
           )}
         </div>
       </div>
+
+      {/* Price */}
+      <Pricing />
+
+      {/* Inventory */}
+      <Inventory />
+
+      {/* Shipping */}
+      <Shipping />
     </div>
-  );
+  )
 }
