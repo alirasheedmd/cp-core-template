@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import AdminHeader from '@/components/layout/AdminHeader'
 import AdminSidebar from '@/components/layout/AdminSidebar'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
@@ -18,9 +19,9 @@ export default function AdminLayout({
       <div className="bg-LightWhite h-[calc(100vh-63px)] rounded-t-2xl">
         <div className="flex h-[calc(100vh-63px)] items-start">
           <AdminSidebar />
-          <div className="h-[calc(100vh-63px)] w-full overflow-y-scroll rounded-t-2xl lg:p-5">
+          <ScrollArea className="h-[calc(100vh-63px)] w-full rounded-t-2xl lg:p-5">
             {children}
-          </div>
+          </ScrollArea>
         </div>
       </div>
     </div>

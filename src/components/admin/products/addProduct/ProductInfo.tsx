@@ -107,7 +107,7 @@ export default function ProductInfo() {
 
   return (
     <FormProvider {...methods}>
-      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="pb-24">
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
           {/* Left Side */}
           <div className="basis-[70%]">
@@ -123,7 +123,7 @@ export default function ProductInfo() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-6 flex justify-end gap-4">
+        <div className="mt-8 flex justify-end gap-4">
           <Button
             type="button"
             className="hover:bg-LightGrey font-normal text-black"
