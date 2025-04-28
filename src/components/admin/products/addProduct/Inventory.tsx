@@ -28,7 +28,7 @@ export default function Inventory() {
 
   return (
     <div className="rounded-lg bg-white p-3">
-      <h2 className="mb-4 text-lg font-semibold">Inventory</h2>
+      <h2 className="mb-4 text-sm font-semibold">Inventory</h2>
 
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
@@ -57,13 +57,13 @@ export default function Inventory() {
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="product" id="productLevel" />
-              <Label htmlFor="productLevel" className="font-normal">
+              <Label htmlFor="productLevel" className="text-sm font-normal">
                 On the product level
               </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="variant" id="variantLevel" />
-              <Label htmlFor="variantLevel" className="font-normal">
+              <Label htmlFor="variantLevel" className="text-sm font-normal">
                 On the variant level
               </Label>
             </div>
@@ -77,13 +77,15 @@ export default function Inventory() {
             }`}
           >
             <div className="mt-3 space-y-6">
-              <div className="grid grid-cols-2 gap-10">
+              <div className="grid grid-cols-2 gap-10 px-1">
                 <div className="space-y-2">
-                  <Label htmlFor="currentStock">Current stock</Label>
+                  <Label htmlFor="currentStock" className="text-sm">
+                    Current stock
+                  </Label>
                   <Input
                     id="currentStock"
                     {...register('currentStock')}
-                    className={`${errors.currentStock ? 'border-destructive' : 'border-black'}`}
+                    className={`${errors.currentStock ? 'border-destructive' : 'border-black'} text-sm`}
                   />
                   {errors.currentStock && (
                     <p className="text-destructive text-sm">
@@ -95,14 +97,14 @@ export default function Inventory() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="lowStock"
-                    className={`${errors.lowStock ? 'border-destructive' : 'border-black'}`}
+                    className={`${errors.lowStock ? 'border-destructive' : 'border-black'} text-sm`}
                   >
                     Low stock threshold
                   </Label>
                   <Input
                     id="lowStock"
                     {...register('lowStock')}
-                    className={`${errors.lowStock ? 'border-destructive' : 'border-black'}`}
+                    className={`${errors.lowStock ? 'border-destructive' : 'border-black'} `}
                   />
                   {errors.lowStock && (
                     <p className="text-destructive text-sm">
@@ -122,9 +124,11 @@ export default function Inventory() {
                   className="rounded-lg bg-white p-3"
                   align="start"
                 >
-                  <h2 className="mb-4 text-base font-semibold">Add field</h2>
+                  <h2 className="mb-4 text-sm font-semibold">Add field</h2>
                   <div className="space-y-2">
-                    <Label htmlFor="damageProduct">Damage product</Label>
+                    <Label htmlFor="damageProduct" className="text-sm">
+                      Damage product
+                    </Label>
                     <Input
                       id="damageProduct"
                       {...register('damageProduct')}
@@ -141,12 +145,12 @@ export default function Inventory() {
                   <div className="flex w-full items-center justify-end gap-x-3 pt-8">
                     <button
                       type="button"
-                      className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
+                      className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7]"
                       onClick={() => setOpen(false)}
                     >
                       Cancel
                     </button>
-                    <button className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]">
+                    <button className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7]">
                       Save
                     </button>
                   </div>

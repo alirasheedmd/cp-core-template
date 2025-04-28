@@ -47,6 +47,19 @@ export const productSchema = z.object({
   height: z.string().optional(),
   country: z.string().optional(),
   hsCode: z.string().optional(),
+  pageTitle: z
+    .string()
+    .max(70, 'Page title must be 70 characters or less')
+    .optional(),
+  metaDescription: z
+    .string()
+    .max(100, 'Meta description must be 100 characters or less')
+    .optional(),
+  urlHandle: z.string().optional(),
+  type: z.string().optional(),
+  collection: z.string().optional(),
+  organization: z.string().optional(),
+  tag: z.string().optional(),
 })
 
 export type ProductFormValues = z.infer<typeof productSchema>
@@ -116,9 +129,7 @@ export default function ProductInfo() {
 
           {/* Right Side */}
           <div className="basis-[30%] space-y-5">
-            <div className="rounded-lg bg-white p-3">
-              <RightSideForm />
-            </div>
+            <RightSideForm />
           </div>
         </div>
 

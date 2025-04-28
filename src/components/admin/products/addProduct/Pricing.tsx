@@ -11,7 +11,7 @@ export default function Pricing() {
   } = useFormContext<ProductFormValues>()
   return (
     <div className="rounded-lg bg-white p-3">
-      <h2 className="mb-4 text-lg font-semibold">Pricing</h2>
+      <h2 className="mb-4 text-sm font-semibold">Pricing</h2>
 
       {/* Price */}
       <div className="space-y-2">

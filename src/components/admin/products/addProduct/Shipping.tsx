@@ -26,7 +26,7 @@ export default function Shipping() {
   } = useFormContext<ProductFormValues>()
   return (
     <div className="rounded-lg bg-white p-3">
-      <h2 className="mb-4 text-lg font-semibold">Shipping</h2>
+      <h2 className="mb-4 text-sm font-semibold">Shipping</h2>
 
       <div className="flex items-center space-x-2">
         <Checkbox
@@ -50,7 +50,9 @@ export default function Shipping() {
           {/* First Row */}
           <div className="grid grid-cols-3 gap-10">
             <div className="space-y-2">
-              <Label htmlFor="shippingPrice">Shipping Price</Label>
+              <Label htmlFor="shippingPrice" className="text-sm">
+                Shipping Price
+              </Label>
               <Input
                 id="shippingPrice"
                 {...register('shippingPrice')}
@@ -76,7 +78,9 @@ export default function Shipping() {
           {/* Second Row */}
           <div className="mt-5 grid grid-cols-3 gap-10">
             <div className="space-y-2">
-              <Label htmlFor="weight">Weight</Label>
+              <Label htmlFor="weight" className="text-sm">
+                Weight
+              </Label>
               <Input
                 id="weight"
                 placeholder="0.0"
@@ -108,7 +112,7 @@ export default function Shipping() {
           <div className="mt-5 grid grid-cols-3 gap-10">
             <div className="space-y-2">
               <Label htmlFor="height">
-                Height<span className="text-gray-500">(optional)</span>
+                Height<span className="text-sm text-gray-500">(optional)</span>
               </Label>
               <Input
                 id="height"
@@ -124,7 +128,7 @@ export default function Shipping() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="width">
+              <Label htmlFor="width" className="text-sm">
                 Width<span className="text-gray-500">(optional)</span>
               </Label>
               <Input
@@ -141,7 +145,7 @@ export default function Shipping() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="length">
+              <Label htmlFor="length" className="text-sm">
                 Length<span className="text-gray-500">(optional)</span>
               </Label>
               <Input
@@ -169,7 +173,9 @@ export default function Shipping() {
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  <Label htmlFor="country">Country / Region</Label>
+                  <Label htmlFor="country" className="text-sm">
+                    Country / Region
+                  </Label>
                   <Input
                     id="country"
                     placeholder="0.0"
@@ -184,7 +190,9 @@ export default function Shipping() {
                 </div>
 
                 <div className="mt-5 space-y-2">
-                  <Label htmlFor="hsCode">HS Code</Label>
+                  <Label htmlFor="hsCode" className="text-sm">
+                    HS Code
+                  </Label>
                   <Input
                     id="hsCode"
                     placeholder="0.0"

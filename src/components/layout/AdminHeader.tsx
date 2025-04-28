@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import Image from "next/image";
-import { FaBell, FaUser, FaSignOutAlt } from "react-icons/fa";
-import AdminMenu from "./AdminMenu";
-import { useState, useRef, useEffect } from "react";
-import { logout } from "@/app/actions/admin/auth/adminAuth";
+import Link from 'next/link'
+import Image from 'next/image'
+import { FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa'
+import AdminMenu from './AdminMenu'
+import { useState, useRef, useEffect } from 'react'
+import { logout } from '@/app/actions/admin/auth/adminAuth'
 
 export default function AdminHeader() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -18,12 +18,12 @@ export default function AdminHeader() {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsDropdownOpen(false);
+        setIsDropdownOpen(false)
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <nav className="h-[63px] w-full bg-black">
@@ -31,7 +31,7 @@ export default function AdminHeader() {
         {/* Logo */}
         <Link href="/" className="hidden shrink-0 rounded-sm lg:block">
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt="logo"
             height={40}
             width={110}
@@ -90,5 +90,5 @@ export default function AdminHeader() {
         <div className="text-transparent lg:hidden">AB</div>
       </div> */}
     </nav>
-  );
+  )
 }

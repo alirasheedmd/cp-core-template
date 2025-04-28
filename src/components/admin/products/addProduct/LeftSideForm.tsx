@@ -9,6 +9,7 @@ import Categories from './Categories'
 import Pricing from './Pricing'
 import Inventory from './Inventory'
 import Shipping from './Shipping'
+import SearchEngineListing from './SearchEngineListing'
 
 export default function LeftSideForm() {
   const {
@@ -128,6 +129,9 @@ export default function LeftSideForm() {
 
       {/* Shipping */}
       <Shipping />
+
+      {/* Search Engine Listing */}
+      <SearchEngineListing />
     </div>
   )
 }

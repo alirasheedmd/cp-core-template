@@ -34,7 +34,7 @@ export default function Categories() {
   return (
     <div className="relative">
       <div className="flex items-center justify-between">
-        <h2 className="mb-4 text-lg font-semibold">Categories</h2>
+        <h2 className="mb-4 text-sm font-semibold">Categories</h2>
         {/* Add Category Button */}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
@@ -56,7 +56,7 @@ export default function Categories() {
         </Dialog>
       </div>
       {/* Vertical line for the entire list */}
-      <div className="absolute top-15.5 bottom-[18px] left-0 w-px bg-black"></div>
+      <div className="absolute top-[3.4rem] bottom-[18px] left-0 w-px bg-black"></div>
       <ul className="space-y-2">
         {dummyCategories.map((category) => (
           <CategoryItem
