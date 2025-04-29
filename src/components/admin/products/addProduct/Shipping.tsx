@@ -17,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 export default function Shipping() {
   const [trackProduct, setTrackProduct] = useState(false)
@@ -25,7 +26,7 @@ export default function Shipping() {
     formState: { errors },
   } = useFormContext<ProductFormValues>()
   return (
-    <div className="rounded-lg bg-white p-3">
+    <AdminContainer>
       <h2 className="mb-4 text-sm font-semibold">Shipping</h2>
 
       <div className="flex items-center space-x-2">
@@ -171,7 +172,7 @@ export default function Shipping() {
                   <span className="ml-2 text-xs text-gray-500">(optional)</span>
                 </p>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-1">
                 <div className="space-y-2">
                   <Label htmlFor="country" className="text-sm">
                     Country / Region
@@ -210,6 +211,6 @@ export default function Shipping() {
           </Accordion>
         </div>
       </div>
-    </div>
+    </AdminContainer>
   )
 }

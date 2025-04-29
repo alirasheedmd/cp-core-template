@@ -3,6 +3,7 @@ import { Label } from '@/components/ui/label'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 export default function ProductOrganization() {
   const {
@@ -10,7 +11,7 @@ export default function ProductOrganization() {
     formState: { errors },
   } = useFormContext<ProductFormValues>()
   return (
-    <div className="rounded-lg bg-white p-3">
+    <AdminContainer>
       <h2 className="mb-4 text-sm font-semibold">Product Organization</h2>
 
       <div className="mt-5 space-y-5">
@@ -82,6 +83,6 @@ export default function ProductOrganization() {
           )}
         </div>
       </div>
-    </div>
+    </AdminContainer>
   )
 }

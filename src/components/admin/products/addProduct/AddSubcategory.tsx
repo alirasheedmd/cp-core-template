@@ -56,7 +56,7 @@ export default function AddSubcategory({
   setOpen: (open: boolean) => void
 }) {
   const [isPending, startTransition] = useTransition()
-  const [open, setComboboxOpen] = useState(false)
+  const [openCombobox, setComboboxOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('')
   const commandRef = useRef<HTMLDivElement>(null)
 
@@ -82,6 +82,7 @@ export default function AddSubcategory({
       name: '',
       images: [],
       visibility: true,
+      parentCategory: '',
     },
   })
 
@@ -155,12 +156,16 @@ export default function AddSubcategory({
           <Label htmlFor="parent-category" className="text-sm">
             Parent Category
           </Label>
-          <Popover open={open} onOpenChange={setComboboxOpen} modal={true}>
+          <Popover
+            open={openCombobox}
+            onOpenChange={setComboboxOpen}
+            modal={true}
+          >
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 role="combobox"
-                aria-expanded={open}
+                aria-expanded={openCombobox}
                 className="w-full justify-between border-black font-normal"
               >
                 {selectedCategory || 'Select category...'}

@@ -13,6 +13,7 @@ import {
 import { Info } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 export default function Inventory() {
   const {
@@ -27,7 +28,7 @@ export default function Inventory() {
   )
 
   return (
-    <div className="rounded-lg bg-white p-3">
+    <AdminContainer>
       <h2 className="mb-4 text-sm font-semibold">Inventory</h2>
 
       <div className="space-y-4">
@@ -172,6 +173,6 @@ export default function Inventory() {
           </div>
         </div>
       </div>
-    </div>
+    </AdminContainer>
   )
 }

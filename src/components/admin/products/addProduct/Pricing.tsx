@@ -3,6 +3,7 @@ import { Label } from '@/components/ui/label'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
 import { Separator } from '@/components/ui/separator'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 export default function Pricing() {
   const {
@@ -10,7 +11,7 @@ export default function Pricing() {
     formState: { errors },
   } = useFormContext<ProductFormValues>()
   return (
-    <div className="rounded-lg bg-white p-3">
+    <AdminContainer>
       <h2 className="mb-4 text-sm font-semibold">Pricing</h2>
 
       {/* Price */}
@@ -141,6 +142,6 @@ export default function Pricing() {
           )}
         </div>
       </div>
-    </div>
+    </AdminContainer>
   )
 }

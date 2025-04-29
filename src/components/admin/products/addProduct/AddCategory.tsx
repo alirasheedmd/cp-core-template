@@ -8,9 +8,13 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import MultiImageUploader from './MultiImageUploader'
 import { Resolver, SubmitHandler } from 'react-hook-form'
-import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { createCategory } from '@/app/actions/admin/main/category'
 import { Button } from '@/components/ui/button'
+import { getAllSubcategories } from '@/utils/categories'
+import { dummyCategories } from '@/data/dummyCategories'
+import { MultiSelect, Option } from '@/components/common/MultiSelect'
+
 const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required'),
   images: z
@@ -22,12 +26,14 @@ const categorySchema = z.object({
     )
     .min(1, 'At least one image is required'),
   visibility: z.boolean().default(true),
+  subcategories: z.array(z.string()).default([]),
 })
 
 type CategoryFormValues = {
   name: string
   images: { src: string; alt: string }[]
   visibility: boolean
+  subcategories: string[]
 }
 
 export default function AddCategory({
@@ -36,12 +42,16 @@ export default function AddCategory({
   setOpen: (open: boolean) => void
 }) {
   const [isPending, startTransition] = useTransition()
+  const [selectedSubcategories, setSelectedSubcategories] = useState<Option[]>(
+    [],
+  )
   const methods = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema) as Resolver<CategoryFormValues>,
     defaultValues: {
       name: '',
       images: [],
       visibility: true,
+      subcategories: [],
     },
   })
 
@@ -50,6 +60,12 @@ export default function AddCategory({
     handleSubmit,
     formState: { errors },
   } = methods
+
+  const dummySubcategories = getAllSubcategories(dummyCategories)
+  const subcategoryOptions: Option[] = dummySubcategories.map((sub) => ({
+    value: sub.name,
+    label: sub.name,
+  }))
 
   const onSubmit: SubmitHandler<CategoryFormValues> = (data) => {
     startTransition(async () => {
@@ -63,6 +79,14 @@ export default function AddCategory({
         setOpen(false)
       }
     })
+  }
+
+  const handleSubcategoryChange = (selected: Option[]) => {
+    setSelectedSubcategories(selected)
+    methods.setValue(
+      'subcategories',
+      selected.map((option) => option.value),
+    )
   }
 
   return (
@@ -105,6 +129,24 @@ export default function AddCategory({
           {errors.images && (
             <p className="text-destructive -mt-3 text-sm">
               {errors.images.message}
+            </p>
+          )}
+        </div>
+
+        {/* Subcategories */}
+        <div className="space-y-2">
+          <Label htmlFor="subcategories" className="text-sm">
+            Subcategories
+          </Label>
+          <MultiSelect
+            options={subcategoryOptions}
+            selected={selectedSubcategories}
+            onSelectedChange={handleSubcategoryChange}
+            placeholder="Select subcategories..."
+          />
+          {errors.subcategories && (
+            <p className="text-destructive text-sm">
+              {errors.subcategories.message}
             </p>
           )}
         </div>

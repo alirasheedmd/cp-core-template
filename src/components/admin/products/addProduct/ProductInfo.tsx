@@ -1,5 +1,5 @@
 'use client'
-import { useForm } from 'react-hook-form'
+import { Resolver, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import LeftSideForm from './LeftSideForm'
 import RightSideForm from './RightSideForm'
@@ -22,6 +22,7 @@ export const productSchema = z.object({
   status: z.enum(['active', 'inactive']),
   publishDate: z.string().min(1, 'Publish date is required'),
   categories: z.array(z.string()).min(1, 'Select at least one category'),
+  subcategories: z.array(z.string()).default([]),
   images: z
     .array(
       z.object({
@@ -60,6 +61,15 @@ export const productSchema = z.object({
   collection: z.string().optional(),
   organization: z.string().optional(),
   tag: z.string().optional(),
+  recommendedProducts: z
+    .array(
+      z.object({
+        _id: z.string(),
+        name: z.string(),
+      }),
+    )
+    .default([])
+    .optional(),
 })
 
 export type ProductFormValues = z.infer<typeof productSchema>
@@ -73,7 +83,7 @@ export default function ProductInfo() {
   )
 
   const methods = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
       status: 'active',
       publishDate: new Date().toISOString().split('T')[0],
@@ -120,7 +130,7 @@ export default function ProductInfo() {
 
   return (
     <FormProvider {...methods}>
-      <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="pb-24">
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
           {/* Left Side */}
           <div className="basis-[70%]">

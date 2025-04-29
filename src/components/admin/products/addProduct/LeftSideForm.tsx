@@ -10,6 +10,7 @@ import Pricing from './Pricing'
 import Inventory from './Inventory'
 import Shipping from './Shipping'
 import SearchEngineListing from './SearchEngineListing'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 export default function LeftSideForm() {
   const {
@@ -20,7 +21,7 @@ export default function LeftSideForm() {
   const form = useFormContext<ProductFormValues>()
   return (
     <div className="space-y-5">
-      <div className="space-y-7 rounded-lg bg-white p-3">
+      <AdminContainer className="space-y-7">
         {/* Title */}
         <div className="space-y-2">
           <Label htmlFor="title" className="text-sm">
@@ -107,10 +108,10 @@ export default function LeftSideForm() {
             </p>
           )}
         </div>
-      </div>
+      </AdminContainer>
 
       {/* Categories */}
-      <div className="rounded-lg bg-white p-3">
+      <AdminContainer>
         <div className="space-y-2">
           <Categories />
           {errors.categories && (
@@ -119,7 +120,7 @@ export default function LeftSideForm() {
             </p>
           )}
         </div>
-      </div>
+      </AdminContainer>
 
       {/* Price */}
       <Pricing />

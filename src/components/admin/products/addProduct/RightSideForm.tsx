@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/select'
 import { DatePicker } from '@/components/common/DatePicker'
 import ProductOrganization from './ProductOrganization'
+import RecommendedProduct from './RecommendedProduct'
+import AdminContainer from '../../shared/AdminContainer'
 
 export default function RightSideForm() {
   const {
@@ -28,7 +30,7 @@ export default function RightSideForm() {
   return (
     <div className="space-y-4">
       {/* Status */}
-      <div className="space-y-2 rounded-lg bg-white p-3">
+      <AdminContainer className="space-y-2">
         <Label htmlFor="status" className="text-sm">
           Status
         </Label>
@@ -52,10 +54,10 @@ export default function RightSideForm() {
         {errors.status && (
           <p className="text-destructive text-sm">{errors.status.message}</p>
         )}
-      </div>
+      </AdminContainer>
 
       {/* Publish / Restock Date */}
-      <div className="space-y-2 rounded-lg bg-white p-3">
+      <AdminContainer className="space-y-2">
         <Label htmlFor="publishDate" className="text-sm">
           Publish / Restock Date
         </Label>
@@ -76,7 +78,10 @@ export default function RightSideForm() {
             {errors.publishDate.message}
           </p>
         )}
-      </div>
+      </AdminContainer>
+
+      {/* Recommended Product */}
+      <RecommendedProduct />
 
       {/* Product Organization */}
       <ProductOrganization />

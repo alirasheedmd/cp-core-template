@@ -1,19 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
-import AddSubcategory from "./AddSubcategory";
+} from '@/components/ui/dialog'
+import { useState } from 'react'
+import AddSubcategory from './AddSubcategory'
 
 interface CategoryItemProps {
-  name: string;
-  isSelected: boolean;
-  onChange: () => void;
+  name: string
+  isSelected: boolean
+  onChange: () => void
 }
 
 export default function CategoryItem({
@@ -21,7 +21,7 @@ export default function CategoryItem({
   isSelected,
   onChange,
 }: CategoryItemProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   return (
     <li className="relative flex items-center justify-between pl-6">
       {/* Horizontal line for each item */}
@@ -52,5 +52,5 @@ export default function CategoryItem({
         </DialogContent>
       </Dialog>
     </li>
-  );
+  )
 }

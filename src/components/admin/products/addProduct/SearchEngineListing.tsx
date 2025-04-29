@@ -4,6 +4,7 @@ import { Pencil } from 'lucide-react'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 export default function SearchEngineListing() {
   const {
@@ -24,7 +25,7 @@ export default function SearchEngineListing() {
   const urlHandle = watch('urlHandle') || ''
 
   return (
-    <div className="rounded-lg bg-white p-3">
+    <AdminContainer>
       <div className="flex items-center justify-between">
         <h2 className="mb-4 text-sm font-semibold">Search Engine Listing</h2>
 
@@ -39,7 +40,7 @@ export default function SearchEngineListing() {
       </p>
 
       <div
-        className={`mt-6 space-y-5 ${
+        className={`mt-6 space-y-5 overflow-hidden px-1 ${
           isEditing
             ? 'max-h-[1000px] opacity-100 duration-300'
             : 'max-h-0 opacity-0 duration-75'
@@ -114,6 +115,6 @@ export default function SearchEngineListing() {
           </div>
         </div>
       </div>
-    </div>
+    </AdminContainer>
   )
 }
