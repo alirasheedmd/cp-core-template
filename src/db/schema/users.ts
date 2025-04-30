@@ -1,5 +1,5 @@
 import { InferSelectModel } from 'drizzle-orm'
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, boolean, } from 'drizzle-orm/pg-core'
 
 // Users table
 export const users = pgTable('users', {
