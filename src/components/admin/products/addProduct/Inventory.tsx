@@ -146,12 +146,12 @@ export default function Inventory() {
                   <div className="flex w-full items-center justify-end gap-x-3 pt-8">
                     <button
                       type="button"
-                      className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7]"
+                      className="hover:bg-LightGrey rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors"
                       onClick={() => setOpen(false)}
                     >
                       Cancel
                     </button>
-                    <button className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7]">
+                    <button className="hover:bg-LightGrey rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors">
                       Save
                     </button>
                   </div>

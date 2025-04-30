@@ -1,35 +1,35 @@
-"use client";
+'use client'
 // React and Next.js imports
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 // Form validation imports
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
 // UI Components imports
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-// API utilities
-import { updateCustomerDetails } from "@/utils/updateOrderCustomerDetails";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+// Data imports
+import { dummyOrders } from '@/data/dummyOrders'
 
 const formSchema = z.object({
   phoneNumber: z
     .string()
-    .min(1, "Phone number is required")
-    .regex(/^[0-9]+$/, "Must be a valid phone number")
-    .min(10, "Phone number must be at least 10 digits")
-    .max(14, "Phone number must not exceed 14 digits"),
-});
+    .min(1, 'Phone number is required')
+    .regex(/^[0-9]+$/, 'Must be a valid phone number')
+    .min(10, 'Phone number must be at least 10 digits')
+    .max(14, 'Phone number must not exceed 14 digits'),
+})
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>
 
 export default function EditContactInformation({
   userEmail,
@@ -37,50 +37,52 @@ export default function EditContactInformation({
   orderId,
   onClose,
 }: {
-  userEmail: string | undefined;
-  userPhoneNumber: string | undefined;
-  orderId: string;
-  onClose: () => void;
+  userEmail: string | undefined
+  userPhoneNumber: string | undefined
+  orderId: string
+  onClose: () => void
 }) {
-  const router = useRouter();
-  const [updateProfile, setUpdateProfile] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const router = useRouter()
+  const [updateProfile, setUpdateProfile] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  // Find the order from dummy data
+  const order = dummyOrders.find((order) => order.orderId === orderId)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phoneNumber: userPhoneNumber || "",
+      phoneNumber: order?.customerDetails.phoneNumber || userPhoneNumber || '',
     },
-  });
+  })
 
   const handleSave = async (data: FormValues) => {
     try {
-      setIsLoading(true);
-      // Update customer phone number
-      await updateCustomerDetails(
+      setIsLoading(true)
+      // In a real application, this would be an API call
+      console.log(
+        'Updating order:',
         orderId,
-        // @ts-expect-error phoneNumber type error
-        {
-          phoneNumber: data.phoneNumber,
-        },
-      );
+        'with phone number:',
+        data.phoneNumber,
+      )
 
-      // If checkbox is selected, update user address
+      // If checkbox is selected, update user profile
       if (updateProfile) {
-        console.log("updateProfile");
+        console.log('Updating user profile with new phone number')
       }
 
-      setOpen(false); // Close dialog after successful update
-      onClose();
+      setOpen(false) // Close dialog after successful update
+      onClose()
       // Refresh page to fetch data
-      router.refresh();
+      router.refresh()
     } catch (error) {
-      console.error("Error updating customer details:", error);
+      console.error('Error updating customer details:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -125,7 +127,7 @@ export default function EditContactInformation({
             </Label>
             <Input
               id="phoneNumber"
-              {...form.register("phoneNumber")}
+              {...form.register('phoneNumber')}
               className="w-full text-sm lg:text-base"
             />
             {form.formState.errors.phoneNumber && (
@@ -135,14 +137,14 @@ export default function EditContactInformation({
             )}
           </div>
 
-          <div className="flex justify-between gap-x-2 pb-4 pt-0 lg:px-3">
+          <div className="flex justify-between gap-x-2 pt-0 pb-4 lg:px-3">
             {/* Checkbox */}
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="update"
                 checked={updateProfile}
                 onCheckedChange={(checked) =>
-                  setUpdateProfile(checked === "indeterminate" ? true : checked)
+                  setUpdateProfile(checked === 'indeterminate' ? true : checked)
                 }
               />
               <label
@@ -157,8 +159,8 @@ export default function EditContactInformation({
               <button
                 type="button"
                 onClick={() => {
-                  setOpen(false);
-                  onClose();
+                  setOpen(false)
+                  onClose()
                 }}
                 disabled={isLoading}
                 className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7] lg:text-base"
@@ -170,12 +172,12 @@ export default function EditContactInformation({
                 disabled={isLoading}
                 className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7] lg:text-base"
               >
-                {isLoading ? "Saving..." : "Save"}
+                {isLoading ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

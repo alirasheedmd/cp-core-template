@@ -1,71 +1,77 @@
-"use client";
+'use client'
 // React and hooks
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 // Next.js components
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 // Data fetching
-import useSWR from "swr";
+import useSWR from 'swr'
 // Components
-import AdjustQuantityButton from "@/components/admin/orders/editOrder/AdjustQuantityButton";
-import EditOrderUpdateButton from "@/components/admin/orders/editOrder/EditOrderUpdateButton";
+import AdjustQuantityButton from '@/components/admin/orders/editOrder/AdjustQuantityButton'
+import EditOrderUpdateButton from '@/components/admin/orders/editOrder/EditOrderUpdateButton'
 import SearchProducts, {
   ISuggestion,
-} from "@/components/admin/orders/editOrder/SearchProducts";
-import SelectVariantButton from "@/components/admin/orders/editOrder/SelectVariantButton";
+} from '@/components/admin/orders/editOrder/SearchProducts'
+import SelectVariantButton from '@/components/admin/orders/editOrder/SelectVariantButton'
 // Icons
-import { BiArrowBack } from "react-icons/bi";
-import { LuTruck } from "react-icons/lu";
+import { BiArrowBack } from 'react-icons/bi'
+import { LuTruck } from 'react-icons/lu'
 // Types and interfaces
-import { IOrder, IVariant } from "@/utils/interface";
-import { IUpdateOrderData } from "@/utils/api/order/updateOrder";
+import { IOrder, IVariant } from '@/utils/interface'
+import { IUpdateOrderData } from '@/utils/api/order/updateOrder'
 // API utilities
-import { updateOrder } from "@/utils/api/order";
+import { updateOrder } from '@/utils/api/order'
+import { fetchOrder } from '@/utils/api/order/fetchOrder'
 
 export default function EditOrderPage() {
-  const pathname = usePathname();
-  const orderId = pathname.split("/")[2];
+  const pathname = usePathname()
+  const orderId = pathname.split('/')[2]
   const {
     data: order,
     isLoading,
     error,
-  } = useSWR<IOrder>(
-    orderId ? `/api/get-order?orderId=${orderId}` : null,
-    (url: string) => fetch(url).then((res) => res.json()),
-  );
-  const [selectedItems, setSelectedItems] = useState<ISuggestion[]>([]);
-  const [orderItems, setOrderItems] = useState(order?.items || []);
-  const [sendNotification, setSendNotification] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
+  } = useSWR<IOrder>(orderId ? `/api/get-order?orderId=${orderId}` : null, () =>
+    fetchOrder(orderId),
+  )
+  const [selectedItems, setSelectedItems] = useState<ISuggestion[]>([])
+  const [orderItems, setOrderItems] = useState(order?.items || [])
+  const [sendNotification, setSendNotification] = useState(false)
+  const [hasChanges, setHasChanges] = useState(false)
 
   useEffect(() => {
     if (order?.items) {
-      setOrderItems(order.items);
+      setOrderItems(order.items)
     }
-  }, [order]);
+  }, [order])
 
   // Calculate subtotal for selected items
-  const selectedItemsSubtotal = selectedItems.reduce((total, item) => {
-    const price =
-      item.variant?.discountPrice ?? item.variant?.originalPrice ?? 0;
-    return total + price * (item.quantity ?? 1);
-  }, 0);
+  const selectedItemsSubtotal = selectedItems.reduce(
+    (total: number, item: ISuggestion) => {
+      const price =
+        item.variant?.discountPrice ?? item.variant?.originalPrice ?? 0
+      return total + price * (item.quantity ?? 1)
+    },
+    0,
+  )
 
   // Calculate subtotal for order items
-  const orderItemsSubtotal = orderItems.reduce((total, item) => {
-    return total + (item.price ?? 0) * (item.quantity ?? 0);
-  }, 0);
+  const orderItemsSubtotal = orderItems.reduce(
+    (total: number, item: IOrderItem) => {
+      return total + (item.price ?? 0) * (item.quantity ?? 0)
+    },
+    0,
+  )
 
   // Combined subtotal
-  const subtotal = selectedItemsSubtotal + orderItemsSubtotal;
+  const subtotal = selectedItemsSubtotal + orderItemsSubtotal
 
   // Total amount including shipping
-  const totalAmount = subtotal + (order?.shippingCost || 0);
+  const totalAmount = subtotal + (order?.shippingCost || 0)
 
   const handleProductsSelected = (products: ISuggestion[]) => {
     const productsWithDefaults = products.map((product) => {
-      const defaultVariant = product.variants?.[0];
+      const defaultVariant = product.variants?.[0]
       return {
         ...product,
         quantity: product.quantity ?? 1,
@@ -76,60 +82,60 @@ export default function EditOrderPage() {
                 defaultVariant.discountPrice ?? defaultVariant.originalPrice, // Default to originalPrice if discountPrice is missing
               stock: defaultVariant.stock,
               images: defaultVariant.images,
-              color: defaultVariant.color ?? "", // Provide default empty string if undefined
-              sku: defaultVariant.sku ?? "", // Provide default empty string if undefined
+              color: defaultVariant.color ?? '', // Provide default empty string if undefined
+              sku: defaultVariant.sku ?? '', // Provide default empty string if undefined
               _key: defaultVariant._key,
             }
           : undefined,
-      };
-    });
-    setSelectedItems(productsWithDefaults);
-    setHasChanges(true);
-  };
+      }
+    })
+    setSelectedItems(productsWithDefaults)
+    setHasChanges(true)
+  }
 
   const handleVariantSelect = (variant: IVariant, productId: string) => {
-    setSelectedItems((prevItems) =>
+    setSelectedItems((prevItems: ISuggestion[]) =>
       prevItems.map((item) =>
         item._id === productId ? { ...item, variant: variant } : item,
       ),
-    );
-    setHasChanges(true);
-  };
+    )
+    setHasChanges(true)
+  }
 
   const handleQuantityUpdate = (quantity: number, productId: string) => {
-    setSelectedItems((prevItems) =>
+    setSelectedItems((prevItems: ISuggestion[]) =>
       prevItems.map((item) =>
         item._id === productId ? { ...item, quantity } : item,
       ),
-    );
-    setHasChanges(true);
-  };
+    )
+    setHasChanges(true)
+  }
 
   const handleRemoveProduct = (productId: string) => {
-    setSelectedItems((prevItems) =>
+    setSelectedItems((prevItems: ISuggestion[]) =>
       prevItems.filter((item) => item._id !== productId),
-    );
-    setHasChanges(true);
-  };
+    )
+    setHasChanges(true)
+  }
 
   const handleOrderItemQuantityUpdate = (
     quantity: number,
     variantId: string,
   ) => {
-    setOrderItems((prevItems) =>
+    setOrderItems((prevItems: IOrderItem[]) =>
       prevItems.map((item) =>
         item.variantId === variantId ? { ...item, quantity } : item,
       ),
-    );
-    setHasChanges(true);
-  };
+    )
+    setHasChanges(true)
+  }
 
   const handleOrderItemRemove = (variantId: string) => {
-    setOrderItems((prevItems) =>
+    setOrderItems((prevItems: IOrderItem[]) =>
       prevItems.filter((item) => item.variantId !== variantId),
-    );
-    setHasChanges(true);
-  };
+    )
+    setHasChanges(true)
+  }
 
   useEffect(() => {
     if (
@@ -137,11 +143,11 @@ export default function EditOrderPage() {
       JSON.stringify(order.items) === JSON.stringify(orderItems) &&
       selectedItems.length === 0
     ) {
-      setHasChanges(false);
+      setHasChanges(false)
     }
-  }, [orderItems, selectedItems, order]);
+  }, [orderItems, selectedItems, order])
 
-  const difference = totalAmount - (order?.totalAmount || 0);
+  const difference = totalAmount - (order?.totalAmount || 0)
 
   const updateOrderHandler = async () => {
     const updatedItems = [
@@ -157,26 +163,26 @@ export default function EditOrderPage() {
           variantId: item.variant?._id ?? item.variants![0]._id, // Use ! to assert non-null after filter
           quantity: item.quantity ?? 1, // Default to 1 if undefined
         })),
-    ];
+    ]
 
     const updateData: IUpdateOrderData = {
       orderId,
       items: updatedItems,
       sendNotification,
-    };
+    }
 
-    const response = await updateOrder(updateData);
+    const response = await updateOrder(updateData)
 
     if (response.success) {
-      setHasChanges(false);
-      setSelectedItems([]);
+      setHasChanges(false)
+      setSelectedItems([])
     } else {
-      console.error("Failed to update order:");
+      console.error('Failed to update order:')
     }
-  };
+  }
 
   if (error)
-    return <div className="mx-auto my-10 max-w-6xl">Error loading order</div>;
+    return <div className="mx-auto my-10 max-w-6xl">Error loading order</div>
 
   return (
     <div className="mx-auto max-w-6xl lg:my-4">
@@ -190,10 +196,10 @@ export default function EditOrderPage() {
 
       <div className="mt-5 flex flex-col gap-5 lg:flex-row lg:gap-x-5">
         <div className="basis-[70%] space-y-5">
-          {order?.status === "shipped" ||
-          order?.status === "delivered" ||
-          order?.status === "cancelled" ||
-          order?.status === "returned" ||
+          {order?.status === 'shipped' ||
+          order?.status === 'delivered' ||
+          order?.status === 'cancelled' ||
+          order?.status === 'returned' ||
           isLoading ? null : (
             <div className="bg-white px-2 py-4 lg:rounded-lg lg:p-4">
               {/* Add product */}
@@ -225,25 +231,25 @@ export default function EditOrderPage() {
                           <div className="space-y-0.5">
                             <p className="font-medium">{item?.name}</p>
                             <p className="text-sm text-neutral-500">
-                              {item?.variant?.color || "No color"}
+                              {item?.variant?.color || 'No color'}
                             </p>
                             <p className="text-sm text-neutral-500">
-                              SKU: {item?.variant?.sku || "No SKU"}
+                              SKU: {item?.variant?.sku || 'No SKU'}
                             </p>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-x-6">
                           <p className="text-neutral-500">
-                            Rs.{" "}
+                            Rs.{' '}
                             {item?.variant?.discountPrice ??
                               item?.variant?.originalPrice ??
-                              0}{" "}
+                              0}{' '}
                             x {item.quantity}
                           </p>
 
                           <p className="text-neutral-500">
-                            Rs.{" "}
+                            Rs.{' '}
                             {(item?.variant?.discountPrice ??
                               item?.variant?.originalPrice ??
                               0) * (item.quantity ?? 0)}
@@ -327,8 +333,8 @@ export default function EditOrderPage() {
                       <div className="flex justify-between gap-x-3">
                         <div className="flex gap-x-3">
                           <Image
-                            src={item?.image || "/placeholder-image.png"}
-                            alt={item?.name || "Product"}
+                            src={item?.image || '/placeholder-image.png'}
+                            alt={item?.name || 'Product'}
                             width={60}
                             height={60}
                             className="mb-auto object-contain lg:mb-0"
@@ -336,13 +342,13 @@ export default function EditOrderPage() {
 
                           <div className="space-y-0.5">
                             <p className="text-sm font-medium lg:text-base">
-                              {item?.name || "No Name"}
+                              {item?.name || 'No Name'}
                             </p>
                             <p className="text-xs text-neutral-500 lg:text-sm">
-                              {item?.variant || "No Variant"}
+                              {item?.variant || 'No Variant'}
                             </p>
                             <p className="text-xs text-neutral-500 lg:text-sm">
-                              SKU: {item?.sku || "No SKU"}
+                              SKU: {item?.sku || 'No SKU'}
                             </p>
                             <p className="text-xs text-neutral-500 lg:hidden">
                               Rs. {item?.price} X {item?.quantity}
@@ -361,10 +367,10 @@ export default function EditOrderPage() {
                         </div>
                       </div>
                       {/* Buttons */}
-                      {order?.status === "shipped" ||
-                      order?.status === "delivered" ||
-                      order?.status === "cancelled" ||
-                      order?.status === "returned" ? null : (
+                      {order?.status === 'shipped' ||
+                      order?.status === 'delivered' ||
+                      order?.status === 'cancelled' ||
+                      order?.status === 'returned' ? null : (
                         <div className="mx-auto flex w-full items-center justify-center gap-x-4 pt-2 text-sm">
                           <AdjustQuantityButton
                             // @ts-expect-error - item.stock is not defined
@@ -392,19 +398,19 @@ export default function EditOrderPage() {
               )}
             </div>
 
-            {order?.status === "shipped" && (
+            {order?.status === 'shipped' && (
               <p className="mt-3 text-sm">Shipped orders cannot be edited</p>
             )}
 
-            {order?.status === "delivered" && (
+            {order?.status === 'delivered' && (
               <p className="mt-3 text-sm">Delivered orders cannot be edited</p>
             )}
 
-            {order?.status === "cancelled" && (
+            {order?.status === 'cancelled' && (
               <p className="mt-3 text-sm">Cancelled orders cannot be edited</p>
             )}
 
-            {order?.status === "returned" && (
+            {order?.status === 'returned' && (
               <p className="mt-3 text-sm">Returned orders cannot be edited</p>
             )}
           </div>
@@ -448,10 +454,10 @@ export default function EditOrderPage() {
                       selectedItems.reduce(
                         (total, item) => total + (item.quantity ?? 1),
                         0,
-                      )}{" "}
+                      )}{' '}
                     {orderItems.length + selectedItems.length === 1
-                      ? "item"
-                      : "items"}
+                      ? 'item'
+                      : 'items'}
                   </p>
                   <p>Rs. {subtotal}</p>
 
@@ -498,7 +504,7 @@ export default function EditOrderPage() {
                     <p>Rs. {order?.totalAmount}</p>
                     <p>Difference:</p>
                     <p>
-                      {difference >= 0 ? "+ " : ""}
+                      {difference >= 0 ? '+ ' : ''}
                       {difference}
                     </p>
                     <p>New total:</p>
@@ -524,12 +530,12 @@ export default function EditOrderPage() {
               <EditOrderUpdateButton
                 className={`w-full ${
                   !hasChanges ||
-                  order?.status === "shipped" ||
-                  order?.status === "delivered" ||
-                  order?.status === "cancelled" ||
-                  order?.status === "returned"
-                    ? "pointer-events-none cursor-not-allowed opacity-50"
-                    : ""
+                  order?.status === 'shipped' ||
+                  order?.status === 'delivered' ||
+                  order?.status === 'cancelled' ||
+                  order?.status === 'returned'
+                    ? 'pointer-events-none cursor-not-allowed opacity-50'
+                    : ''
                 }`}
                 onClick={updateOrderHandler}
               />
@@ -538,5 +544,5 @@ export default function EditOrderPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

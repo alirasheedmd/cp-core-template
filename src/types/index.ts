@@ -56,3 +56,46 @@ export interface IProduct {
   createdAt: string
   status: string
 }
+
+export interface IOrderItem {
+  productId: string
+  variantId: string
+  name: string
+  variant: string
+  sku: string
+  price: number
+  quantity: number
+  image: string
+}
+
+export interface IOrderAddress {
+  apartment: string
+  street: string
+  city: string
+  postalCode: string
+}
+
+export interface IOrderCustomer {
+  fullName: string
+  email: string
+  phoneNumber: string
+  address: IOrderAddress
+}
+
+export interface ICustomerDetails {
+  fullName: string
+  email: string
+  phoneNumber: string
+  address: IOrderAddress
+}
+
+export interface IOrder {
+  orderId: string
+  createdAt: string
+  status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
+  paymentMethod: 'CASH_ON_DELIVERY' | 'ONLINE_PAYMENT'
+  totalAmount: number
+  shippingCost: number
+  customerDetails: IOrderCustomer
+  items: IOrderItem[]
+}

@@ -1,57 +1,57 @@
-"use client";
+'use client'
 // React and Next.js imports
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
+import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
 // Data fetching
-import useSWR from "swr";
-import { IOrder } from "@/utils/interface";
+
 // UI Components
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover'
 // Order management components
 
 // Icons
-import { BiArrowBack } from "react-icons/bi";
-import { BsThreeDots } from "react-icons/bs";
-import { FaCircle } from "react-icons/fa6";
-import { LuTruck } from "react-icons/lu";
-import PrintOrderButton from "@/components/admin/orders/orderDetails/PrintOrderButton";
-import OrderStatusSelector from "@/components/admin/orders/orderDetails/OrderStatusSelector";
-import PaymentStatusSelector from "@/components/admin/orders/orderDetails/PaymentStatusSelector";
-import UploadInvoice from "@/components/admin/orders/orderDetails/UploadInvoice";
-import UpdateOrderButton from "@/components/admin/orders/orderDetails/UpdateOrderButton";
-import DeleteOrderButton from "@/components/admin/orders/orderDetails/DeleteOrderButton";
-import EditInformation from "@/components/admin/orders/orderDetails/EditInformation";
+import { BiArrowBack } from 'react-icons/bi'
+import { BsThreeDots } from 'react-icons/bs'
+import { FaCircle } from 'react-icons/fa6'
+import { LuTruck } from 'react-icons/lu'
+import PrintOrderButton from '@/components/admin/orders/orderDetails/PrintOrderButton'
+import OrderStatusSelector from '@/components/admin/orders/orderDetails/OrderStatusSelector'
+import PaymentStatusSelector from '@/components/admin/orders/orderDetails/PaymentStatusSelector'
+import UploadInvoice from '@/components/admin/orders/orderDetails/UploadInvoice'
+import UpdateOrderButton from '@/components/admin/orders/orderDetails/UpdateOrderButton'
+import DeleteOrderButton from '@/components/admin/orders/orderDetails/DeleteOrderButton'
+import EditInformation from '@/components/admin/orders/orderDetails/EditInformation'
+import { dummyOrders } from '@/data/dummyOrders'
 
 export default function OrderDetailsPage() {
-  const pathname = usePathname();
-  const orderId = pathname.split("/")[2];
-  const [uploadResponse, setUploadResponse] = useState<string | null>(null);
+  const pathname = usePathname()
+  const orderId = pathname.split('/')[3]
+  const [uploadResponse, setUploadResponse] = useState<string | null>(null)
 
-  const {
-    data: order,
-    isLoading,
-    error,
-  } = useSWR<IOrder>(
-    orderId ? `/api/admin/get-order?orderId=${orderId}` : null,
-    (url: string) => fetch(url).then((res) => res.json()),
-  );
+  // Find order from dummy data
+  const order = dummyOrders.find((order) => order.orderId === orderId)
+  const isLoading = false
+  const error = null
 
   if (error)
-    return <div className="mx-auto my-10 max-w-6xl">Error loading order</div>;
+    return <div className="mx-auto my-10 max-w-6xl">Error loading order</div>
 
   if (isLoading) {
-    return <OrderSkeleton />;
+    return <OrderSkeleton />
+  }
+
+  if (!order) {
+    return <div className="mx-auto my-10 max-w-6xl">Order not found</div>
   }
 
   const handleUploadResponse = (response: string) => {
-    setUploadResponse(response);
-  };
+    setUploadResponse(response)
+  }
 
   return (
     <div className="mx-auto max-w-6xl lg:my-4">
@@ -112,15 +112,15 @@ export default function OrderDetailsPage() {
 
           {/* Date */}
           <p className="mt-1">
-            {new Date(order?.createdAt ?? "").toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}{" "}
-            at{" "}
-            {new Date(order?.createdAt ?? "").toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
+            {new Date(order?.createdAt ?? '').toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}{' '}
+            at{' '}
+            {new Date(order?.createdAt ?? '').toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
             })}
           </p>
         </div>
@@ -168,17 +168,17 @@ export default function OrderDetailsPage() {
               <div className="p-2 lg:p-4">
                 <p className="text-sm lg:text-base">
                   {order?.paymentMethod
-                    .replace(/_/g, " ")
+                    .replace(/_/g, ' ')
                     .toLowerCase()
                     .replace(/^./, (char) => char.toUpperCase())}
                 </p>
                 <p className="mt-1 text-sm lg:text-base">
-                  {new Date(order?.createdAt ?? "").toLocaleDateString(
-                    "en-US",
+                  {new Date(order?.createdAt ?? '').toLocaleDateString(
+                    'en-US',
                     {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     },
                   )}
                 </p>
@@ -234,7 +234,7 @@ export default function OrderDetailsPage() {
             <div className="mt-4 ml-auto w-32 rounded-lg bg-[#E7E7E7] shadow-xs">
               <OrderStatusSelector
                 orderId={orderId}
-                initialStatus={order?.status ?? ""}
+                initialStatus={order?.status ?? ''}
               />
             </div>
           </div>
@@ -253,11 +253,11 @@ export default function OrderDetailsPage() {
                 {order?.items.reduce(
                   (total, item) => total + (item?.quantity ?? 0),
                   0,
-                )}{" "}
-                {order?.items.length == 1 ? "item" : "items"}
+                )}{' '}
+                {order?.items.length == 1 ? 'item' : 'items'}
               </p>
               <p>
-                Rs.{" "}
+                Rs.{' '}
                 {order?.items.reduce(
                   (total, item) =>
                     total + (item?.price ?? 0) * (item?.quantity ?? 0),
@@ -282,22 +282,22 @@ export default function OrderDetailsPage() {
             <div className="mt-4 flex items-center justify-between gap-x-2">
               <p className="text-sm lg:text-base">
                 {order?.paymentMethod
-                  ?.replace(/_/g, " ")
+                  ?.replace(/_/g, ' ')
                   .toLowerCase()
                   .replace(/^./, (char) => char.toUpperCase())}
               </p>
               <PaymentStatusSelector />
             </div>
             <p className="text-sm lg:text-base">
-              {new Date(order?.createdAt ?? "").toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
+              {new Date(order?.createdAt ?? '').toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
               })}
             </p>
 
             {/* Display when order is paid and payment method is bank transfer */}
-            {order?.paymentMethod === "bank_transfer" && (
+            {order?.paymentMethod === 'ONLINE_PAYMENT' && (
               <UploadInvoice onUploadResponse={handleUploadResponse} />
             )}
           </div>
@@ -385,7 +385,7 @@ export default function OrderDetailsPage() {
         <DeleteOrderButton orderId={orderId} />
       </div>
     </div>
-  );
+  )
 }
 
 const OrderSkeleton = () => {
@@ -496,5 +496,5 @@ const OrderSkeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

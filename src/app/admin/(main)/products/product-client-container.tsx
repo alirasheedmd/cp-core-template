@@ -1,90 +1,90 @@
-"use client";
+'use client'
 
-import { useState, useMemo } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { productsTabs } from "@/data/tabs";
-import { IProduct } from "@/types";
-import Link from "next/link";
-import ProductTabs from "@/components/admin/products/productTable/ProductTabs";
-import ProductActions from "@/components/admin/products/productTable/ProductActions";
-import ProductListMobile from "@/components/admin/products/productTable/ProductListMobile";
-import EmptyProductView from "@/components/admin/products/productTable/EmptyProductView";
-import { ProductsDataTable } from "./products-data-table";
+import { useState, useMemo } from 'react'
+import { ColumnDef } from '@tanstack/react-table'
+import { productsTabs } from '@/data/tabs'
+import { IProduct } from '@/types'
+import Link from 'next/link'
+import ProductTabs from '@/components/admin/products/productTable/ProductTabs'
+import ProductActions from '@/components/admin/products/productTable/ProductActions'
+import ProductListMobile from '@/components/admin/products/productTable/ProductListMobile'
+import EmptyProductView from '@/components/admin/products/productTable/EmptyProductView'
+import { ProductsDataTable } from './products-data-table'
 
 interface ProductClientContainerProps {
-  products: IProduct[];
-  columns: ColumnDef<IProduct, string | number>[];
+  products: IProduct[]
+  columns: ColumnDef<IProduct, string | number>[]
 }
 
 export default function ProductClientContainer({
   products,
   columns,
 }: ProductClientContainerProps) {
-  const [selectedTab, setSelectedTab] = useState<string>(productsTabs[0].id);
-  const [query, setQuery] = useState<string>("");
-  const [selectedRows, setSelectedRows] = useState<IProduct[]>([]);
-  const [clearSelectionTrigger, setClearSelectionTrigger] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<string>(productsTabs[0].id)
+  const [query, setQuery] = useState<string>('')
+  const [selectedRows, setSelectedRows] = useState<IProduct[]>([])
+  const [clearSelectionTrigger, setClearSelectionTrigger] = useState(false)
 
   const clearInput = () => {
-    setQuery("");
-  };
+    setQuery('')
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+    setQuery(e.target.value)
+  }
 
   const productsCount = useMemo(() => {
     return productsTabs.reduce(
       (acc, tab) => {
         acc[tab.id] = products.filter(
           (product: IProduct) =>
-            tab.id === "all-products" || product.status === tab.id,
-        ).length;
-        return acc;
+            tab.id === 'all-products' || product.status === tab.id,
+        ).length
+        return acc
       },
       {} as Record<string, number>,
-    );
-  }, [products]);
+    )
+  }, [products])
 
   const filteredProducts = useMemo(() => {
     return products.filter((product: IProduct) => {
-      const queryLower = query.toLowerCase();
+      const queryLower = query.toLowerCase()
       const statusMatch =
-        selectedTab === "all-products" || product.status === selectedTab;
-      return statusMatch && product.name.toLowerCase().includes(queryLower);
-    });
-  }, [products, query, selectedTab]);
+        selectedTab === 'all-products' || product.status === selectedTab
+      return statusMatch && product.name.toLowerCase().includes(queryLower)
+    })
+  }, [products, query, selectedTab])
 
   const handleDeleteAction = async () => {
     try {
       console.log(
-        "Deleting products:",
-        selectedRows.map((row) => row._id || ""),
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+        'Deleting products:',
+        selectedRows.map((row) => row._id || ''),
+      )
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       // await deleteProducts(selectedRows.map((row) => row._id || ""));
       // await fetchProducts();
-      setSelectedRows([]);
-      setClearSelectionTrigger((prev) => !prev);
+      setSelectedRows([])
+      setClearSelectionTrigger((prev) => !prev)
     } catch (error) {
-      console.error("Error deleting products:", error);
-      throw error;
+      console.error('Error deleting products:', error)
+      throw error
     }
-  };
+  }
 
   const emptyViewMessage = useMemo(() => {
     if (filteredProducts.length === 0 && query) {
-      return `No products found for "${query}"`;
+      return `No products found for "${query}"`
     }
-    if (filteredProducts.length === 0 && selectedTab === "all-products") {
-      return "No products available";
+    if (filteredProducts.length === 0 && selectedTab === 'all-products') {
+      return 'No products available'
     }
     if (filteredProducts.length === 0) {
-      const tabName = productsTabs.find((tab) => tab.id === selectedTab)?.name;
-      return `No ${tabName ? tabName.toLowerCase() : ""} products available`;
+      const tabName = productsTabs.find((tab) => tab.id === selectedTab)?.name
+      return `No ${tabName ? tabName.toLowerCase() : ''} products available`
     }
-    return ""; // Should not happen if filteredProducts > 0
-  }, [selectedTab, filteredProducts, query]);
+    return '' // Should not happen if filteredProducts > 0
+  }, [selectedTab, filteredProducts, query])
 
   return (
     <div className="w-full">
@@ -138,5 +138,5 @@ export default function ProductClientContainer({
         )}
       </div>
     </div>
-  );
+  )
 }

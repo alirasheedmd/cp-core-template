@@ -47,7 +47,7 @@ export default function Categories() {
           </DialogTrigger>
           <DialogContent className="min-w-[50rem] p-0 [&>button]:hidden">
             <DialogHeader>
-              <DialogTitle className="rounded-t-lg bg-[#E7E7E7] px-3 py-3 text-xl font-semibold">
+              <DialogTitle className="bg-LightGrey rounded-t-lg px-3 py-3 text-xl font-semibold">
                 Add Categories
               </DialogTitle>
             </DialogHeader>

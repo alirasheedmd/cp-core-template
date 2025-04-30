@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   ColumnDef,
@@ -8,7 +8,7 @@ import {
   SortingState,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
 import {
   Table,
@@ -17,16 +17,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 
-import { DataTablePagination } from "@/components/admin/orders/orderTable/DataTablePagination";
-import React, { useEffect, useMemo, useState } from "react";
+import { DataTablePagination } from '@/components/common/DataTablePagination'
+import React, { useEffect, useMemo, useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  onRowSelectionChange: (selectedData: TData[]) => void;
-  clearSelectionTrigger?: boolean;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  onRowSelectionChange: (selectedData: TData[]) => void
+  clearSelectionTrigger?: boolean
 }
 
 export function ProductsDataTable<TData, TValue>({
@@ -35,9 +35,9 @@ export function ProductsDataTable<TData, TValue>({
   onRowSelectionChange,
   clearSelectionTrigger,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
-  const [lastClearTrigger, setLastClearTrigger] = useState(false);
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [rowSelection, setRowSelection] = useState({})
+  const [lastClearTrigger, setLastClearTrigger] = useState(false)
 
   const table = useReactTable({
     data,
@@ -51,31 +51,31 @@ export function ProductsDataTable<TData, TValue>({
       sorting,
       rowSelection,
     },
-  });
+  })
 
   const selectedRows = useMemo(
     () => table.getSelectedRowModel().rows.map((row) => row.original),
     [rowSelection, table],
-  );
+  )
 
   const clearSelection = () => {
-    setRowSelection({});
-    onRowSelectionChange([]);
-  };
+    setRowSelection({})
+    onRowSelectionChange([])
+  }
 
   useEffect(() => {
     if (
       clearSelectionTrigger !== undefined &&
       clearSelectionTrigger !== lastClearTrigger
     ) {
-      clearSelection();
-      setLastClearTrigger(clearSelectionTrigger);
+      clearSelection()
+      setLastClearTrigger(clearSelectionTrigger)
     }
-  }, [clearSelectionTrigger, lastClearTrigger]);
+  }, [clearSelectionTrigger, lastClearTrigger])
 
   useEffect(() => {
-    onRowSelectionChange(selectedRows);
-  }, [selectedRows, onRowSelectionChange]);
+    onRowSelectionChange(selectedRows)
+  }, [selectedRows, onRowSelectionChange])
 
   return (
     <>
@@ -105,7 +105,7 @@ export function ProductsDataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="border-b border-gray-300"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -133,7 +133,7 @@ export function ProductsDataTable<TData, TValue>({
       </div>
       <DataTablePagination table={table} />
     </>
-  );
+  )
 }
 
-export default ProductsDataTable;
+export default ProductsDataTable

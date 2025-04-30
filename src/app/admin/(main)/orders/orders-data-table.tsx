@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   ColumnDef,
@@ -8,7 +8,7 @@ import {
   SortingState,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
 import {
   Table,
@@ -17,28 +17,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 
-import { DataTablePagination } from "@/components/admin/orders/orderTable/DataTablePagination";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { debounce } from "lodash";
+import { DataTablePagination } from '@/components/common/DataTablePagination'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { debounce } from 'lodash'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  onSelectedRowsChange: (selectedData: TData[]) => void;
-  clearSelectionTrigger?: boolean;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  onSelectedRowsChange: (selectedData: TData[]) => void
+  clearSelectionTrigger?: boolean
 }
 
-export function DataTable<TData, TValue>({
+export function OrdersDataTable<TData, TValue>({
   columns,
   data,
   onSelectedRowsChange,
   clearSelectionTrigger,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
-  const [lastClearTrigger, setLastClearTrigger] = useState(false);
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [rowSelection, setRowSelection] = useState({})
+  const [lastClearTrigger, setLastClearTrigger] = useState(false)
 
   const table = useReactTable({
     data,
@@ -52,44 +52,44 @@ export function DataTable<TData, TValue>({
       sorting,
       rowSelection,
     },
-  });
+  })
 
   // Compute selected rows as a memoized value
   const selectedRows = useMemo(
     () => table.getSelectedRowModel().rows.map((row) => row.original),
     [rowSelection],
-  );
+  )
 
   const debouncedClearSelection = useRef(
     debounce(() => {
-      setRowSelection({});
-      if (typeof onSelectedRowsChange === "function") {
-        onSelectedRowsChange([]);
+      setRowSelection({})
+      if (typeof onSelectedRowsChange === 'function') {
+        onSelectedRowsChange([])
       }
     }, 100),
-  ).current;
+  ).current
 
   useEffect(() => {
     if (
       clearSelectionTrigger !== undefined &&
       clearSelectionTrigger !== lastClearTrigger
     ) {
-      debouncedClearSelection();
-      setLastClearTrigger(clearSelectionTrigger);
+      debouncedClearSelection()
+      setLastClearTrigger(clearSelectionTrigger)
     }
-  }, [clearSelectionTrigger, onSelectedRowsChange, lastClearTrigger]);
+  }, [clearSelectionTrigger, onSelectedRowsChange, lastClearTrigger])
 
   useEffect(() => {
     return () => {
-      debouncedClearSelection.cancel();
-    };
-  }, []);
+      debouncedClearSelection.cancel()
+    }
+  }, [])
 
   useEffect(() => {
-    if (typeof onSelectedRowsChange === "function") {
-      onSelectedRowsChange(selectedRows); // Notify parent on change
+    if (typeof onSelectedRowsChange === 'function') {
+      onSelectedRowsChange(selectedRows) // Notify parent on change
     }
-  }, [selectedRows, onSelectedRowsChange]);
+  }, [selectedRows, onSelectedRowsChange])
 
   // console.log("Data", data);
   return (
@@ -121,7 +121,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="border-b border-gray-300"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -151,5 +151,5 @@ export function DataTable<TData, TValue>({
       {/* Pagination */}
       <DataTablePagination table={table} />
     </>
-  );
+  )
 }

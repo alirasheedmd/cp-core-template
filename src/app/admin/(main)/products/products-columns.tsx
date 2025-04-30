@@ -61,7 +61,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return (
         <Link
           href={`/admin/products/${_id}`}
-          className="ml-3 flex w-fit items-center gap-x-2 transition-colors hover:text-orange-600"
+          className="hover:text-Orange ml-3 flex w-fit items-center gap-x-2 transition-colors"
         >
           <div className="relative h-8 w-8 rounded-md bg-white">
             <Image
@@ -200,7 +200,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
   //             className="scrollbar max-h-[14.3rem] w-80 overflow-y-auto rounded-lg p-3"
   //             align="end"
   //           >
-  //             <div className="rounded-lg border border-neutral-400 bg-[#f1f1f1] px-2 py-3 text-sm">
+  //             <div className="bg-LightWhite rounded-lg border border-neutral-400 px-2 py-3 text-sm">
   //               {variants.map((variant) => (
   //                 <div
   //                   key={variant.sku}

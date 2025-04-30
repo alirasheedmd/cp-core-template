@@ -1,18 +1,18 @@
-"use client";
+'use client'
 // Internal component imports
-import EditContactInformation from "@/components/orderDetails/EditContactInformation";
-import EditShippingAddress from "@/components/orderDetails/EditShippingAddress";
+import EditContactInformation from '@/components/admin/orders/orderDetails/EditContactInformation'
+import EditShippingAddress from '@/components/admin/orders/orderDetails/EditShippingAddress'
 // UI component imports
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover'
 // Icon imports
-import { BsThreeDots } from "react-icons/bs";
+import { BsThreeDots } from 'react-icons/bs'
 // Type imports
-import { ICustomerDetails } from "@/utils/interface";
-import { useState } from "react";
+import { ICustomerDetails } from '@/types'
+import { useState } from 'react'
 
 export default function EditInformation({
   userEmail,
@@ -20,12 +20,12 @@ export default function EditInformation({
   userAddress,
   orderId,
 }: {
-  userEmail: string | undefined;
-  userPhoneNumber: string | undefined;
-  userAddress: ICustomerDetails | undefined;
-  orderId: string;
+  userEmail: string | undefined
+  userPhoneNumber: string | undefined
+  userAddress: ICustomerDetails | undefined
+  orderId: string
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,5 +50,5 @@ export default function EditInformation({
         />
       </PopoverContent>
     </Popover>
-  );
+  )
 }

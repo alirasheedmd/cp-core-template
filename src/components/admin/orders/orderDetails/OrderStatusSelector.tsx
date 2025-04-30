@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 import {
   Select,
   SelectTrigger,
@@ -8,60 +8,42 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-} from "@/components/ui/select";
-import { updateOrderStatus } from "@/utils/api/order/updateOrderStatus";
+} from '@/components/ui/select'
 
 const OrderStatusSelector = ({
   orderId,
   initialStatus,
   mutate,
 }: {
-  orderId: string;
-  initialStatus: string;
-  mutate?: () => void;
+  orderId: string
+  initialStatus: string
+  mutate?: () => void
 }) => {
-  const [status, setStatus] = useState<string>(initialStatus);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>(initialStatus)
 
-  const handleStatusChange = async (newStatus: string) => {
-    setStatus(newStatus); // Optimistic UI update
-    setIsLoading(true);
-
-    try {
-      await updateOrderStatus(orderId, newStatus);
-      console.log("Status updated successfully!");
-      mutate?.(); // Re-fetch the orders
-    } catch (error) {
-      console.error("Failed to update status:", error);
-      setStatus(initialStatus); // Revert on error
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleStatusChange = (newStatus: string) => {
+    setStatus(newStatus)
+    console.log(orderId)
+    mutate?.() // Call mutate if provided
+  }
 
   return (
-    <>
-      <Select
-        value={status}
-        onValueChange={handleStatusChange}
-        disabled={isLoading}
-      >
-        <SelectTrigger className="transition-colors hover:text-orange-600">
-          <SelectValue placeholder={status} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="confirmed">Confirmed</SelectItem>
-            <SelectItem value="shipped">Shipped</SelectItem>
-            <SelectItem value="delivered">Delivered</SelectItem>
-            <SelectItem value="returned">Returned</SelectItem>
-            <SelectItem value="cancelled">Cancelled</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </>
-  );
-};
+    <Select value={status} onValueChange={handleStatusChange}>
+      <SelectTrigger className="hover:text-Orange w-30 transition-colors">
+        <SelectValue placeholder={status} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value="pending">Pending</SelectItem>
+          <SelectItem value="confirmed">Confirmed</SelectItem>
+          <SelectItem value="shipped">Shipped</SelectItem>
+          <SelectItem value="delivered">Delivered</SelectItem>
+          <SelectItem value="returned">Returned</SelectItem>
+          <SelectItem value="cancelled">Cancelled</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
+}
 
-export default OrderStatusSelector;
+export default OrderStatusSelector

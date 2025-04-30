@@ -44,7 +44,7 @@ export default function CategoryItem({
         </DialogTrigger>
         <DialogContent className="max-h-[90vh] min-w-[50rem] overflow-y-auto p-0 [&>button]:hidden">
           <DialogHeader>
-            <DialogTitle className="rounded-t-lg bg-[#E7E7E7] px-3 py-3 text-xl font-semibold">
+            <DialogTitle className="bg-LightGrey rounded-t-lg px-3 py-3 text-xl font-semibold">
               Add Subcategories
             </DialogTitle>
           </DialogHeader>
