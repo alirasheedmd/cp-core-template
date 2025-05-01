@@ -14,6 +14,7 @@ import { Info } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 export default function Inventory() {
   const {
@@ -142,19 +143,13 @@ export default function Inventory() {
                     )}
                   </div>
 
-                  {/* Buttons */}
-                  <div className="flex w-full items-center justify-end gap-x-3 pt-8">
-                    <button
-                      type="button"
-                      className="hover:bg-LightGrey rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors"
-                      onClick={() => setOpen(false)}
-                    >
-                      Cancel
-                    </button>
-                    <button className="hover:bg-LightGrey rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors">
-                      Save
-                    </button>
-                  </div>
+                  <ActionButtons
+                    onCancel={() => setOpen(false)}
+                    onSave={() => {
+                      // Handle save
+                      setOpen(false)
+                    }}
+                  />
                 </PopoverContent>
               </Popover>
             </div>

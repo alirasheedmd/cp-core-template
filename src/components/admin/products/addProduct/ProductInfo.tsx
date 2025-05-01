@@ -12,7 +12,7 @@ import {
 } from '@/app/actions/admin/main/product'
 import { useRouter } from 'next/navigation'
 import { useRef, startTransition, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 export const productSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -86,7 +86,7 @@ export default function ProductInfo() {
     resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
       status: 'active',
-      publishDate: new Date().toISOString().split('T')[0],
+      publishDate: new Date(performance.now()).toISOString().split('T')[0],
       ...(state?.data ?? {}),
     },
   })
@@ -144,22 +144,12 @@ export default function ProductInfo() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex justify-end gap-4">
-          <Button
-            type="button"
-            className="hover:bg-LightGrey font-normal text-black"
-            variant="outline"
-          >
-            Discard
-          </Button>
-          <Button
-            type="submit"
-            disabled={isPending || isSubmitting}
-            className="hover:bg-LightGrey font-normal text-black"
-            variant="outline"
-          >
-            {isPending || isSubmitting ? 'Saving...' : 'Save'}
-          </Button>
+        <div className="mt-8">
+          <ActionButtons
+            onCancel={() => router.push('/admin/products')}
+            onSave={handleSubmit(onSubmit)}
+            isLoading={isPending || isSubmitting}
+          />
         </div>
 
         {/* Show general error message */}

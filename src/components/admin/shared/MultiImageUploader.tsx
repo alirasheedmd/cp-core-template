@@ -3,31 +3,31 @@ import {
   FieldValues,
   useFieldArray,
   UseFormReturn,
-} from "react-hook-form";
-import { useCallback, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { generateThumbHashFromFile } from "@/lib/thumbhash-client";
-import { createPngDataUri } from "unlazy/thumbhash";
-import { ProgressArgs, Uploader } from "@/lib/uploader";
-import { cn } from "@/lib/utils";
-import { DragAndDrop } from "./DragAndDrop";
-import dynamic from "next/dynamic";
-import { Skeleton } from "@/components/ui/skeleton";
-import { SortableItem } from "./SortableItem";
-import { ImageItem, ImageProgress } from "@/types/image-uploader";
+} from 'react-hook-form'
+import { useCallback, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { generateThumbHashFromFile } from '@/lib/thumbhash-client'
+import { createPngDataUri } from 'unlazy/thumbhash'
+import { ProgressArgs, Uploader } from '@/lib/uploader'
+import { cn } from '@/lib/utils'
+import { DragAndDrop } from './DragAndDrop'
+import dynamic from 'next/dynamic'
+import { Skeleton } from '@/components/ui/skeleton'
+import { ImageItem, ImageProgress } from '@/types/image-uploader'
+import { SortableItem } from '@/components/admin/shared/SortableItem'
 
 interface MultiImageUploaderProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends ArrayPath<TFieldValues> = ArrayPath<TFieldValues>,
 > {
-  name: TName;
-  form: UseFormReturn<TFieldValues>;
-  className?: string;
-  error?: string;
+  name: TName
+  form: UseFormReturn<TFieldValues>
+  className?: string
+  error?: string
 }
 
 const DragAndDropContext = dynamic(
-  () => import("./DragAndDropContext").then((mod) => mod.DragAndDropContext),
+  () => import('./DragAndDropContext').then((mod) => mod.DragAndDropContext),
   {
     ssr: false,
     loading: () => (
@@ -38,7 +38,7 @@ const DragAndDropContext = dynamic(
       </div>
     ),
   },
-);
+)
 
 export default function MultiImageUploader<
   TFieldValues extends FieldValues = FieldValues,
@@ -49,128 +49,128 @@ export default function MultiImageUploader<
   className,
   error,
 }: MultiImageUploaderProps<TFieldValues, TName>) {
-  const { control } = form;
+  const { control } = form
   const { fields, replace } = useFieldArray({
     control,
     name,
-  });
+  })
 
   const [items, setItems] = useState<ImageItem[]>(
     fields.map((field, index) => ({
       id: index,
       uuid: field.id,
       percentage: 100,
-      alt: (field as { alt?: string }).alt || "",
-      key: "",
-      src: (field as { src?: string }).src || "",
-      base64: "",
+      alt: (field as { alt?: string }).alt || '',
+      key: '',
+      src: (field as { src?: string }).src || '',
+      base64: '',
       done: true,
     })),
-  );
-  const [progress, setProgress] = useState<ImageProgress[]>([]);
-  const [isUploading, setIsUploading] = useState<boolean>(false);
+  )
+  const [progress, setProgress] = useState<ImageProgress[]>([])
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
   const handleItemProgress = useCallback((updates: ImageProgress) => {
     setProgress((prev) => {
-      const index = prev.findIndex((item) => item.uuid === updates.uuid);
+      const index = prev.findIndex((item) => item.uuid === updates.uuid)
       if (index === -1) {
-        return [...prev, updates];
+        return [...prev, updates]
       }
-      const newProgress = [...prev];
-      newProgress[index] = { ...newProgress[index], ...updates };
-      return newProgress;
-    });
-  }, []);
+      const newProgress = [...prev]
+      newProgress[index] = { ...newProgress[index], ...updates }
+      return newProgress
+    })
+  }, [])
 
   const handleItemsUpdate = useCallback(
     (newItems: ImageItem[]) => {
-      replace(newItems as unknown as TFieldValues[TName]);
-      setItems(newItems);
+      replace(newItems as unknown as TFieldValues[TName])
+      setItems(newItems)
     },
     [replace],
-  );
+  )
 
   const setFiles = useCallback(
     async (validFiles: File[]) => {
-      const files = Object.values(validFiles);
-      setIsUploading(files.length > 0);
+      const files = Object.values(validFiles)
+      setIsUploading(files.length > 0)
 
-      let id = items.length + 1;
-      const newImageData: ImageItem[] = [];
+      let id = items.length + 1
+      const newImageData: ImageItem[] = []
 
       for (const file of files) {
-        const uuid = uuidv4();
-        const hash = await generateThumbHashFromFile(file);
-        const base64 = createPngDataUri(hash);
+        const uuid = uuidv4()
+        const hash = await generateThumbHashFromFile(file)
+        const base64 = createPngDataUri(hash)
 
         const data: ImageItem = {
           id,
           uuid,
           percentage: 0,
           alt: file.name,
-          key: "",
-          src: "",
+          key: '',
+          src: '',
           base64,
           done: false,
-        };
+        }
 
-        newImageData.push(data);
-        id++;
+        newImageData.push(data)
+        id++
 
-        const options = { file, uuid };
+        const options = { file, uuid }
 
-        const uploader = new Uploader(options);
+        const uploader = new Uploader(options)
 
         uploader
           .onProgress((progress: ProgressArgs) => {
             if (progress.percentage !== data.percentage) {
-              data.src = `${process.env.NEXT_PUBLIC_S3_URL}/${progress.key}`;
-              data.key = progress.key || "";
+              data.src = `${process.env.NEXT_PUBLIC_S3_URL}/${progress.key}`
+              data.key = progress.key || ''
               handleItemProgress({
                 uuid,
                 progress: progress.percentage,
-              });
+              })
 
-              const clone = [...items, ...newImageData];
-              setItems(clone);
+              const clone = [...items, ...newImageData]
+              setItems(clone)
             }
           })
           .onError((error: Error) => {
-            setIsUploading(false);
-            console.error(error);
+            setIsUploading(false)
+            console.error(error)
           })
           .onComplete(() => {
-            data.done = true;
+            data.done = true
             const clone = [...items, ...newImageData].map((item) => ({
               ...item,
               percentage: 100,
-            }));
+            }))
 
-            setItems(clone);
+            setItems(clone)
             replace(
               clone.map((item) => ({
                 src: item.src,
                 alt: item.alt,
               })) as unknown as TFieldValues[TName],
-            );
-            setIsUploading(false);
-          });
+            )
+            setIsUploading(false)
+          })
 
-        uploader.start();
+        uploader.start()
       }
     },
     [items, handleItemProgress, replace],
-  );
+  )
 
   const remove = (i: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== i));
+    setItems((prev) => prev.filter((item) => item.id !== i))
     replace(
       items.filter((item) => item.id !== i) as unknown as TFieldValues[TName],
-    );
-  };
+    )
+  }
 
   return (
-    <div className={cn(className, "mt-1 space-y-3")}>
+    <div className={cn(className, 'mt-1 space-y-3')}>
       <DragAndDrop
         items={items}
         setFiles={setFiles}
@@ -196,5 +196,5 @@ export default function MultiImageUploader<
         />
       </div>
     </div>
-  );
+  )
 }

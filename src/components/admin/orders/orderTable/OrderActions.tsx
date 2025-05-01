@@ -4,11 +4,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 interface OrderActionsProps {
   query: string
@@ -32,63 +32,66 @@ export default function OrderActions({
   setOpen,
 }: OrderActionsProps) {
   return (
-    <div className="flex items-center gap-x-2">
-      <div className="relative">
+    <div className="mb-3 flex items-center gap-x-3 lg:mb-0">
+      {/* Search Input */}
+      <div className="flex w-full items-center rounded-full border border-gray-500 xl:w-72">
         <input
           type="text"
           value={query}
           onChange={onQueryChange}
-          placeholder="Search orders..."
-          className="focus:border-Orange w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:outline-none"
+          placeholder="Search order number"
+          className="w-full rounded-l-full bg-white px-3 py-1 text-xs outline-hidden lg:px-4 lg:text-sm"
         />
-        {query ? (
-          <button
-            onClick={onClearQuery}
-            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            <FaTimes />
+        <div className="flex h-4 items-center justify-center gap-x-1 rounded-r-full bg-white pr-1 lg:h-7 lg:pr-2">
+          {query && (
+            <button
+              className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-500"
+              onClick={onClearQuery}
+            >
+              <FaTimes className="text-[10px] text-white" />
+            </button>
+          )}
+          <button>
+            <FaSearch className="text-base text-black" />
           </button>
-        ) : (
-          <FaSearch className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" />
-        )}
+        </div>
       </div>
-      {selectedRowCount > 0 && (
+
+      {/* Delete button */}
+      <div className="hidden lg:block">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <button
-              className="flex items-center gap-x-1 rounded-lg border border-red-500 px-3 py-2 text-red-500 hover:bg-red-50"
-              disabled={isDeleting}
+              disabled={selectedRowCount === 0}
+              className={`flex h-6 w-6 items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors ${
+                selectedRowCount === 0
+                  ? 'cursor-not-allowed opacity-50'
+                  : 'hover:bg-LightGrey cursor-pointer hover:text-orange-600'
+              }`}
             >
-              <RiDeleteBinLine />
-              Delete
+              <RiDeleteBinLine className="text-base" />
             </button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Delete Orders</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete {selectedRowCount} selected
-                orders? This action cannot be undone.
+                Are you sure you want to delete {selectedRowCount} order(s)?
+                This action cannot be undone.
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter>
-              <button
-                onClick={() => setOpen(false)}
-                className="rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={onDelete}
-                className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting...' : 'Delete'}
-              </button>
-            </DialogFooter>
+            <div className="mx-auto mt-5">
+              <ActionButtons
+                onCancel={() => setOpen(false)}
+                onSave={onDelete}
+                isLoading={isDeleting}
+                saveText="Yes"
+                cancelText="No"
+              />
+            </div>
           </DialogContent>
         </Dialog>
-      )}
+      </div>
     </div>
   )
 }

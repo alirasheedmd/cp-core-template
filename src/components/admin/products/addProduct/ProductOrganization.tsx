@@ -23,6 +23,7 @@ export default function ProductOrganization() {
           <Input
             id="type"
             {...register('type')}
+            placeholder="Enter product type"
             className={`${errors.type ? 'border-destructive' : 'border-black'}`}
           />
           {errors.type && (
@@ -40,6 +41,7 @@ export default function ProductOrganization() {
           <Input
             id="collection"
             {...register('collection')}
+            placeholder="Enter product collection"
             className={`${errors.collection ? 'border-destructive' : 'border-black'}`}
           />
           {errors.collection && (
@@ -57,6 +59,7 @@ export default function ProductOrganization() {
           <Input
             id="organization"
             {...register('organization')}
+            placeholder="Enter product organization"
             className={`${errors.organization ? 'border-destructive' : 'border-black'}`}
           />
           {errors.organization && (
@@ -74,6 +77,7 @@ export default function ProductOrganization() {
           <Input
             id="tag"
             {...register('tag')}
+            placeholder="Enter product tag"
             className={`${errors.tag ? 'border-destructive' : 'border-black'}`}
           />
           {errors.tag && (

@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { products as dummyProducts } from '@/data/dummyProducts'
+import { dummyProducts } from '@/data/dummyProducts'
 import { productsColumns } from './products-columns'
 import ProductClientContainer from './product-client-container'
 

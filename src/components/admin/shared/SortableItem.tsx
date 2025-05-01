@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { CheckCircle, XIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ImgixImage } from "@/components/common/ImgixImage";
-import { ImageItem } from "@/types/image-uploader";
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { CheckCircle, XIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ImgixImage } from '@/components/admin/shared/ImgixImage'
+import { ImageItem } from '@/types/image-uploader'
 
 interface SortableItemProps {
-  index: number;
-  item: ImageItem;
-  remove: (index: number) => void;
-  progress?: number;
+  index: number
+  item: ImageItem
+  remove: (index: number) => void
+  progress?: number
 }
 
 export const SortableItem = (props: SortableItemProps) => {
-  const { index, item, remove, progress } = props;
+  const { index, item, remove, progress } = props
   const {
     attributes,
     listeners,
@@ -23,13 +23,13 @@ export const SortableItem = (props: SortableItemProps) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: index });
+  } = useSortable({ id: index })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : undefined,
-  };
+  }
 
   return (
     <div className="group relative">
@@ -60,7 +60,7 @@ export const SortableItem = (props: SortableItemProps) => {
                 height={160}
                 quality={25}
                 blurDataURL={item.base64 as string}
-                placeholder={item.base64 ? "blur" : "empty"}
+                placeholder={item.base64 ? 'blur' : 'empty'}
                 className="aspect-3/2 object-cover"
               />
 
@@ -74,5 +74,5 @@ export const SortableItem = (props: SortableItemProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

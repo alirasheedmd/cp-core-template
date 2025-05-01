@@ -4,13 +4,13 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 export default function DeleteOrderButton({ orderId }: { orderId: string }) {
   const router = useRouter()
@@ -35,7 +35,7 @@ export default function DeleteOrderButton({ orderId }: { orderId: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="w-1/2 rounded-xl border border-neutral-300 bg-white py-2 text-sm text-nowrap shadow-md transition-colors hover:text-orange-600 lg:w-32 lg:text-base">
+        <button className="hover:text-Orange w-1/2 rounded-xl border border-neutral-300 bg-white py-2 text-sm text-nowrap shadow-md transition-colors lg:w-32 lg:text-base">
           Delete Order
         </button>
       </DialogTrigger>
@@ -47,24 +47,15 @@ export default function DeleteOrderButton({ orderId }: { orderId: string }) {
             undone.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <div className="mx-auto mt-5 flex gap-x-4">
-            <button
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="w-28 rounded-xl bg-[#e7e7e7] px-4 py-2 text-sm text-nowrap shadow-xs transition-colors hover:text-orange-600 lg:text-base"
-            >
-              {isDeleting ? 'Deleting...' : 'Yes'}
-            </button>
-            <button
-              onClick={() => setOpen(false)}
-              disabled={isDeleting}
-              className="w-28 rounded-xl bg-[#e7e7e7] px-4 py-2 text-sm text-nowrap shadow-xs transition-colors hover:text-orange-600 lg:text-base"
-            >
-              No
-            </button>
-          </div>
-        </DialogFooter>
+        <div className="mx-auto mt-5">
+          <ActionButtons
+            onCancel={() => setOpen(false)}
+            onSave={handleDelete}
+            isLoading={isDeleting}
+            saveText="Yes"
+            cancelText="No"
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

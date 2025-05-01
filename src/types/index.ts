@@ -92,7 +92,13 @@ export interface ICustomerDetails {
 export interface IOrder {
   orderId: string
   createdAt: string
-  status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
+  status:
+    | 'pending'
+    | 'confirmed'
+    | 'shipped'
+    | 'delivered'
+    | 'cancelled'
+    | 'returned'
   paymentMethod: 'CASH_ON_DELIVERY' | 'ONLINE_PAYMENT'
   totalAmount: number
   shippingCost: number

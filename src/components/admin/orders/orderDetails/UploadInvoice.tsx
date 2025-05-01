@@ -1,66 +1,66 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 interface UploadInvoiceProps {
-  onUploadResponse: (response: string) => void;
+  onUploadResponse: (response: string) => void
 }
 
 export default function UploadInvoice({
   onUploadResponse,
 }: UploadInvoiceProps) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadResponse, setUploadResponse] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadResponse, setUploadResponse] = useState<string | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    console.log("File selected:", file);
-    setSelectedFile(file); // Update selected file state
-    setUploadResponse(null);
-  };
+    const file = event.target.files?.[0] || null
+    console.log('File selected:', file)
+    setSelectedFile(file) // Update selected file state
+    setUploadResponse(null)
+  }
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile) return
 
-    setIsUploading(true);
+    setIsUploading(true)
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+      const formData = new FormData()
+      formData.append('file', selectedFile)
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
+      const response = await fetch('/api/upload', {
+        method: 'POST',
         body: formData,
-      });
+      })
 
-      if (!response.ok) throw new Error("Upload failed");
+      if (!response.ok) throw new Error('Upload failed')
 
-      const result = await response.json();
-      const successMessage = `File uploaded successfully: ${result.secure_url}`;
-      setUploadResponse(successMessage);
-      onUploadResponse(result.secure_url); // Send the API response link to the parent component
+      const result = await response.json()
+      const successMessage = `File uploaded successfully: ${result.secure_url}`
+      setUploadResponse(successMessage)
+      onUploadResponse(result.secure_url) // Send the API response link to the parent component
     } catch (error) {
-      console.error("Upload error:", error);
-      const errorMessage = `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`;
-      setUploadResponse(errorMessage);
-      onUploadResponse(errorMessage);
+      console.error('Upload error:', error)
+      const errorMessage = `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      setUploadResponse(errorMessage)
+      onUploadResponse(errorMessage)
     } finally {
-      setIsUploading(false);
+      setIsUploading(false)
     }
-  };
+  }
 
   const removeFile = () => {
-    setSelectedFile(null); // Clear selected file state
-    setUploadResponse(null);
-  };
+    setSelectedFile(null) // Clear selected file state
+    setUploadResponse(null)
+  }
 
   return (
     <div className="mt-4 w-full">
       <div className="flex flex-col items-center justify-between gap-y-3 rounded-lg border border-gray-300 px-2 py-4 shadow-xs xl:flex-row">
         <div className="flex w-full flex-1 flex-col items-start gap-2 sm:flex-row sm:items-center">
-          <Label className="text-nowrap text-sm font-semibold text-gray-700 lg:text-base">
+          <Label className="text-sm font-semibold text-nowrap text-gray-700 lg:text-base">
             Select a file:
           </Label>
           {selectedFile ? (
@@ -100,20 +100,20 @@ export default function UploadInvoice({
           <button
             onClick={handleUpload}
             disabled={!selectedFile || isUploading}
-            className={`w-32 text-nowrap rounded-xl bg-[#e7e7e7] py-2 text-sm shadow-sm transition-colors lg:text-base ${
+            className={`bg-LightGrey w-32 rounded-xl py-2 text-sm text-nowrap shadow-sm transition-colors lg:text-base ${
               !selectedFile || isUploading
-                ? "cursor-not-allowed text-muted-foreground"
-                : "hover:text-orange-600"
+                ? 'text-muted-foreground cursor-not-allowed'
+                : 'hover:text-Orange'
             }`}
           >
-            {isUploading ? "Uploading..." : "Upload Invoice"}
+            {isUploading ? 'Uploading...' : 'Upload Invoice'}
           </button>
         </div>
       </div>
 
       {uploadResponse && (
         <div className="mt-2 w-full text-left text-sm lg:text-base">
-          {uploadResponse.includes("success") ? (
+          {uploadResponse.includes('success') ? (
             <p className="break-words text-green-600">{uploadResponse}</p>
           ) : (
             <p className="text-red-600">{uploadResponse}</p>
@@ -121,5 +121,5 @@ export default function UploadInvoice({
         </div>
       )}
     </div>
-  );
+  )
 }

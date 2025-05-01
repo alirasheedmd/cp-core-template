@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ActionButtons } from '@/components/common/ActionButtons'
 // Data imports
 import { dummyOrders } from '@/data/dummyOrders'
 
@@ -87,13 +88,13 @@ export default function EditContactInformation({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="block w-full rounded-lg bg-[#e7e7e7] px-3 py-2 text-left transition-colors hover:bg-[#e7e7e7] lg:bg-transparent">
+        <button className="bg-LightGrey hover:bg-LightGrey block w-full rounded-lg px-3 py-2 text-left transition-colors lg:bg-transparent">
           Edit contact information
         </button>
       </DialogTrigger>
       <DialogContent className="w-[90%] rounded-lg p-0 lg:w-full [&>button]:hidden">
         <DialogHeader>
-          <DialogTitle className="rounded-t-lg bg-[#E7E7E7] px-3 py-5 text-left">
+          <DialogTitle className="bg-LightGrey rounded-t-lg px-3 py-5 text-left">
             Edit contact information
           </DialogTitle>
         </DialogHeader>
@@ -149,32 +150,19 @@ export default function EditContactInformation({
               />
               <label
                 htmlFor="update"
-                className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 lg:text-sm"
+                className="text-xs leading-none text-nowrap peer-disabled:cursor-not-allowed peer-disabled:opacity-70 lg:text-sm"
               >
                 Update customer profile
               </label>
             </div>
-            {/* Buttons */}
-            <div className="flex justify-end gap-x-2 text-sm">
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false)
-                  onClose()
-                }}
-                disabled={isLoading}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7] lg:text-base"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7] lg:text-base"
-              >
-                {isLoading ? 'Saving...' : 'Save'}
-              </button>
-            </div>
+            <ActionButtons
+              onCancel={() => {
+                setOpen(false)
+                onClose()
+              }}
+              onSave={form.handleSubmit(handleSave)}
+              isLoading={isLoading}
+            />
           </div>
         </form>
       </DialogContent>

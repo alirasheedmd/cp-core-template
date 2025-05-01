@@ -5,8 +5,6 @@ import { usePathname } from 'next/navigation'
 // Next.js components
 import Image from 'next/image'
 import Link from 'next/link'
-// Data fetching
-import useSWR from 'swr'
 // Components
 import AdjustQuantityButton from '@/components/admin/orders/editOrder/AdjustQuantityButton'
 import EditOrderUpdateButton from '@/components/admin/orders/editOrder/EditOrderUpdateButton'
@@ -18,32 +16,61 @@ import SelectVariantButton from '@/components/admin/orders/editOrder/SelectVaria
 import { BiArrowBack } from 'react-icons/bi'
 import { LuTruck } from 'react-icons/lu'
 // Types and interfaces
-import { IOrder, IVariant } from '@/utils/interface'
-import { IUpdateOrderData } from '@/utils/api/order/updateOrder'
-// API utilities
-import { updateOrder } from '@/utils/api/order'
-import { fetchOrder } from '@/utils/api/order/fetchOrder'
+import { IOrder, IVariant, IOrderItem } from '@/types'
+import { dummyOrders } from '@/data/dummyOrders'
+
+interface IUpdateOrderData {
+  orderId: string
+  items: Array<{
+    productId: string
+    variantId: string
+    quantity: number
+  }>
+  sendNotification: boolean
+}
+
+// Mock functions for now - will be replaced with server actions later
+const fetchOrder = async (orderId: string): Promise<IOrder> => {
+  const order = dummyOrders.find((order) => order.orderId === orderId)
+  if (!order) throw new Error('Order not found')
+  return order
+}
+
+const updateOrder = async (data: IUpdateOrderData) => {
+  // Mock implementation - will be replaced with server action
+  console.log('Updating order:', data)
+  return { success: true }
+}
 
 export default function EditOrderPage() {
   const pathname = usePathname()
-  const orderId = pathname.split('/')[2]
-  const {
-    data: order,
-    isLoading,
-    error,
-  } = useSWR<IOrder>(orderId ? `/api/get-order?orderId=${orderId}` : null, () =>
-    fetchOrder(orderId),
-  )
+  const orderId = pathname.split('/')[3]
+  const [order, setOrder] = useState<IOrder | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
   const [selectedItems, setSelectedItems] = useState<ISuggestion[]>([])
-  const [orderItems, setOrderItems] = useState(order?.items || [])
+  const [orderItems, setOrderItems] = useState<IOrderItem[]>([])
   const [sendNotification, setSendNotification] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
   useEffect(() => {
-    if (order?.items) {
-      setOrderItems(order.items)
+    const loadOrder = async () => {
+      try {
+        setIsLoading(true)
+        const data = await fetchOrder(orderId)
+        setOrder(data)
+        setOrderItems(data.items)
+      } catch (err) {
+        setError(err as Error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  }, [order])
+
+    if (orderId) {
+      loadOrder()
+    }
+  }, [orderId])
 
   // Calculate subtotal for selected items
   const selectedItemsSubtotal = selectedItems.reduce(
@@ -157,10 +184,10 @@ export default function EditOrderPage() {
         quantity: item.quantity ?? 1, // Default to 1 if undefined
       })),
       ...selectedItems
-        .filter((item) => item.variant?._id || item.variants?.[0]?._id) // Filter out items without a valid variantId
+        .filter((item) => item.variant?._key || item.variants?.[0]?._key) // Filter out items without a valid variantId
         .map((item) => ({
           productId: item._id,
-          variantId: item.variant?._id ?? item.variants![0]._id, // Use ! to assert non-null after filter
+          variantId: item.variant?._key ?? item.variants![0]._key, // Use ! to assert non-null after filter
           quantity: item.quantity ?? 1, // Default to 1 if undefined
         })),
     ]
@@ -181,6 +208,10 @@ export default function EditOrderPage() {
     }
   }
 
+  // Update status checks to match IOrder type
+  const isOrderEditable =
+    order?.status && ['pending', 'confirmed'].includes(order.status)
+
   if (error)
     return <div className="mx-auto my-10 max-w-6xl">Error loading order</div>
 
@@ -196,11 +227,7 @@ export default function EditOrderPage() {
 
       <div className="mt-5 flex flex-col gap-5 lg:flex-row lg:gap-x-5">
         <div className="basis-[70%] space-y-5">
-          {order?.status === 'shipped' ||
-          order?.status === 'delivered' ||
-          order?.status === 'cancelled' ||
-          order?.status === 'returned' ||
-          isLoading ? null : (
+          {!isOrderEditable || isLoading ? null : (
             <div className="bg-white px-2 py-4 lg:rounded-lg lg:p-4">
               {/* Add product */}
               <p className="mb-2">Add product</p>
@@ -367,10 +394,7 @@ export default function EditOrderPage() {
                         </div>
                       </div>
                       {/* Buttons */}
-                      {order?.status === 'shipped' ||
-                      order?.status === 'delivered' ||
-                      order?.status === 'cancelled' ||
-                      order?.status === 'returned' ? null : (
+                      {!isOrderEditable && (
                         <div className="mx-auto flex w-full items-center justify-center gap-x-4 pt-2 text-sm">
                           <AdjustQuantityButton
                             // @ts-expect-error - item.stock is not defined
@@ -398,20 +422,15 @@ export default function EditOrderPage() {
               )}
             </div>
 
-            {order?.status === 'shipped' && (
-              <p className="mt-3 text-sm">Shipped orders cannot be edited</p>
-            )}
-
-            {order?.status === 'delivered' && (
-              <p className="mt-3 text-sm">Delivered orders cannot be edited</p>
-            )}
-
-            {order?.status === 'cancelled' && (
-              <p className="mt-3 text-sm">Cancelled orders cannot be edited</p>
-            )}
-
-            {order?.status === 'returned' && (
-              <p className="mt-3 text-sm">Returned orders cannot be edited</p>
+            {!isOrderEditable && (
+              <p className="mt-3 text-sm">
+                {order?.status === 'shipped' &&
+                  'Shipped orders cannot be edited'}
+                {order?.status === 'delivered' &&
+                  'Delivered orders cannot be edited'}
+                {order?.status === 'cancelled' &&
+                  'Cancelled orders cannot be edited'}
+              </p>
             )}
           </div>
 
@@ -529,11 +548,7 @@ export default function EditOrderPage() {
               </div>
               <EditOrderUpdateButton
                 className={`w-full ${
-                  !hasChanges ||
-                  order?.status === 'shipped' ||
-                  order?.status === 'delivered' ||
-                  order?.status === 'cancelled' ||
-                  order?.status === 'returned'
+                  !hasChanges || !isOrderEditable
                     ? 'pointer-events-none cursor-not-allowed opacity-50'
                     : ''
                 }`}

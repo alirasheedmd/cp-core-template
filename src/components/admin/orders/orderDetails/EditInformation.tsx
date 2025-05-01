@@ -30,7 +30,7 @@ export default function EditInformation({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="rounded-lg p-1 font-bold transition-colors hover:bg-[#e7e7e7]">
+        <button className="hover:bg-LightGrey rounded-lg p-1 font-bold transition-colors">
           <BsThreeDots className="text-lg" />
         </button>
       </PopoverTrigger>

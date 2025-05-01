@@ -6,14 +6,14 @@ import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import MultiImageUploader from './MultiImageUploader'
+import MultiImageUploader from '../../shared/MultiImageUploader'
 import { Resolver, SubmitHandler } from 'react-hook-form'
 import { useState, useTransition } from 'react'
 import { createCategory } from '@/app/actions/admin/main/category'
-import { Button } from '@/components/ui/button'
 import { getAllSubcategories } from '@/utils/categories'
 import { dummyCategories } from '@/data/dummyCategories'
 import { MultiSelect, Option } from '@/components/common/MultiSelect'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required'),
@@ -169,25 +169,11 @@ export default function AddCategory({
           Makes new categories immediately available on the storefront.
         </p>
 
-        {/* Buttons */}
-        <div className="flex w-full items-center justify-end gap-x-3 pt-2">
-          <Button
-            type="button"
-            className="hover:bg-LightGrey font-normal text-black"
-            variant="outline"
-            onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            className="hover:bg-LightGrey font-normal text-black"
-            variant="outline"
-            disabled={isPending}
-          >
-            {isPending ? 'Saving...' : 'Save'}
-          </Button>
-        </div>
+        <ActionButtons
+          onCancel={() => setOpen(false)}
+          onSave={methods.handleSubmit(onSubmit)}
+          isLoading={isPending}
+        />
       </form>
     </FormProvider>
   )

@@ -36,7 +36,10 @@ export function OrdersDataTable<TData, TValue>({
   onSelectedRowsChange,
   clearSelectionTrigger,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  // Initialize sorting state with a default sort by orderId
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'orderId', desc: false },
+  ])
   const [rowSelection, setRowSelection] = useState({})
   const [lastClearTrigger, setLastClearTrigger] = useState(false)
 

@@ -1,72 +1,72 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
-import { IProductDetails, IVariant } from "@/utils/interface";
+'use client'
+import { useState, useEffect, useRef } from 'react'
+import { FaSearch, FaTimes } from 'react-icons/fa'
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Checkbox } from "../../../ui/checkbox";
-import Image from "next/image";
-import { products } from "@/utils/data";
+} from '@/components/ui/dialog'
+import { Checkbox } from '@/components/ui/checkbox'
+import { dummyProducts as products } from '@/data/dummyProducts'
+import { ActionButtons } from '@/components/common/ActionButtons'
+import { IProduct, IVariant } from '@/types'
 
 export interface ISuggestion {
-  type: "product";
-  _id: string;
-  name: string;
-  slug: string;
-  categoryId?: string;
-  categoryName?: string;
-  categorySlug?: string;
-  variantKey: string;
-  sku?: string;
-  price: number;
-  stock: number;
-  color?: string;
-  image: string;
-  quantity?: number;
+  type: 'product'
+  _id: string
+  name: string
+  slug: string
+  categoryId?: string
+  categoryName?: string
+  categorySlug?: string
+  variantKey: string
+  sku?: string
+  price: number
+  stock: number
+  color?: string
+  image: string
+  quantity?: number
   variants: {
-    variantKey: string;
-    sku?: string;
-    _key: string;
-    images: string[];
-    originalPrice: number;
-    discountPrice?: number;
-    stock: number;
-    color?: string;
-    variantImages?: string[];
-    _id?: string; // Add _id to the variant (if not already present)
-  }[];
-  variant?: IVariant;
+    variantKey: string
+    sku?: string
+    _key: string
+    images: string[]
+    originalPrice: number
+    discountPrice?: number
+    stock: number
+    color?: string
+    variantImages?: string[]
+    _id?: string // Add _id to the variant (if not already present)
+  }[]
+  variant?: IVariant
 }
 
 interface SearchProductsProps {
-  onProductsSelected: (products: ISuggestion[]) => void;
-  selectedItems: ISuggestion[];
+  onProductsSelected: (products: ISuggestion[]) => void
+  selectedItems: ISuggestion[]
 }
 
 const SearchProducts = ({
   onProductsSelected,
   selectedItems,
 }: SearchProductsProps) => {
-  const [query, setQuery] = useState("");
-  const [allSuggestions, setAllSuggestions] = useState<ISuggestion[]>([]);
-  const [suggestions, setSuggestions] = useState<ISuggestion[]>([]);
-  const [open, setOpen] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState<ISuggestion[]>([]);
-  const innerInputRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState('')
+  const [allSuggestions, setAllSuggestions] = useState<ISuggestion[]>([])
+  const [suggestions, setSuggestions] = useState<ISuggestion[]>([])
+  const [open, setOpen] = useState(false)
+  const [selectedProducts, setSelectedProducts] = useState<ISuggestion[]>([])
+  const innerInputRef = useRef<HTMLInputElement>(null)
   // Add this to track how dialog was closed
 
-  const closeViaCancel = useRef(false);
+  const closeViaCancel = useRef(false)
 
   // Fetch products and set initial 5 suggestions
   useEffect(() => {
     const fetchData = async () => {
-      const allSuggestions = products.map((product: IProductDetails) => ({
-        type: "product" as const,
-        _id: product._id || "",
+      const allSuggestions = products.map((product: IProduct) => ({
+        type: 'product' as const,
+        _id: product._id || '',
         name: product.name,
         slug: product.slug.current,
         categoryId: product.category?._id,
@@ -91,68 +91,68 @@ const SearchProducts = ({
           color: variant.color,
           variantImages: variant.images,
         })),
-      }));
+      }))
 
       // console.log("allSuggestions", allSuggestions);
-      setAllSuggestions(allSuggestions);
+      setAllSuggestions(allSuggestions)
       // Show first 5 products initially
-      setSuggestions(allSuggestions.slice(0, 5));
-    };
+      setSuggestions(allSuggestions.slice(0, 5))
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   // Filter suggestions based on query
   useEffect(() => {
     if (query.length > 0) {
       const filtered = allSuggestions.filter((item) =>
         item?.name?.toLowerCase().includes(query?.toLowerCase()),
-      );
-      setSuggestions(filtered);
+      )
+      setSuggestions(filtered)
     } else {
       // Show first 5 when query is empty
-      setSuggestions(allSuggestions.slice(0, 5));
+      setSuggestions(allSuggestions.slice(0, 5))
     }
-  }, [query, allSuggestions]);
+  }, [query, allSuggestions])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+    setQuery(e.target.value)
+  }
 
   const clearInput = () => {
-    setQuery("");
-  };
+    setQuery('')
+  }
 
   const handleProductSelect = (product: ISuggestion) => {
     setSelectedProducts((prevSelected) =>
       prevSelected.some((p) => p.slug === product.slug)
         ? prevSelected.filter((p) => p.slug !== product.slug)
         : [...prevSelected, product],
-    );
-  };
+    )
+  }
 
   const handleSave = () => {
-    closeViaCancel.current = false;
-    onProductsSelected(selectedProducts);
-    setOpen(false);
-  };
+    closeViaCancel.current = false
+    onProductsSelected(selectedProducts)
+    setOpen(false)
+  }
 
   const handleCancel = () => {
-    closeViaCancel.current = true;
-    setOpen(false);
-  };
+    closeViaCancel.current = true
+    setOpen(false)
+  }
 
   useEffect(() => {
     if (open) {
       if (innerInputRef.current) {
-        innerInputRef.current.focus();
+        innerInputRef.current.focus()
       }
     } else if (closeViaCancel.current) {
       // Reset selections to parent's selected items when closed via cancel
-      setSelectedProducts([...selectedItems]);
-      closeViaCancel.current = false;
+      setSelectedProducts([...selectedItems])
+      closeViaCancel.current = false
     }
-  }, [open, selectedItems]);
+  }, [open, selectedItems])
 
   // Add this effect to sync with parent's selected items
   useEffect(() => {
@@ -160,8 +160,8 @@ const SearchProducts = ({
       prev.filter((product) =>
         selectedItems.some((item) => item.slug === product.slug),
       ),
-    );
-  }, [selectedItems]);
+    )
+  }, [selectedItems])
 
   return (
     <div className="flex items-center justify-between">
@@ -227,69 +227,37 @@ const SearchProducts = ({
             </div>
 
             {/* Always show suggestions */}
-            <ul className="scrollbar z-10 mt-3 h-full w-full overflow-auto bg-white">
-              {suggestions.map((suggestion) => (
-                <li
-                  key={suggestion.sku}
-                  className="flex cursor-pointer items-center justify-between border-b px-2 py-4 transition-colors hover:bg-gray-100"
-                  onClick={() => handleProductSelect(suggestion)}
+            <div className="flex flex-col gap-y-2">
+              {suggestions.map((product) => (
+                <div
+                  key={product.slug}
+                  className="flex items-center justify-between rounded-lg border border-neutral-300 p-2"
                 >
                   <div className="flex items-center gap-x-2">
                     <Checkbox
-                      id={suggestion.slug}
-                      className="mr-2"
+                      id={product.slug}
                       checked={selectedProducts.some(
-                        (p) => p.slug === suggestion.slug,
+                        (p) => p.slug === product.slug,
                       )}
-                      onCheckedChange={() => handleProductSelect(suggestion)}
-                      onClick={() => handleProductSelect(suggestion)}
+                      onCheckedChange={() => handleProductSelect(product)}
                     />
-                    <Image
-                      src={suggestion.image || "/no-image.png"}
-                      alt={suggestion.name}
-                      width={30}
-                      height={30}
-                    />
-
                     <label
-                      htmlFor={suggestion.slug}
-                      className="max-w-80 flex-1 cursor-pointer truncate px-4 py-2 text-sm"
+                      htmlFor={product.slug}
+                      className="text-sm text-black"
                     >
-                      {suggestion.name}
+                      {product.name}
                     </label>
                   </div>
-
-                  <div className="grid grid-cols-1 grid-rows-2 gap-x-4 md:grid-cols-2 md:grid-rows-1">
-                    <p className="w-[5.5rem] text-right text-sm">
-                      {suggestion.stock} available
-                    </p>
-                    <p className="w-[5.5rem] text-right text-sm">
-                      Rs. {suggestion.price}
-                    </p>
-                  </div>
-                </li>
+                </div>
               ))}
-            </ul>
-
-            <div className="flex w-full items-center justify-end gap-x-3 px-1 pt-2 pb-4">
-              <button
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
-              >
-                Save
-              </button>
             </div>
+
+            <ActionButtons onCancel={handleCancel} onSave={handleSave} />
           </div>
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default SearchProducts;
+export default SearchProducts

@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react'
 import { Command, CommandEmpty, CommandGroup } from '@/components/ui/command'
-import { Button } from '@/components/ui/button'
 import { ProductCard } from './ProductCard'
-import { products as dummyProducts } from '@/data/dummyProducts'
+import { dummyProducts } from '@/data/dummyProducts'
 import { IProduct } from '@/types'
 import {
   Popover,
@@ -13,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 export default function RecommendedProduct() {
   const { setValue } = useFormContext<ProductFormValues>()
@@ -159,24 +159,13 @@ export default function RecommendedProduct() {
               )}
             </div>
 
-            <div className="mt-4 flex justify-end gap-2">
-              <Button
-                onClick={handleAdd}
-                size="sm"
-                disabled={selectedProducts.length === 0}
-                className="hover:bg-LightGrey w-20 font-normal text-black"
-                variant="outline"
-              >
-                Add
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleCancel}
-                size="sm"
-                className="hover:bg-LightGrey w-20 font-normal text-black"
-              >
-                Cancel
-              </Button>
+            <div className="mt-4">
+              <ActionButtons
+                onCancel={handleCancel}
+                onSave={handleAdd}
+                saveDisabled={selectedProducts.length === 0}
+                saveText="Add"
+              />
             </div>
           </Command>
         </PopoverContent>

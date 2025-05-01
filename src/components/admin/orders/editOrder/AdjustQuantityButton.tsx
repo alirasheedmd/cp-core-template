@@ -1,60 +1,61 @@
-"use client";
+'use client'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+} from '@/components/ui/dialog'
+import { ActionButtons } from '@/components/common/ActionButtons'
+import { useState } from 'react'
 
 export default function AdjustQuantityButton({
   availableStock,
   onQuantitySave,
 }: {
-  availableStock: number;
-  onQuantitySave: (quantity: number) => void;
+  availableStock: number
+  onQuantitySave: (quantity: number) => void
 }) {
-  const [open, setOpen] = useState(false);
-  const [quantity, setQuantity] = useState(1); // Default quantity is 1
-  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false)
+  const [quantity, setQuantity] = useState(1) // Default quantity is 1
+  const [error, setError] = useState('')
 
   const handleSave = () => {
     if (quantity > availableStock) {
-      setError(`Quantity cannot exceed available stock (${availableStock}).`);
-      return;
+      setError(`Quantity cannot exceed available stock (${availableStock}).`)
+      return
     }
-    onQuantitySave(quantity); // Send quantity to parent component
-    setOpen(false); // Close dialog
-  };
+    onQuantitySave(quantity) // Send quantity to parent component
+    setOpen(false) // Close dialog
+  }
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    if (value === "") {
-      setQuantity(0); // Temporarily set to 0 to allow editing
-      setError(""); // No error when input is blank for now
-      return;
+    const value = e.target.value.trim()
+    if (value === '') {
+      setQuantity(0) // Temporarily set to 0 to allow editing
+      setError('') // No error when input is blank for now
+      return
     }
 
-    const numericValue = Number(value);
+    const numericValue = Number(value)
     if (isNaN(numericValue) || numericValue < 1) {
-      setQuantity(1); // Reset to 1 if input is invalid or below 1
-      setError("Quantity cannot be less than 1.");
+      setQuantity(1) // Reset to 1 if input is invalid or below 1
+      setError('Quantity cannot be less than 1.')
     } else if (numericValue > availableStock) {
-      setQuantity(numericValue); // Temporarily allow exceeding stock but show error
-      setError(`Quantity cannot exceed available stock (${availableStock}).`);
+      setQuantity(numericValue) // Temporarily allow exceeding stock but show error
+      setError(`Quantity cannot exceed available stock (${availableStock}).`)
     } else {
-      setQuantity(numericValue); // Valid input
-      setError(""); // Clear error
+      setQuantity(numericValue) // Valid input
+      setError('') // Clear error
     }
-  };
+  }
 
   const handleBlur = () => {
     if (!quantity || quantity < 1) {
-      setQuantity(1); // Ensure minimum quantity of 1 on blur
-      setError("");
+      setQuantity(1) // Ensure minimum quantity of 1 on blur
+      setError('')
     }
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -76,7 +77,7 @@ export default function AdjustQuantityButton({
               <p>Quantity</p>
               <input
                 type="number"
-                value={quantity === 0 ? "" : quantity} // Show empty if 0
+                value={quantity === 0 ? '' : quantity} // Show empty if 0
                 onChange={handleQuantityChange}
                 onBlur={handleBlur}
                 className="mt-2 w-full rounded-lg border border-neutral-300 px-2 py-1"
@@ -88,23 +89,9 @@ export default function AdjustQuantityButton({
               <p className="text-orange-600 lg:mt-2">{availableStock}</p>
             </div>
           </div>
-          {/* Buttons */}
-          <div className="flex w-full items-center justify-end gap-x-3 px-4 pb-4 pt-2">
-            <button
-              className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="rounded-lg border border-neutral-300 bg-white px-3 py-1 shadow-md transition-colors hover:bg-[#e7e7e7]"
-            >
-              Save
-            </button>
-          </div>
+          <ActionButtons onCancel={() => setOpen(false)} onSave={handleSave} />
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

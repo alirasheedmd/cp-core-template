@@ -1,29 +1,29 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
-import { RiDeleteBinLine } from "react-icons/ri";
+import React, { useState } from 'react'
+import { FaSearch, FaTimes } from 'react-icons/fa'
+import { RiDeleteBinLine } from 'react-icons/ri'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import SortButton from "@/components/common/SortButton";
+} from '@/components/ui/dialog'
+import SortButton from '@/components/admin/products/addProduct/SortButton'
+import { ActionButtons } from '@/components/common/ActionButtons'
 
 interface ProductActionsProps {
-  query: string;
-  onQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClearQuery: () => void;
-  selectedRowCount: number;
-  onDelete: () => Promise<void>;
-  sortConfig: { type: "date" | "name"; direction: "asc" | "desc" } | null;
+  query: string
+  onQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onClearQuery: () => void
+  selectedRowCount: number
+  onDelete: () => Promise<void>
+  sortConfig: { type: 'date' | 'name'; direction: 'asc' | 'desc' } | null
   onSortChange: (
-    config: { type: "date" | "name"; direction: "asc" | "desc" } | null,
-  ) => void;
+    config: { type: 'date' | 'name'; direction: 'asc' | 'desc' } | null,
+  ) => void
 }
 
 const ProductActions: React.FC<ProductActionsProps> = ({
@@ -35,21 +35,21 @@ const ProductActions: React.FC<ProductActionsProps> = ({
   sortConfig,
   onSortChange,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
-    setIsDeleting(true);
+    setIsDeleting(true)
     try {
-      await onDelete();
+      await onDelete()
     } catch (error) {
-      console.error("Error in delete action:", error);
+      console.error('Error in delete action:', error)
       // Optionally show an error message to the user
     } finally {
-      setIsDeleting(false);
-      setOpen(false);
+      setIsDeleting(false)
+      setOpen(false)
     }
-  };
+  }
 
   return (
     <div className="mb-3 flex items-center gap-x-3 lg:mb-0">
@@ -59,7 +59,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
           type="text"
           value={query}
           onChange={onQueryChange}
-          placeholder="Search products"
+          placeholder="Search product name"
           className="w-full rounded-l-full bg-white px-3 py-1 text-xs outline-hidden lg:px-4 lg:text-sm"
         />
         <div className="flex h-4 items-center justify-center gap-x-1 rounded-r-full bg-white pr-1 lg:h-7 lg:pr-2">
@@ -85,8 +85,8 @@ const ProductActions: React.FC<ProductActionsProps> = ({
               disabled={selectedRowCount === 0}
               className={`flex h-6 w-6 items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors ${
                 selectedRowCount === 0
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:bg-LightGrey cursor-pointer hover:text-orange-600"
+                  ? 'cursor-not-allowed opacity-50'
+                  : 'hover:bg-LightGrey cursor-pointer hover:text-orange-600'
               }`}
             >
               <RiDeleteBinLine className="text-base" />
@@ -100,22 +100,15 @@ const ProductActions: React.FC<ProductActionsProps> = ({
                 This action cannot be undone.
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="mx-auto mt-5 gap-x-4">
-              <button
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="bg-LightGrey w-28 rounded-xl px-4 py-2 text-nowrap shadow-xs transition-colors hover:text-orange-600"
-              >
-                {isDeleting ? "Deleting..." : "Yes"}
-              </button>
-              <button
-                onClick={() => setOpen(false)}
-                disabled={isDeleting}
-                className="bg-LightGrey w-28 rounded-xl px-4 py-2 text-nowrap shadow-xs transition-colors hover:text-orange-600"
-              >
-                No
-              </button>
-            </DialogFooter>
+            <div className="mx-auto mt-5">
+              <ActionButtons
+                onCancel={() => setOpen(false)}
+                onSave={handleDelete}
+                isLoading={isDeleting}
+                saveText="Yes"
+                cancelText="No"
+              />
+            </div>
           </DialogContent>
         </Dialog>
       </div>
@@ -125,7 +118,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
         <SortButton sortConfig={sortConfig} onSortChange={onSortChange} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductActions;
+export default ProductActions

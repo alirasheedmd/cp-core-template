@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { ActionButtons } from '@/components/common/ActionButtons'
 // Type imports
 import { IOrderCustomer } from '@/types'
 // Data imports
@@ -101,13 +102,13 @@ export default function EditShippingAddress({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="block w-full rounded-lg bg-[#e7e7e7] px-3 py-2 text-left transition-colors hover:bg-[#e7e7e7] lg:bg-transparent">
+        <button className="bg-LightGrey hover:bg-LightGrey block w-full rounded-lg px-3 py-2 text-left transition-colors lg:bg-transparent">
           Edit shipping address
         </button>
       </DialogTrigger>
       <DialogContent className="scrollbar max-h-[90dvh] w-[90%] overflow-y-auto rounded-lg p-0 lg:w-full [&>button]:hidden">
         <DialogHeader>
-          <DialogTitle className="rounded-t-lg bg-[#E7E7E7] px-3 py-5 text-left">
+          <DialogTitle className="bg-LightGrey rounded-t-lg px-3 py-5 text-left">
             Edit shipping address
           </DialogTitle>
         </DialogHeader>
@@ -250,27 +251,14 @@ export default function EditShippingAddress({
                   Update customer profile
                 </label>
               </div>
-              {/* Buttons */}
-              <div className="flex justify-end gap-x-2 text-sm">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOpen(false)
-                    onClose()
-                  }}
-                  disabled={isLoading}
-                  className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7]"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="rounded-lg border border-neutral-300 bg-white px-3 py-1 text-sm shadow-md transition-colors hover:bg-[#e7e7e7]"
-                >
-                  {isLoading ? 'Saving...' : 'Save'}
-                </button>
-              </div>
+              <ActionButtons
+                onCancel={() => {
+                  setOpen(false)
+                  onClose()
+                }}
+                onSave={methods.handleSubmit(handleSave)}
+                isLoading={isLoading}
+              />
             </div>
           </form>
         </FormProvider>
