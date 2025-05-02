@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { routes } from '@/config/routes'
 
 export default function AdminAuthLayout({
   children,
@@ -12,7 +13,7 @@ export default function AdminAuthLayout({
       <header className="bg-black py-6">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
-            <Link href="/" className="shrink-0">
+            <Link href={routes.home} className="shrink-0">
               <Image
                 src="/logo.png"
                 alt="Logo"

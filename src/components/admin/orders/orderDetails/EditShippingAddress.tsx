@@ -1,6 +1,6 @@
 'use client'
 // React and Next.js imports
-import { useState } from 'react'
+import { useActionState, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 // Form validation imports
 import { useForm, FormProvider } from 'react-hook-form'
@@ -22,22 +22,32 @@ import { ActionButtons } from '@/components/common/ActionButtons'
 import { IOrderCustomer } from '@/types'
 // Data imports
 import { dummyOrders } from '@/data/dummyOrders'
+// Server action imports
+import {
+  updateOrderShippingInfo,
+  type UpdateOrderShippingInfoState,
+} from '@/app/actions/admin/main/order'
 
 const shippingSchema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
   phoneNumber: z
     .string()
     .min(1, 'Phone number is required')
-    .regex(/^[0-9]+$/, 'Must be a valid phone number')
-    .min(10, 'Phone number must be at least 10 digits')
-    .max(14, 'Phone number must not exceed 14 digits'),
+    .transform((val) => val.replace(/[\s\-\(\)]/g, '')) // Remove spaces, dashes, and parentheses
+    .pipe(
+      z
+        .string()
+        .regex(/^\+?[0-9]+$/, 'Must contain only numbers and optional + prefix')
+        .min(8, 'Phone number must be at least 8 digits')
+        .max(20, 'Phone number must not exceed 20 digits'),
+    ),
   street: z.string().min(1, 'Street address is required'),
   apartment: z.string().optional(),
   city: z.string().min(1, 'City is required'),
   postalCode: z.string().min(1, 'Postal code is required'),
 })
 
-type ShippingFormValues = z.infer<typeof shippingSchema>
+type EditShippingInfoFormValues = z.infer<typeof shippingSchema>
 
 export default function EditShippingAddress({
   userAddress,
@@ -50,13 +60,13 @@ export default function EditShippingAddress({
 }) {
   const router = useRouter()
   const [updateProfile, setUpdateProfile] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
   // Find the order from dummy data
   const order = dummyOrders.find((order) => order.orderId === orderId)
 
-  const methods = useForm<ShippingFormValues>({
+  const methods = useForm<EditShippingInfoFormValues>({
     resolver: zodResolver(shippingSchema),
     defaultValues: {
       fullName: order?.customerDetails.fullName || userAddress?.fullName || '',
@@ -79,23 +89,43 @@ export default function EditShippingAddress({
     },
   })
 
-  const handleSave = async (data: ShippingFormValues) => {
-    try {
-      setIsLoading(true)
-      // In a real application, this would be an API call
-      console.log('Updating order:', orderId, 'with shipping details:', data)
+  const [state, formAction] = useActionState<
+    UpdateOrderShippingInfoState,
+    FormData
+  >(
+    async (_prevState, formData) =>
+      updateOrderShippingInfo({
+        orderId: formData.get('orderId') as string,
+        fullName: formData.get('fullName') as string,
+        phoneNumber: formData.get('phoneNumber') as string,
+        street: formData.get('street') as string,
+        apartment: formData.get('apartment') as string,
+        city: formData.get('city') as string,
+        postalCode: formData.get('postalCode') as string,
+        updateProfile: formData.get('updateProfile') === 'true',
+      }),
+    { success: false },
+  )
 
-      if (updateProfile) {
-        console.log('Updating user profile with new shipping details')
-      }
+  const handleSave = async (data: EditShippingInfoFormValues) => {
+    const formData = new FormData()
+    formData.append('orderId', orderId)
+    formData.append('fullName', data.fullName)
+    formData.append('phoneNumber', data.phoneNumber)
+    formData.append('street', data.street)
+    formData.append('apartment', data.apartment || '')
+    formData.append('city', data.city)
+    formData.append('postalCode', data.postalCode)
+    formData.append('updateProfile', updateProfile.toString())
 
+    startTransition(() => {
+      formAction(formData)
+    })
+
+    if (state.status === 'success') {
       setOpen(false)
       onClose()
       router.refresh()
-    } catch (error) {
-      console.error('Error updating customer details:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -246,7 +276,7 @@ export default function EditShippingAddress({
                 />
                 <label
                   htmlFor="update"
-                  className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 lg:text-sm"
+                  className="text-xs leading-none text-nowrap peer-disabled:cursor-not-allowed peer-disabled:opacity-70 lg:text-sm"
                 >
                   Update customer profile
                 </label>
@@ -257,9 +287,12 @@ export default function EditShippingAddress({
                   onClose()
                 }}
                 onSave={methods.handleSubmit(handleSave)}
-                isLoading={isLoading}
+                isLoading={isPending}
               />
             </div>
+            {state.error && (
+              <p className="text-sm text-red-500">{state.error}</p>
+            )}
           </form>
         </FormProvider>
       </DialogContent>

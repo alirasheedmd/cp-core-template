@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import { FaCircle } from 'react-icons/fa6'
 import PrintOrderButton from './PrintOrderButton'
 import { IOrder } from '@/types'
+import { routes } from '@/config/routes'
 
 interface OrderHeaderProps {
   order: IOrder
@@ -30,7 +31,7 @@ export default function OrderHeader({ order, orderId }: OrderHeaderProps) {
 
       <div className="hidden items-center gap-x-4 lg:flex">
         <Link
-          href={`/admin/orders/${orderId}/edit`}
+          href={routes.admin.orderEdit(orderId)}
           className="bg-LightGrey hover:text-Orange w-16 rounded-xl py-1.5 text-center font-semibold transition-colors"
         >
           Edit

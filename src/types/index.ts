@@ -10,16 +10,6 @@ export interface ICategory {
   subcategories?: ICategory[]
 }
 
-export interface IVariant {
-  _key: string
-  color: string
-  sku: string
-  originalPrice: number
-  discountPrice: number
-  stock: number
-  images: string[]
-}
-
 export interface IAdditionalDetailChild {
   _key: string
   _type: string
@@ -48,7 +38,11 @@ export interface IProduct {
   images: string[]
   category: ICategory
   description: string
-  variants: IVariant[]
+  color: string
+  sku: string
+  originalPrice: number
+  discountPrice?: number
+  stock: number
   rating: number
   additionalDetails: IAdditionalDetail[]
   reviews: IReview[]
@@ -59,13 +53,12 @@ export interface IProduct {
 
 export interface IOrderItem {
   productId: string
-  variantId: string
   name: string
-  variant: string
   sku: string
   price: number
   quantity: number
   image: string
+  stock: number
 }
 
 export interface IOrderAddress {

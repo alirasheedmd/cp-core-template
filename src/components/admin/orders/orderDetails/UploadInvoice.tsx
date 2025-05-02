@@ -93,7 +93,7 @@ export default function UploadInvoice({
           />
           <label
             htmlFor="file-upload"
-            className="cursor-pointer rounded-xl border border-neutral-500 bg-white px-4 py-2 text-sm transition-colors hover:border-orange-600 hover:bg-neutral-100 hover:text-orange-600 lg:text-base"
+            className="hover:border-Orange hover:text-Orange cursor-pointer rounded-xl border border-neutral-500 bg-white px-4 py-2 text-sm transition-colors hover:bg-neutral-100 lg:text-base"
           >
             Select File
           </label>

@@ -1,6 +1,7 @@
 import { IOrder } from '@/types'
 import Link from 'next/link'
 import { FaCircle } from 'react-icons/fa6'
+import { routes } from '@/config/routes'
 
 export default function MobileOrders({ orders }: { orders: IOrder[] }) {
   return (
@@ -8,7 +9,7 @@ export default function MobileOrders({ orders }: { orders: IOrder[] }) {
       {orders.map((order) => (
         <Link
           key={order.orderId}
-          href={`/orders/${order.orderId}`}
+          href={routes.admin.orderDetails(order.orderId)}
           className="flex items-center justify-between gap-x-2 border-b border-neutral-300 px-3 py-3"
         >
           <div className="space-y-1">

@@ -1,6 +1,6 @@
 'use client'
 // React and Next.js imports
-import { useState } from 'react'
+import { useActionState, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 // Form validation imports
 import { useForm } from 'react-hook-form'
@@ -20,17 +20,27 @@ import { Label } from '@/components/ui/label'
 import { ActionButtons } from '@/components/common/ActionButtons'
 // Data imports
 import { dummyOrders } from '@/data/dummyOrders'
+// Server action imports
+import {
+  updateOrderContactInfo,
+  type UpdateOrderContactInfoState,
+} from '@/app/actions/admin/main/order'
 
 const formSchema = z.object({
   phoneNumber: z
     .string()
     .min(1, 'Phone number is required')
-    .regex(/^[0-9]+$/, 'Must be a valid phone number')
-    .min(10, 'Phone number must be at least 10 digits')
-    .max(14, 'Phone number must not exceed 14 digits'),
+    .transform((val) => val.replace(/[\s\-\(\)]/g, '')) // Remove spaces, dashes, and parentheses
+    .pipe(
+      z
+        .string()
+        .regex(/^\+?[0-9]+$/, 'Must contain only numbers and optional + prefix')
+        .min(8, 'Phone number must be at least 8 digits')
+        .max(20, 'Phone number must not exceed 20 digits'),
+    ),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type EditContactInfoFormValues = z.infer<typeof formSchema>
 
 export default function EditContactInformation({
   userEmail,
@@ -45,43 +55,46 @@ export default function EditContactInformation({
 }) {
   const router = useRouter()
   const [updateProfile, setUpdateProfile] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
   // Find the order from dummy data
   const order = dummyOrders.find((order) => order.orderId === orderId)
 
-  const form = useForm<FormValues>({
+  const form = useForm<EditContactInfoFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       phoneNumber: order?.customerDetails.phoneNumber || userPhoneNumber || '',
     },
   })
 
-  const handleSave = async (data: FormValues) => {
-    try {
-      setIsLoading(true)
-      // In a real application, this would be an API call
-      console.log(
-        'Updating order:',
-        orderId,
-        'with phone number:',
-        data.phoneNumber,
-      )
+  const [state, formAction] = useActionState<
+    UpdateOrderContactInfoState,
+    FormData
+  >(
+    async (_prevState, formData) =>
+      updateOrderContactInfo({
+        orderId: formData.get('orderId') as string,
+        phoneNumber: formData.get('phoneNumber') as string,
+        updateProfile: formData.get('updateProfile') === 'true',
+      }),
+    { success: false },
+  )
 
-      // If checkbox is selected, update user profile
-      if (updateProfile) {
-        console.log('Updating user profile with new phone number')
-      }
+  const handleSave = async (data: EditContactInfoFormValues) => {
+    const formData = new FormData()
+    formData.append('orderId', orderId)
+    formData.append('phoneNumber', data.phoneNumber)
+    formData.append('updateProfile', updateProfile.toString())
 
-      setOpen(false) // Close dialog after successful update
+    startTransition(() => {
+      formAction(formData)
+    })
+
+    if (state.status === 'success') {
+      setOpen(false)
       onClose()
-      // Refresh page to fetch data
       router.refresh()
-    } catch (error) {
-      console.error('Error updating customer details:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -136,6 +149,9 @@ export default function EditContactInformation({
                 {form.formState.errors.phoneNumber.message}
               </p>
             )}
+            {state.error && (
+              <p className="text-sm text-red-500">{state.error}</p>
+            )}
           </div>
 
           <div className="flex justify-between gap-x-2 pt-0 pb-4 lg:px-3">
@@ -161,7 +177,7 @@ export default function EditContactInformation({
                 onClose()
               }}
               onSave={form.handleSubmit(handleSave)}
-              isLoading={isLoading}
+              isLoading={isPending}
             />
           </div>
         </form>

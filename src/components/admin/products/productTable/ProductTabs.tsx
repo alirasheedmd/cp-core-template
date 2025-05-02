@@ -1,13 +1,13 @@
 interface Tab {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface ProductTabsProps {
-  tabs: Tab[];
-  selectedTab: string;
-  onSelectTab: (tabId: string) => void;
-  productsCount: Record<string, number>;
+  tabs: Tab[]
+  selectedTab: string
+  onSelectTab: (tabId: string) => void
+  productsCount: Record<string, number>
 }
 
 const ProductTabs: React.FC<ProductTabsProps> = ({
@@ -25,8 +25,8 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
               onClick={() => onSelectTab(tab.id)}
               className={`hover:bg-LightGrey relative block cursor-pointer rounded-xl px-2 py-2 font-medium whitespace-nowrap transition-all xl:px-4 xl:py-2 ${
                 selectedTab === tab.id
-                  ? "bg-LightGrey text-orange-600"
-                  : "text-black"
+                  ? 'bg-LightGrey text-Orange'
+                  : 'text-black'
               }`}
             >
               {tab.name} (
@@ -39,7 +39,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default ProductTabs;
+export default ProductTabs

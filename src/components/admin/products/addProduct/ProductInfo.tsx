@@ -8,11 +8,12 @@ import { z } from 'zod'
 import { useActionState } from 'react'
 import {
   createProduct,
-  type ActionState,
+  type ProductActionState,
 } from '@/app/actions/admin/main/product'
 import { useRouter } from 'next/navigation'
 import { useRef, startTransition, useEffect } from 'react'
 import { ActionButtons } from '@/components/common/ActionButtons'
+import { routes } from '@/config/routes'
 
 export const productSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -77,8 +78,8 @@ export type ProductFormValues = z.infer<typeof productSchema>
 export default function ProductInfo() {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
-  const [state, formAction] = useActionState<ActionState, FormData>(
-    async (_prevState, formData) => createProduct(formData),
+  const [state, formAction] = useActionState<ProductActionState, FormData>(
+    async (_prevState, formData) => createProduct(_prevState, formData),
     { status: 'idle' },
   )
 
@@ -122,7 +123,7 @@ export default function ProductInfo() {
   // Redirect on success
   useEffect(() => {
     if (state?.status === 'success') {
-      router.push('/admin/products')
+      router.push(routes.admin.products)
     }
   }, [state?.status, router])
 
@@ -146,7 +147,7 @@ export default function ProductInfo() {
         {/* Action Buttons */}
         <div className="mt-8">
           <ActionButtons
-            onCancel={() => router.push('/admin/products')}
+            onCancel={() => router.push(routes.admin.products)}
             onSave={handleSubmit(onSubmit)}
             isLoading={isPending || isSubmitting}
           />

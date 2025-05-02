@@ -1,3 +1,4 @@
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 import PaymentStatusSelector from './PaymentStatusSelector'
 import UploadInvoice from './UploadInvoice'
 import { IOrder } from '@/types'
@@ -15,7 +16,7 @@ export default function PaymentInformation({
   onUploadResponse,
 }: PaymentInformationProps) {
   return (
-    <div className="bg-white p-4 lg:rounded-lg">
+    <AdminContainer>
       <p className="font-semibold">Payment Details</p>
       <p className="mt-2 text-sm text-neutral-500">#{orderId}</p>
       <div className="mt-4 flex items-center justify-between gap-x-2">
@@ -36,6 +37,6 @@ export default function PaymentInformation({
       {order?.paymentMethod === 'ONLINE_PAYMENT' && (
         <UploadInvoice onUploadResponse={onUploadResponse} />
       )}
-    </div>
+    </AdminContainer>
   )
 }

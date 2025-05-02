@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { FaSearch, FaTimes } from 'react-icons/fa'
+import Image from 'next/image'
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox'
 import { dummyProducts as products } from '@/data/dummyProducts'
 import { ActionButtons } from '@/components/common/ActionButtons'
-import { IProduct, IVariant } from '@/types'
+import { IProduct } from '@/types'
 
 export interface ISuggestion {
   type: 'product'
@@ -20,26 +21,11 @@ export interface ISuggestion {
   categoryId?: string
   categoryName?: string
   categorySlug?: string
-  variantKey: string
-  sku?: string
   price: number
   stock: number
-  color?: string
   image: string
   quantity?: number
-  variants: {
-    variantKey: string
-    sku?: string
-    _key: string
-    images: string[]
-    originalPrice: number
-    discountPrice?: number
-    stock: number
-    color?: string
-    variantImages?: string[]
-    _id?: string // Add _id to the variant (if not already present)
-  }[]
-  variant?: IVariant
+  sku: string
 }
 
 interface SearchProductsProps {
@@ -57,8 +43,6 @@ const SearchProducts = ({
   const [open, setOpen] = useState(false)
   const [selectedProducts, setSelectedProducts] = useState<ISuggestion[]>([])
   const innerInputRef = useRef<HTMLInputElement>(null)
-  // Add this to track how dialog was closed
-
   const closeViaCancel = useRef(false)
 
   // Fetch products and set initial 5 suggestions
@@ -72,30 +56,13 @@ const SearchProducts = ({
         categoryId: product.category?._id,
         categoryName: product.category?.name,
         categorySlug: product.category?.slug.current,
-        variantKey: product.variants[0]._key,
-        sku: product.variants[0]?.sku,
-        price:
-          product.variants[0]?.discountPrice ||
-          product.variants[0]?.originalPrice,
-        stock: product.variants[0]?.stock,
-        color: product.variants[0]?.color,
-        image: product.images[0] || product.variants[0]?.images[0],
-        variants: product.variants.map((variant: IVariant) => ({
-          variantKey: variant._key,
-          sku: variant.sku,
-          _key: variant._key,
-          images: variant.images || [],
-          originalPrice: variant.originalPrice,
-          discountPrice: variant.discountPrice,
-          stock: variant.stock,
-          color: variant.color,
-          variantImages: variant.images,
-        })),
+        price: product.discountPrice || product.originalPrice || 0,
+        stock: product.stock || 0,
+        image: product.images[0] || '',
+        sku: product.sku || '',
       }))
 
-      // console.log("allSuggestions", allSuggestions);
       setAllSuggestions(allSuggestions)
-      // Show first 5 products initially
       setSuggestions(allSuggestions.slice(0, 5))
     }
 
@@ -110,7 +77,6 @@ const SearchProducts = ({
       )
       setSuggestions(filtered)
     } else {
-      // Show first 5 when query is empty
       setSuggestions(allSuggestions.slice(0, 5))
     }
   }, [query, allSuggestions])
@@ -148,13 +114,11 @@ const SearchProducts = ({
         innerInputRef.current.focus()
       }
     } else if (closeViaCancel.current) {
-      // Reset selections to parent's selected items when closed via cancel
       setSelectedProducts([...selectedItems])
       closeViaCancel.current = false
     }
   }, [open, selectedItems])
 
-  // Add this effect to sync with parent's selected items
   useEffect(() => {
     setSelectedProducts((prev) =>
       prev.filter((product) =>
@@ -191,16 +155,16 @@ const SearchProducts = ({
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button className="rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm text-nowrap shadow-md transition-colors hover:text-orange-600 lg:w-32 lg:text-base">
+          <button className="hover:text-Orange rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm text-nowrap shadow-md transition-colors lg:w-32 lg:text-base">
             Browse
           </button>
         </DialogTrigger>
         <DialogContent className="h-[80dvh] max-w-[95%] rounded-lg p-0 md:max-w-0 md:min-w-[40rem] [&>button]:hidden">
-          <DialogTitle className="h-fit rounded-t-lg bg-[#E7E7E7] px-3 py-5">
+          <DialogTitle className="bg-LightGrey h-fit rounded-t-lg px-3 py-5">
             Add Products
           </DialogTitle>
-          <div className="fixed top-16 m-2 flex h-[69dvh] w-[96%] flex-col items-start justify-between">
-            <div className="max-h-10 w-full flex-1 rounded-full border border-gray-800">
+          <div className="fixed top-16 m-2 flex h-[69dvh] w-[96%] flex-col items-start pb-4">
+            <div className="w-full rounded-full border border-gray-800">
               <div className="flex items-center">
                 <input
                   type="text"
@@ -226,27 +190,47 @@ const SearchProducts = ({
               </div>
             </div>
 
-            {/* Always show suggestions */}
-            <div className="flex flex-col gap-y-2">
+            {/* Product List */}
+            <div className="my-4 w-full flex-1 space-y-2 overflow-y-auto">
               {suggestions.map((product) => (
                 <div
                   key={product.slug}
-                  className="flex items-center justify-between rounded-lg border border-neutral-300 p-2"
+                  className="flex items-center gap-4 rounded-lg border border-neutral-300 p-3 hover:bg-gray-50"
                 >
-                  <div className="flex items-center gap-x-2">
-                    <Checkbox
-                      id={product.slug}
-                      checked={selectedProducts.some(
-                        (p) => p.slug === product.slug,
-                      )}
-                      onCheckedChange={() => handleProductSelect(product)}
+                  <Checkbox
+                    id={product.slug}
+                    checked={selectedProducts.some(
+                      (p) => p.slug === product.slug,
+                    )}
+                    onCheckedChange={() => handleProductSelect(product)}
+                  />
+                  <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
                     />
-                    <label
-                      htmlFor={product.slug}
-                      className="text-sm text-black"
-                    >
-                      {product.name}
-                    </label>
+                  </div>
+                  <div className="flex flex-1 items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-900">
+                        {product.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-gray-500">
+                        SKU: {product.sku}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="space-x-5 text-sm">
+                        <span className="ml-2 text-gray-500">
+                          {product.stock} available
+                        </span>
+                        <span className="font-medium text-gray-900">
+                          Rs.{product.price.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}

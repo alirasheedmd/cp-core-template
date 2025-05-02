@@ -1,96 +1,103 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { TbLoader2 } from "react-icons/tb";
+import { useState, useEffect } from 'react'
+import { TbLoader2 } from 'react-icons/tb'
 
 interface ResetPasswordFormProps {
-  onBackToLogin: () => void;
-  initialEmail?: string; // Allow passing initial email from parent
+  onBackToLogin: () => void
+  initialEmail?: string // Allow passing initial email from parent
 }
 
 export default function ResetPasswordForm({
   onBackToLogin,
-  initialEmail = "",
+  initialEmail = '',
 }: ResetPasswordFormProps) {
-  const [email, setEmail] = useState(initialEmail);
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
+  const [email, setEmail] = useState(initialEmail)
+  const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [cooldown, setCooldown] = useState(0)
 
   // When cooldown is active, count down every second.
   useEffect(() => {
     if (cooldown > 0) {
       const interval = setInterval(() => {
-        setCooldown((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(interval);
+        setCooldown((prev) => prev - 1)
+      }, 1000)
+      return () => clearInterval(interval)
     }
-  }, [cooldown]);
+  }, [cooldown])
 
   // Update email if initialEmail changes (e.g., from parent)
   useEffect(() => {
     if (initialEmail && initialEmail !== email) {
-      setEmail(initialEmail);
+      setEmail(initialEmail)
     }
-  }, [initialEmail, email]);
+  }, [initialEmail, email])
 
   const handlePasswordReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccessMessage("");
+    e.preventDefault()
+    setError('')
+    setSuccessMessage('')
 
     // Client-side validation
     if (!email.trim()) {
-      setError("Please enter your email address");
-      return;
+      setError('Please enter your email address')
+      return
     }
 
     // Simple email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address");
-      return;
+      setError('Please enter a valid email address')
+      return
     }
 
     try {
-      setIsSubmitting(true);
-      const res = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      setIsSubmitting(true)
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
+      })
+      const data = await res.json()
       if (res.ok && data.success) {
-        setSuccessMessage(data.message || "Password reset email sent successfully. Please check your inbox.");
+        setSuccessMessage(
+          data.message ||
+            'Password reset email sent successfully. Please check your inbox.',
+        )
         // Start a cooldown of 60 seconds after a successful send.
-        setCooldown(60);
+        setCooldown(60)
       } else {
         // Use a friendly error message or the server's error message
-        const errorMessage = getFriendlyErrorMessage(data.error);
-        setError(errorMessage || data.error || "Failed to send reset email. Please try again.");
+        const errorMessage = getFriendlyErrorMessage(data.error)
+        setError(
+          errorMessage ||
+            data.error ||
+            'Failed to send reset email. Please try again.',
+        )
       }
     } catch (err) {
-      console.error("Password reset error:", err);
-      setError("An unexpected error occurred. Please try again later.");
+      console.error('Password reset error:', err)
+      setError('An unexpected error occurred. Please try again later.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   // Returns a user-friendly error message
   const getFriendlyErrorMessage = (errorCode: string): string => {
     switch (errorCode) {
-      case "auth/user-not-found":
-        return "No account exists with this email address. Please check and try again.";
-      case "auth/invalid-email":
-        return "Please enter a valid email address.";
-      case "auth/too-many-requests":
-        return "Too many requests. Please try again later.";
+      case 'auth/user-not-found':
+        return 'No account exists with this email address. Please check and try again.'
+      case 'auth/invalid-email':
+        return 'Please enter a valid email address.'
+      case 'auth/too-many-requests':
+        return 'Too many requests. Please try again later.'
       default:
-        return "";
+        return ''
     }
-  };
+  }
 
   return (
     <div className="w-full">
@@ -116,7 +123,7 @@ export default function ResetPasswordForm({
             required
             placeholder="your.email@example.com"
             disabled={isSubmitting || cooldown > 0}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-1 focus:ring-orange-500 disabled:bg-gray-100 disabled:text-gray-500"
+            className="focus:ring-Orange w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-1 focus:outline-hidden disabled:bg-gray-100 disabled:text-gray-500"
           />
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
@@ -126,10 +133,10 @@ export default function ResetPasswordForm({
         <button
           type="submit"
           disabled={isSubmitting || cooldown > 0}
-          className={`w-full rounded-full bg-orange-500 px-4 py-2 font-semibold text-white transition-all focus:outline-hidden focus:ring-2 focus:ring-orange-400 ${
+          className={`bg-Orange focus:ring-Orange w-full rounded-full px-4 py-2 font-semibold text-white transition-all focus:ring-2 focus:outline-hidden ${
             isSubmitting || cooldown > 0
-              ? "cursor-not-allowed opacity-50"
-              : "hover:bg-orange-600"
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-Orange/80'
           }`}
         >
           {isSubmitting ? (
@@ -138,10 +145,10 @@ export default function ResetPasswordForm({
             </span>
           ) : cooldown > 0 ? (
             <span>
-              Resend link in {cooldown} second{cooldown !== 1 ? "s" : ""}
+              Resend link in {cooldown} second{cooldown !== 1 ? 's' : ''}
             </span>
           ) : (
-            "Send Reset Email"
+            'Send Reset Email'
           )}
         </button>
       </form>
@@ -154,10 +161,10 @@ export default function ResetPasswordForm({
 
       <button
         onClick={onBackToLogin}
-        className="w-full rounded-full border border-gray-300 bg-white px-4 py-2 text-gray-700 transition-all hover:border-gray-800 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-gray-400"
+        className="w-full rounded-full border border-gray-300 bg-white px-4 py-2 text-gray-700 transition-all hover:border-gray-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-400 focus:outline-hidden"
       >
         Back to sign in page
       </button>
     </div>
-  );
+  )
 }

@@ -28,7 +28,7 @@ export default function AdminSignInPage() {
     return (
       <Button
         type="submit"
-        className="bg-Orange w-full hover:bg-orange-600"
+        className="bg-Orange hover:bg-Orange/80 w-full"
         disabled={isPending}
       >
         {isPending ? (

@@ -1,4 +1,5 @@
 import { IOrder } from '@/types'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 interface PaymentDetailsProps {
   order: IOrder
@@ -6,7 +7,7 @@ interface PaymentDetailsProps {
 
 export default function PaymentDetails({ order }: PaymentDetailsProps) {
   return (
-    <div className="bg-white p-4 lg:rounded-lg">
+    <AdminContainer>
       <p className="bg-LightGrey text-Orange w-fit rounded-lg px-2 py-1 text-xs capitalize">
         Unpaid
       </p>
@@ -33,6 +34,6 @@ export default function PaymentDetails({ order }: PaymentDetailsProps) {
         <p className="col-span-2">Total</p>
         <p>Rs. {order?.totalAmount}</p>
       </div>
-    </div>
+    </AdminContainer>
   )
 }

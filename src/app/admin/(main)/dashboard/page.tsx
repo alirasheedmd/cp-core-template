@@ -1,21 +1,26 @@
-"use client";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { ShoppingCart, Users, DollarSign } from "lucide-react";
+'use client'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { ShoppingCart, Users, DollarSign } from 'lucide-react'
+import dynamic from 'next/dynamic'
 
 const data = [
-  { name: "Electronics", value: 400 },
-  { name: "Fashion", value: 300 },
-  { name: "Home Appliances", value: 300 },
-  { name: "Others", value: 200 },
-];
+  { name: 'Electronics', value: 400 },
+  { name: 'Fashion', value: 300 },
+  { name: 'Home Appliances', value: 300 },
+  { name: 'Others', value: 200 },
+]
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
+
+const PieChartComponent = dynamic(
+  () => import('@/components/admin/dashboard/PieChartComponent'),
+  { ssr: false },
+)
 
 export default function AdminDashboardPage() {
-  const orders = 1240;
-  const users = 980;
-  const revenue = 85640;
+  const orders = 1240
+  const users = 980
+  const revenue = 85640
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-6">
@@ -57,7 +62,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">
-              Rs. {revenue.toLocaleString("en-PK")}
+              Rs. {revenue.toLocaleString('en-PK')}
             </p>
             <p className="text-gray-500">This month</p>
           </CardContent>
@@ -70,28 +75,7 @@ export default function AdminDashboardPage() {
             <h2 className="text-lg font-semibold">Sales Breakdown</h2>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={data}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#8884d8"
-                  label
-                >
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            <PieChartComponent data={data} colors={COLORS} />
           </CardContent>
         </Card>
 
@@ -115,5 +99,5 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

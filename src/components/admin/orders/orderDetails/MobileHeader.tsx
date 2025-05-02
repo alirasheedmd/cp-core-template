@@ -8,6 +8,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
 import PrintOrderButton from './PrintOrderButton'
 import { IOrder } from '@/types'
+import { routes } from '@/config/routes'
 
 interface MobileHeaderProps {
   orderId: string
@@ -17,7 +18,7 @@ interface MobileHeaderProps {
 export default function MobileHeader({ orderId, order }: MobileHeaderProps) {
   return (
     <div className="flex items-center justify-between p-5 lg:hidden">
-      <Link href={`/admin/orders`}>
+      <Link href={routes.admin.orders}>
         <BiArrowBack className="text-lg" />
       </Link>
       <Popover>
@@ -28,7 +29,7 @@ export default function MobileHeader({ orderId, order }: MobileHeaderProps) {
         </PopoverTrigger>
         <PopoverContent className="w-44 space-y-3 text-sm" align="end">
           <Link
-            href={`/admin/orders/${orderId}/edit`}
+            href={routes.admin.orderEdit(orderId)}
             className="bg-LightGrey hover:text-Orange block w-full rounded-lg px-3 py-1.5 transition-colors"
           >
             Edit

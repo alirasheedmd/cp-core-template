@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { ActionButtons } from '@/components/common/ActionButtons'
 import { useState } from 'react'
@@ -60,17 +61,21 @@ export default function AdjustQuantityButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="text-sm text-blue-500 hover:text-blue-600 hover:underline hover:underline-offset-4">
+        <button className="text-Blue text-sm hover:underline hover:underline-offset-4">
           Adjust quantity
         </button>
       </DialogTrigger>
       <DialogContent className="w-[90%] rounded-lg p-0 lg:w-full [&>button]:hidden">
         <DialogHeader>
-          <DialogTitle className="rounded-t-lg bg-[#E7E7E7] px-3 py-5 text-left">
+          <DialogTitle className="bg-LightGrey rounded-t-lg px-3 py-5 text-left">
             Adjust quantity
           </DialogTitle>
+          <DialogDescription className="px-3 py-2">
+            Enter the new quantity for this item. The quantity cannot exceed the
+            available stock.
+          </DialogDescription>
         </DialogHeader>
-        <div>
+        <div className="pr-4 pb-4">
           {/* Input */}
           <div className="flex flex-col gap-x-8 gap-y-5 p-4 lg:flex-row lg:items-center">
             <div>
@@ -80,13 +85,13 @@ export default function AdjustQuantityButton({
                 value={quantity === 0 ? '' : quantity} // Show empty if 0
                 onChange={handleQuantityChange}
                 onBlur={handleBlur}
-                className="mt-2 w-full rounded-lg border border-neutral-300 px-2 py-1"
+                className="border-DarkGrey mt-2 w-full rounded-lg border px-2 py-1"
               />
               {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
             </div>
             <div>
               <p>Available Stock</p>
-              <p className="text-orange-600 lg:mt-2">{availableStock}</p>
+              <p className="text-Orange lg:mt-2">{availableStock}</p>
             </div>
           </div>
           <ActionButtons onCancel={() => setOpen(false)} onSave={handleSave} />

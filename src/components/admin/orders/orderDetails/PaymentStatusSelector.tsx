@@ -19,7 +19,7 @@ export default function PaymentStatusSelector() {
   return (
     <div className="w-fit">
       <Select value={status} onValueChange={handleStatusChange}>
-        <SelectTrigger className="bg-LightGrey hover:text-Orange shadow-xs transition-colors lg:w-32 lg:text-base">
+        <SelectTrigger className="bg-LightGrey hover:text-Orange shadow-xs transition-colors lg:w-32 lg:text-sm">
           <SelectValue placeholder={'Unpaid'} className="capitalize" />
         </SelectTrigger>
         <SelectContent align="end">

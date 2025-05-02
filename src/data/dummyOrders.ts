@@ -11,7 +11,7 @@ export const dummyOrders: IOrder[] = [
     customerDetails: {
       fullName: 'John Doe',
       email: 'john.doe@example.com',
-      phoneNumber: '+92 300 1234567',
+      phoneNumber: '+923001234567',
       address: {
         apartment: 'Apt 123',
         street: '123 Main Street',
@@ -22,23 +22,21 @@ export const dummyOrders: IOrder[] = [
     items: [
       {
         productId: 'PROD001',
-        variantId: 'VAR001',
         name: 'Classic White T-Shirt',
-        variant: 'White / M',
         sku: 'TS-WHT-M',
         price: 1200,
         quantity: 1,
         image: '/products/leather-jacket-1.webp',
+        stock: 50,
       },
       {
         productId: 'PROD002',
-        variantId: 'VAR002',
         name: 'Blue Denim Jeans',
-        variant: 'Blue / 32',
         sku: 'DJ-BLU-32',
         price: 1150,
         quantity: 1,
         image: '/products/leather-jacket-black.webp',
+        stock: 30,
       },
     ],
   },
@@ -52,7 +50,7 @@ export const dummyOrders: IOrder[] = [
     customerDetails: {
       fullName: 'Jane Smith',
       email: 'jane.smith@example.com',
-      phoneNumber: '+92 301 2345678',
+      phoneNumber: '+923012345678',
       address: {
         apartment: 'B-45',
         street: '456 Park Avenue',
@@ -63,13 +61,12 @@ export const dummyOrders: IOrder[] = [
     items: [
       {
         productId: 'PROD003',
-        variantId: 'VAR003',
         name: 'Leather Jacket',
-        variant: 'Black / L',
         sku: 'LJ-BLK-L',
         price: 3350,
         quantity: 1,
         image: '/products/jeans-1.webp',
+        stock: 20,
       },
     ],
   },
@@ -83,7 +80,7 @@ export const dummyOrders: IOrder[] = [
     customerDetails: {
       fullName: 'Ahmed Khan',
       email: 'ahmed.khan@example.com',
-      phoneNumber: '+92 302 3456789',
+      phoneNumber: '+923023456789',
       address: {
         apartment: 'C-12',
         street: '789 Garden Road',
@@ -94,13 +91,12 @@ export const dummyOrders: IOrder[] = [
     items: [
       {
         productId: 'PROD004',
-        variantId: 'VAR004',
         name: 'Running Shoes',
-        variant: 'Gray / 42',
         sku: 'RS-GRY-42',
         price: 1650,
         quantity: 1,
         image: '/products/tshirt-1.webp',
+        stock: 40,
       },
     ],
   },
@@ -114,7 +110,7 @@ export const dummyOrders: IOrder[] = [
     customerDetails: {
       fullName: 'Fatima Ali',
       email: 'fatima.ali@example.com',
-      phoneNumber: '+92 303 4567890',
+      phoneNumber: '+923034567890',
       address: {
         apartment: 'D-78',
         street: '321 Lake View',
@@ -125,13 +121,12 @@ export const dummyOrders: IOrder[] = [
     items: [
       {
         productId: 'PROD005',
-        variantId: 'VAR005',
         name: 'Designer Watch',
-        variant: 'Silver',
         sku: 'DW-SLV-01',
         price: 4050,
         quantity: 1,
         image: '/products/tshirt-green.webp',
+        stock: 15,
       },
     ],
   },
@@ -145,7 +140,7 @@ export const dummyOrders: IOrder[] = [
     customerDetails: {
       fullName: 'Usman Malik',
       email: 'usman.malik@example.com',
-      phoneNumber: '+92 304 5678901',
+      phoneNumber: '+923045678901',
       address: {
         apartment: 'E-34',
         street: '567 Hill Street',
@@ -156,13 +151,12 @@ export const dummyOrders: IOrder[] = [
     items: [
       {
         productId: 'PROD006',
-        variantId: 'VAR006',
         name: 'Wireless Headphones',
-        variant: 'Black',
         sku: 'WH-BLK-01',
         price: 2650,
         quantity: 1,
         image: '/products/shoes-2.webp',
+        stock: 25,
       },
     ],
   },

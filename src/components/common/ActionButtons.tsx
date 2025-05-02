@@ -7,6 +7,7 @@ interface ActionButtonsProps {
   isLoading?: boolean
   saveText?: string
   cancelText?: string
+  loadingText?: string
   className?: string
   disabled?: boolean
   saveDisabled?: boolean
@@ -19,6 +20,7 @@ export function ActionButtons({
   isLoading = false,
   saveText = 'Save',
   cancelText = 'Cancel',
+  loadingText = 'Saving...',
   className,
   disabled = false,
   saveDisabled,
@@ -48,7 +50,7 @@ export function ActionButtons({
         disabled={isLoading || isSaveDisabled}
         className="hover:bg-LightGrey font-normal text-black"
       >
-        {isLoading ? 'Saving...' : saveText}
+        {isLoading ? loadingText : saveText}
       </Button>
     </div>
   )

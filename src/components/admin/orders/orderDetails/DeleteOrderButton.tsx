@@ -8,34 +8,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ActionButtons } from '@/components/common/ActionButtons'
 
-export default function DeleteOrderButton({ orderId }: { orderId: string }) {
-  const router = useRouter()
+interface DeleteOrderButtonProps {
+  orderId: string
+  onDelete: () => void
+  isPending: boolean
+}
+
+export default function DeleteOrderButton({
+  onDelete,
+  isPending,
+}: DeleteOrderButtonProps) {
   const [open, setOpen] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
-    setIsDeleting(true)
-
-    try {
-      // await deleteOrders([orderId]);
-      console.log('Deleting order:', orderId)
-      setOpen(false)
-      router.push('/admin/orders')
-    } catch (error) {
-      console.error('Error deleting order:', error)
-      alert('An error occurred while deleting the order.')
-    } finally {
-      setIsDeleting(false)
-    }
+    onDelete()
+    setOpen(false)
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="hover:text-Orange w-1/2 rounded-xl border border-neutral-300 bg-white py-2 text-sm text-nowrap shadow-md transition-colors lg:w-32 lg:text-base">
+        <button
+          className="hover:text-Orange w-1/2 rounded-xl border border-neutral-300 bg-white py-2 text-sm text-nowrap shadow-md transition-colors lg:w-32 lg:text-base"
+          disabled={isPending}
+        >
           Delete Order
         </button>
       </DialogTrigger>
@@ -51,9 +50,10 @@ export default function DeleteOrderButton({ orderId }: { orderId: string }) {
           <ActionButtons
             onCancel={() => setOpen(false)}
             onSave={handleDelete}
-            isLoading={isDeleting}
+            isLoading={isPending}
             saveText="Yes"
             cancelText="No"
+            loadingText="Deleting..."
           />
         </div>
       </DialogContent>

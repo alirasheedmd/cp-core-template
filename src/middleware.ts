@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as jose from 'jose'
+import { routes } from '@/config/routes'
 
 // Secret key for JWT signing (must match the one in auth.ts)
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 
 // List of paths that should not redirect to login
 const publicPaths = [
-  '/admin/signin',
-  '/',
-  '/products',
-  '/categories',
-  '/about',
-  '/contact',
+  routes.admin.signin,
+  routes.home,
+  routes.products,
+  routes.categories,
+  routes.about,
+  routes.contact,
   // Add other public paths
 ]
 
@@ -44,7 +45,7 @@ export async function middleware(request: NextRequest) {
 
     // For admin routes, redirect to admin signin
     if (pathname.startsWith('/admin')) {
-      return NextResponse.redirect(new URL('/admin/signin', request.url))
+      return NextResponse.redirect(new URL(routes.admin.signin, request.url))
     }
 
     // For website routes that need auth, we don't redirect - the AuthContext will handle showing the modal
@@ -67,7 +68,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith('/admin')) {
       if (!payload.isAdmin) {
         console.log('User is not an admin, redirecting to homepage')
-        return NextResponse.redirect(new URL('/', request.url))
+        return NextResponse.redirect(new URL(routes.home, request.url))
       }
 
       console.log('Admin access verified from JWT claim')
@@ -86,7 +87,7 @@ export async function middleware(request: NextRequest) {
     // For admin routes, redirect to admin signin
     if (pathname.startsWith('/admin')) {
       const response = NextResponse.redirect(
-        new URL('/admin/signin', request.url),
+        new URL(routes.admin.signin, request.url),
       )
       response.cookies.delete('session')
       return response

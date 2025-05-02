@@ -10,6 +10,7 @@ import ProductActions from '@/components/admin/products/productTable/ProductActi
 import ProductListMobile from '@/components/admin/products/productTable/ProductListMobile'
 import EmptyProductView from '@/components/admin/products/productTable/EmptyProductView'
 import { ProductsDataTable } from './products-data-table'
+import { routes } from '@/config/routes'
 
 interface ProductClientContainerProps {
   products: IProduct[]
@@ -93,7 +94,7 @@ export default function ProductClientContainer({
       </h1>
 
       <div className="my-2 flex justify-end">
-        <Link href="/admin/products/add">
+        <Link href={routes.admin.addProduct}>
           <button className="rounded-lg bg-gray-700 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-black">
             Add Product
           </button>

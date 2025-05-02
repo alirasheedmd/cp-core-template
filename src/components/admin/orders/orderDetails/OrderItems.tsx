@@ -3,6 +3,7 @@ import { LuTruck } from 'react-icons/lu'
 import { format } from 'date-fns'
 import OrderStatusSelector from './OrderStatusSelector'
 import { IOrder } from '@/types'
+import AdminContainer from '@/components/admin/shared/AdminContainer'
 
 interface OrderItemsProps {
   order: IOrder
@@ -11,7 +12,7 @@ interface OrderItemsProps {
 
 export default function OrderItems({ order, orderId }: OrderItemsProps) {
   return (
-    <div className="bg-white px-2 py-4 lg:rounded-lg lg:p-4">
+    <AdminContainer>
       <div className="flex items-center justify-between">
         <p className="bg-LightGrey text-Orange w-fit rounded-lg px-2 py-1 text-xs capitalize">
           <LuTruck className="mr-1 inline text-sm" />
@@ -38,7 +39,7 @@ export default function OrderItems({ order, orderId }: OrderItemsProps) {
           {order?.items?.map((item) => (
             <div
               className="flex justify-between gap-x-3 px-2 pb-2 lg:px-4"
-              key={item?.variantId}
+              key={item?.productId}
             >
               <div className="flex gap-x-3">
                 <Image
@@ -52,9 +53,6 @@ export default function OrderItems({ order, orderId }: OrderItemsProps) {
                 <div className="space-y-0.5">
                   <p className="text-sm font-medium lg:text-base">
                     {item?.name}
-                  </p>
-                  <p className="text-xs text-neutral-500 lg:text-sm">
-                    {item?.variant}
                   </p>
                   <p className="text-xs text-neutral-500 lg:text-sm">
                     SKU: {item?.sku}
@@ -84,6 +82,6 @@ export default function OrderItems({ order, orderId }: OrderItemsProps) {
           initialStatus={order?.status ?? ''}
         />
       </div>
-    </div>
+    </AdminContainer>
   )
 }

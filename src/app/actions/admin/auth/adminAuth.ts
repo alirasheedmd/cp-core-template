@@ -8,6 +8,7 @@ import { hashPassword } from '@/lib/auth'
 import { deleteSession } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { verifyPassword, createSession } from '@/lib/auth'
+import { routes } from '@/config/routes'
 
 /////// CREATE NEW ADMIN USER /////////
 
@@ -166,7 +167,7 @@ export async function adminSignIn(
 
   // Redirect only if authentication was successful
   if (success) {
-    redirect('/admin/dashboard')
+    redirect(routes.admin.dashboard)
   }
 
   // This should never be reached if success is true
@@ -176,5 +177,5 @@ export async function adminSignIn(
 /////// LOG OUT /////////
 export async function logout() {
   await deleteSession()
-  redirect('/admin/signin')
+  redirect(routes.admin.signin)
 }

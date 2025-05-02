@@ -11,7 +11,6 @@ interface ProductCardProps {
   isSelected?: boolean
   onSelect?: (checked: boolean) => void
   onDelete?: () => void
-  variant?: 'select' | 'delete'
 }
 
 export function ProductCard({
@@ -22,7 +21,6 @@ export function ProductCard({
   isSelected,
   onSelect,
   onDelete,
-  variant = 'select',
 }: ProductCardProps) {
   return (
     <div className="bg-LightWhite border-LightWhite flex items-center justify-between rounded-md border p-2 transition-colors hover:bg-neutral-50">
@@ -40,13 +38,14 @@ export function ProductCard({
           <p className="text-xs">Price: ${price.toLocaleString()}</p>
         </div>
       </div>
-      {variant === 'select' ? (
+      {onSelect && (
         <Checkbox
           checked={isSelected}
           onCheckedChange={onSelect}
           className="ml-2 bg-white"
         />
-      ) : (
+      )}
+      {onDelete && (
         <Button
           variant="ghost"
           size="icon"

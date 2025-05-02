@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import { RxHamburgerMenu } from "react-icons/rx";
+import { RxHamburgerMenu } from 'react-icons/rx'
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { adminTabs } from "@/data/tabs";
-import { useState } from "react";
+} from '@/components/ui/sheet'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { adminTabs } from '@/data/tabs'
+import { useState } from 'react'
 
 export default function AdminMenu() {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -37,8 +37,8 @@ export default function AdminMenu() {
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center gap-x-2 px-4 py-2 transition-all hover:bg-gray-100 ${
                     pathname.startsWith(tab.href)
-                      ? "border-l-4 border-orange-600 text-orange-600"
-                      : "border-l-4 border-transparent text-neutral-600"
+                      ? 'border-Orange text-Orange border-l-4'
+                      : 'border-l-4 border-transparent text-neutral-600'
                   }`}
                 >
                   <span>{tab.icon}</span>
@@ -55,8 +55,8 @@ export default function AdminMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-x-2 px-4 py-2 transition-all hover:bg-gray-100 ${
                   pathname.startsWith(adminSettingsTab.href)
-                    ? "border-l-4 border-orange-600 text-orange-600"
-                    : "border-l-4 border-transparent text-neutral-600"
+                    ? 'border-l-4 border-Orange text-Orange'
+                    : 'border-l-4 border-transparent text-neutral-600'
                 }`}
               >
                 <span>{adminSettingsTab.icon}</span>
@@ -67,5 +67,5 @@ export default function AdminMenu() {
         </div>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

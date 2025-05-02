@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { Command, CommandEmpty, CommandGroup } from '@/components/ui/command'
-import { ProductCard } from './ProductCard'
+import { ProductCard } from '../../shared/ProductCard'
 import { dummyProducts } from '@/data/dummyProducts'
 import { IProduct } from '@/types'
 import {
@@ -26,9 +26,7 @@ export default function RecommendedProduct() {
     ? dummyProducts.filter(
         (product) =>
           product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.variants.some((variant) =>
-            variant.sku.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
+          product.sku.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : dummyProducts
 
@@ -99,13 +97,9 @@ export default function RecommendedProduct() {
             <ProductCard
               key={product._id}
               name={product.name}
-              sku={product.variants[0].sku}
-              price={
-                product.variants[0].discountPrice ||
-                product.variants[0].originalPrice
-              }
+              sku={product.sku}
+              price={product.discountPrice || product.originalPrice}
               image={product.images[0]}
-              variant="delete"
               onDelete={() => handleDelete(product._id)}
             />
           ))}
@@ -142,11 +136,8 @@ export default function RecommendedProduct() {
                       <ProductCard
                         key={product._id}
                         name={product.name}
-                        sku={product.variants[0].sku}
-                        price={
-                          product.variants[0].discountPrice ||
-                          product.variants[0].originalPrice
-                        }
+                        sku={product.sku}
+                        price={product.discountPrice || product.originalPrice}
                         image={product.images[0]}
                         isSelected={selectedProducts.some(
                           (p) => p._id === product._id,

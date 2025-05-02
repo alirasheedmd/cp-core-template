@@ -9,29 +9,30 @@ import { BiCart } from 'react-icons/bi'
 import { BsTag } from 'react-icons/bs'
 import { GoHome } from 'react-icons/go'
 import { IoSettingsOutline } from 'react-icons/io5'
+import { routes } from '@/config/routes'
 
 export const adminTabs: IAdminTab[] = [
   {
     name: 'Dashboard',
     icon: <GoHome className="text-xl" />,
-    href: '/admin/dashboard',
+    href: routes.admin.dashboard,
   },
   {
     name: 'Orders',
     icon: <BiCart className="text-xl" />,
-    href: '/admin/orders',
+    href: routes.admin.orders,
   },
   {
     name: 'Products',
     icon: <BsTag className="text-xl" />,
-    href: '/admin/products',
+    href: routes.admin.products,
   },
 ]
 
 export const adminSettingsTab: IAdminTab = {
   name: 'Settings',
   icon: <IoSettingsOutline className="text-xl" />,
-  href: '/admin/settings',
+  href: routes.admin.settings,
 }
 
 ///////////////////////////////////// Product tabs //////////////////////////////////////

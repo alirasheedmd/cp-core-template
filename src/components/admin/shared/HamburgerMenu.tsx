@@ -38,7 +38,7 @@ export default function HamburgerMenu() {
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center gap-x-2 px-4 py-2 transition-all hover:bg-gray-100 ${
                     pathname.startsWith(tab.href)
-                      ? 'border-l-4 border-orange-600 text-orange-600'
+                      ? 'border-Orange text-Orange border-l-4'
                       : 'border-l-4 border-transparent text-neutral-600'
                   }`}
                 >
@@ -56,8 +56,8 @@ export default function HamburgerMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-x-2 px-4 py-2 transition-all hover:bg-gray-100 ${
                   pathname.startsWith(adminSettingsTab.href)
-                    ? "border-l-4 border-orange-600 text-orange-600"
-                    : "border-l-4 border-transparent text-neutral-600"
+                    ? 'border-Orange text-Orange border-l-4'
+                    : 'border-l-4 border-transparent text-neutral-600'
                 }`}
               >
                 <span>{adminSettingsTab.icon}</span>

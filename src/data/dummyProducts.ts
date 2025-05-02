@@ -22,26 +22,11 @@ export const dummyProducts: IProduct[] = [
     },
     description:
       'A high-quality leather jacket made from premium materials, perfect for any season.',
-    variants: [
-      {
-        _key: 'variant-1',
-        color: 'Black',
-        sku: 'JKT-BLK-001',
-        originalPrice: 250,
-        discountPrice: 200,
-        stock: 50,
-        images: ['/products/leather-jacket-black.webp'],
-      },
-      {
-        _key: 'variant-2',
-        color: 'Brown',
-        sku: 'JKT-BRN-002',
-        originalPrice: 250,
-        discountPrice: 250,
-        stock: 30,
-        images: ['/products/leather-jacket-brown.webp'],
-      },
-    ],
+    color: 'Black',
+    sku: 'JKT-BLK-001',
+    originalPrice: 250,
+    discountPrice: 200,
+    stock: 50,
     rating: 4.5,
     additionalDetails: [
       {
@@ -92,26 +77,11 @@ export const dummyProducts: IProduct[] = [
     },
     description:
       'Classic fit denim jeans with premium wash and comfortable stretch fabric.',
-    variants: [
-      {
-        _key: 'variant-1',
-        color: 'Blue',
-        sku: 'JNS-BLU-001',
-        originalPrice: 120,
-        discountPrice: 99,
-        stock: 100,
-        images: ['/products/jeans-blue.webp'],
-      },
-      {
-        _key: 'variant-2',
-        color: 'Black',
-        sku: 'JNS-BLK-002',
-        originalPrice: 120,
-        discountPrice: 120,
-        stock: 75,
-        images: ['/products/jeans-black.webp'],
-      },
-    ],
+    color: 'Blue',
+    sku: 'JNS-BLU-001',
+    originalPrice: 120,
+    discountPrice: 99,
+    stock: 100,
     rating: 4.2,
     additionalDetails: [
       {
@@ -150,44 +120,11 @@ export const dummyProducts: IProduct[] = [
     },
     description:
       'Soft and comfortable cotton t-shirt perfect for everyday wear.',
-    variants: [
-      {
-        _key: 'variant-1',
-        color: 'White',
-        sku: 'TSH-WHT-001',
-        originalPrice: 35,
-        discountPrice: 29,
-        stock: 200,
-        images: ['/products/tshirt-white.webp'],
-      },
-      {
-        _key: 'variant-2',
-        color: 'Green',
-        sku: 'TSH-GRE-002',
-        originalPrice: 35,
-        discountPrice: 35,
-        stock: 150,
-        images: ['/products/tshirt-green.webp'],
-      },
-      {
-        _key: 'variant-3',
-        color: 'Skin',
-        sku: 'TSH-SKN-003',
-        originalPrice: 35,
-        discountPrice: 35,
-        stock: 150,
-        images: ['/products/tshirt-skin.webp'],
-      },
-      {
-        _key: 'variant-4',
-        color: 'Blue',
-        sku: 'TSH-BLU-004',
-        originalPrice: 35,
-        discountPrice: 35,
-        stock: 150,
-        images: ['/products/tshirt-blue.webp'],
-      },
-    ],
+    color: 'White',
+    sku: 'TSH-WHT-001',
+    originalPrice: 35,
+    discountPrice: 29,
+    stock: 200,
     rating: 4.0,
     additionalDetails: [
       {
@@ -226,26 +163,11 @@ export const dummyProducts: IProduct[] = [
     },
     description:
       'High-performance running shoes with advanced cushioning technology.',
-    variants: [
-      {
-        _key: 'variant-1',
-        color: 'Red',
-        sku: 'SHO-RED-001',
-        originalPrice: 180,
-        discountPrice: 150,
-        stock: 60,
-        images: ['/products/shoes-red.webp'],
-      },
-      {
-        _key: 'variant-2',
-        color: 'Blue',
-        sku: 'SHO-BLU-002',
-        originalPrice: 180,
-        discountPrice: 180,
-        stock: 45,
-        images: ['/products/shoes-blue.webp'],
-      },
-    ],
+    color: 'Red',
+    sku: 'SHO-RED-001',
+    originalPrice: 180,
+    discountPrice: 150,
+    stock: 60,
     rating: 4.7,
     additionalDetails: [
       {
@@ -289,26 +211,11 @@ export const dummyProducts: IProduct[] = [
     },
     description:
       'Durable backpack with multiple compartments and laptop sleeve.',
-    variants: [
-      {
-        _key: 'variant-1',
-        color: 'Blue',
-        sku: 'BAG-BLU-001',
-        originalPrice: 90,
-        discountPrice: 75,
-        stock: 80,
-        images: ['/products/backpack-blue.webp'],
-      },
-      {
-        _key: 'variant-2',
-        color: 'Grey',
-        sku: 'BAG-GRY-002',
-        originalPrice: 90,
-        discountPrice: 90,
-        stock: 65,
-        images: ['/products/backpack-grey.webp'],
-      },
-    ],
+    color: 'Blue',
+    sku: 'BAG-BLU-001',
+    originalPrice: 90,
+    discountPrice: 75,
+    stock: 80,
     rating: 4.3,
     additionalDetails: [
       {

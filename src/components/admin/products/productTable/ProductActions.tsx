@@ -86,7 +86,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
               className={`flex h-6 w-6 items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors ${
                 selectedRowCount === 0
                   ? 'cursor-not-allowed opacity-50'
-                  : 'hover:bg-LightGrey cursor-pointer hover:text-orange-600'
+                  : 'hover:bg-LightGrey hover:text-Orange cursor-pointer'
               }`}
             >
               <RiDeleteBinLine className="text-base" />

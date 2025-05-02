@@ -13,6 +13,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ICustomerDetails, IOrder, IOrderItem } from '@/types'
 import OrderStatusSelector from '@/components/admin/orders/orderDetails/OrderStatusSelector'
+import { routes } from '@/config/routes'
 
 export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
   {
@@ -57,7 +58,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
       const orderId: string = row.getValue('orderId')
       return (
         <Link
-          href={`/admin/orders/${orderId}`}
+          href={routes.admin.orderDetails(orderId)}
           className="hover:text-Orange ml-4 transition-colors"
         >
           {orderId}
@@ -176,7 +177,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
                 <h4 className="text-base capitalize">{status}</h4>
                 {item.map((i) => (
                   <div
-                    key={i.variantId}
+                    key={i.productId}
                     className="mt-2 flex h-14 gap-x-1 rounded-lg bg-white p-2 shadow-md"
                   >
                     <Image
@@ -188,7 +189,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
                     />
                     <div className="flex w-44 flex-col justify-between">
                       <p className="truncate">{i.name}</p>
-                      <p className="text-muted-foreground">{i.variant}</p>
+                      <p className="text-muted-foreground">{i.sku}</p>
                     </div>
                     <p className="whitespace-nowrap">x {i.quantity}</p>
                   </div>
