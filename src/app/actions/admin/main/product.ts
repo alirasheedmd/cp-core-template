@@ -6,6 +6,7 @@ import {
   ProductFormValues,
   productSchema,
 } from "@/components/admin/products/addProduct/ProductInfo";
+import { createProduct as createProductInDb } from '@/lib/dal'
 
 export type ActionState = {
   status: "idle" | "submitting" | "success" | "error";
@@ -19,9 +20,8 @@ export async function createProduct(formData: FormData): Promise<ActionState> {
     const rawData = Object.fromEntries(formData.entries());
     const validatedData = productSchema.parse(rawData);
 
-    // Here you would typically save the product to your database
-    // For now, we'll just simulate a successful save
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Save the product to the database
+    await createProductInDb(validatedData);
 
     // Revalidate the products page to show the new product
     revalidatePath("/admin/products");

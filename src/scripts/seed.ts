@@ -1,6 +1,6 @@
 import "dotenv/config"; // Ensure environment variables are loaded
 import { db } from "../db";
-import { users } from "../db/schema"; // Removed 'issues' import
+import { users } from "../db/products"; // Removed 'issues' import
 
 // Define the type for user insertion based on the schema
 type NewUser = typeof users.$inferInsert;
