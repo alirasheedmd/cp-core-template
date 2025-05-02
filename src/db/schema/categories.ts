@@ -1,0 +1,25 @@
+import { InferSelectModel, relations } from 'drizzle-orm'
+import { pgTable, text, timestamp, boolean, numeric, jsonb } from 'drizzle-orm/pg-core'
+import { productCategories } from './productCategories'
+
+// Categories table
+export const categories = pgTable('categories', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description'),
+  image: text('image'),
+  parentId: text('parent_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+})  
+
+export type Category = InferSelectModel<typeof categories>
+
+
+
+export type ProductCategory = InferSelectModel<typeof productCategories>
+
+export const categoryRelations = relations(categories, ({ many }) => ({
+  products: many(productCategories),
+}))
