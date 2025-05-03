@@ -1,7 +1,20 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+
+/* H-full does not work without this */
+/* html,
+body,
+:root {
+  height: 100%;
+} */
+
+/* Shadcn Select scrollbar remove bug fix */
+html body[data-scroll-locked] {
+  overflow: visible !important;
+  margin-right: 0 !important;
+}
 
 @theme {
   /* Custom Colors */
@@ -11,7 +24,14 @@
   --color-MediumGrey: #868686;
   --color-LightMediumGrey: #b8b8b8;
   --color-LightWhite: #f1f1f1;
-  --color-blue: #0f65d6;
+  --color-Blue: #0f65d6;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 @theme inline {
