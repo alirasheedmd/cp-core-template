@@ -11,7 +11,7 @@ export const products = pgTable('products', {
   description: text('description'),
   status: text('status').notNull().default('inactive'),
   publishDate: timestamp('publish_date'),
-  
+
   // Price information
   price: numeric('price').notNull(),
   pricePerItem: numeric('price_per_item'),
@@ -21,13 +21,13 @@ export const products = pgTable('products', {
   defaultPrice: numeric('default_price'),
   customPrice: numeric('custom_price'),
   tax: numeric('tax'),
-  
+
   // Inventory
   trackInventory: boolean('track_inventory').default(false),
   currentStock: numeric('current_stock'),
   lowStockThreshold: numeric('low_stock_threshold'),
   damageStock: numeric('damage_stock'),
-  
+
   // Shipping
   isPhysicalProduct: boolean('is_physical_product').default(true),
   shippingPrice: numeric('shipping_price'),
@@ -38,24 +38,24 @@ export const products = pgTable('products', {
   length: numeric('length'),
   country: text('country'),
   hsCode: text('hs_code'),
-  
+
   // Organization
   type: text('type'),
   collection: text('collection'),
   organization: text('organization'),
   tag: text('tag'),
-  
+
   // SEO
   pageTitle: text('page_title'),
   metaDescription: text('meta_description'),
   urlHandle: text('url_handle'),
-  
+
   // Store product images as JSONB
-  images: jsonb('images').default([]),
-  
+  // images: jsonb('images').default([]),
+
   // Store recommended products as JSONB
   recommendedProducts: jsonb('recommended_products').default([]),
-  
+
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })

@@ -1,5 +1,5 @@
 import { InferSelectModel, relations } from 'drizzle-orm'
-import { pgTable, text, timestamp, boolean, numeric, jsonb } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core'
 import { productCategories } from './productCategories'
 
 // Categories table
