@@ -1,8 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   experimental: {
     dynamicIO: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'cp-core-template.imgix.net',
+      },
+    ],
   },
   // Add webpack configuration to handle Node.js modules
   webpack: (config, { isServer }) => {
@@ -13,10 +20,10 @@ const nextConfig: NextConfig = {
         net: false,
         tls: false,
         crypto: false,
-      };
+      }
     }
-    return config;
+    return config
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

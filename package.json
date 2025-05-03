@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@faker-js/faker": "^9.7.0",
     "@tailwindcss/postcss": "^4",
     "@types/lodash": "^4.17.16",
     "@types/lodash.orderby": "^4.6.9",

@@ -2,11 +2,9 @@
 
 import { db } from '@/db'
 import { getSession } from './auth'
-import { eq, sql, inArray } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { cache } from 'react'
-import { users, products,  } from '@/db/schema'
-import { ProductFormValues } from '@/components/admin/products/addProduct/ProductInfo'
-import { nanoid } from 'nanoid'
+import { users, products, images } from '@/db/schema'
 
 // Current user
 export const getCurrentUser = cache(async () => {
@@ -77,74 +75,34 @@ export async function createAdminUser(data: {
   }
 }
 
-// Create a new product
-export async function createProduct(data: ProductFormValues) {
-  try {
-    // Transform the form data to match our database schema
-    const productId = nanoid()
-    const productData = {
-      id: productId,
-      title: data.title,
-      sku: data.sku,
-      barcode: data.barcode || null,
-      description: data.description,
-      status: data.status,
-      publishDate: data.publishDate ? new Date(data.publishDate) : null,
-      
-      // Price information
-      price: data.price,
-      pricePerItem: data.pricePerItem || null,
-      costPrice: null, // Map this if you have it in your form
-      profit: data.profit || null,
-      margin: data.margin || null,
-      defaultPrice: data.defaultPrice || null,
-      customPrice: data.customPrice || null,
-      tax: data.tax || null,
-      
-      // Inventory
-      trackInventory: false, // Set based on your form
-      currentStock: data.currentStock || null,
-      lowStockThreshold: data.lowStock || null,
-      damageStock: data.damageProduct || null,
-      
-      // Shipping
-      isPhysicalProduct: true, // Set based on your form
-      shippingPrice: data.shippingPrice || null,
-      weight: data.weight || null,
-      weightUnit: null, // Map this if you have it in your form
-      height: data.height || null,
-      width: data.width || null,
-      length: data.length || null,
-      country: data.country || null,
-      hsCode: data.hsCode || null,
-      
-      // Organization
-      type: data.type || null,
-      collection: data.collection || null,
-      organization: data.organization || null,
-      tag: data.tag || null,
-      
-      // SEO
-      pageTitle: data.pageTitle || null,
-      metaDescription: data.metaDescription || null,
-      urlHandle: data.urlHandle || null,
+export async function getAllProducts() {
+  // Get all products first
+  const productsData = await db.select().from(products)
 
-      categories: data.categories || [],
-      
-      // JSON data
-      images: data.images || [],
-      recommendedProducts: data.recommendedProducts || [],
+  // Get all images
+  const imagesData = await db.select().from(images)
+
+  // Map products and add their images as arrays
+  const result = productsData.map((product) => {
+    // Find all images for this product
+    const productImages = imagesData.filter(
+      (img) => img.productId === product.id,
+    )
+
+    // Return the product with images as an array
+    return {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: productImages.length > 0 ? productImages[0].src : null,
+      images: productImages.map((img) => ({
+        id: img.id,
+        url: img.src,
+        alt: img.alt,
+      })),
     }
+  })
 
-    // Insert the product
-    const result = await db.insert(products).values(productData).returning()
-    const product = result[0]
-    
-    
-    
-    return product || null
-  } catch (error) {
-    console.error('Error creating product:', error)
-    throw error
-  }
+  return result
 }
