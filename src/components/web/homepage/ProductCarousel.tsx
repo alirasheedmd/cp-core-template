@@ -2,7 +2,7 @@ import { getAllProducts } from '@/lib/dal'
 import ProductCard from './ProductCard'
 
 export const ProductCarousel = async () => {
-  const products = await getAllProducts('03f671b4-a24b-4738-a8c3-2bd1fde5d952')
+  const products = await getAllProducts()
 
   return (
     <div className="w-full py-8">

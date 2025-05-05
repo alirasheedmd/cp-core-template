@@ -4,7 +4,13 @@ import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
 import { cache } from 'react'
-import { users, products, images, productCategories } from '@/db/schema'
+import {
+  users,
+  products,
+  images,
+  productCategories,
+  categories,
+} from '@/db/schema'
 
 // Current user
 export const getCurrentUser = cache(async () => {
@@ -75,21 +81,12 @@ export async function createAdminUser(data: {
   }
 }
 
-export async function getAllProducts(byCategoryId?: string) {
+export async function getAllProducts() {
   // Get all products first
   const productsData = await db.select().from(products)
 
   // Get all images
   const imagesData = await db.select().from(images)
-
-  // If byCategoryId is provided, filter products by category ID
-  if (byCategoryId) {
-    const productCategoriesData = await db.select().from(productCategories)
-
-    productCategoriesData.filter((c) => c.categoryId === byCategoryId)
-
-    console.log('productCategoriesData', productCategoriesData)
-  }
 
   // Map products and add their images as arrays
   const result = productsData.map((product) => {
@@ -114,4 +111,64 @@ export async function getAllProducts(byCategoryId?: string) {
   })
 
   return result
+}
+
+export async function getProductsByCategory(categoryId: string) {
+  const productsData = await db
+    .select()
+    .from(products)
+    .innerJoin(productCategories, eq(productCategories.productId, products.id))
+    .innerJoin(categories, eq(productCategories.categoryId, categories.id))
+    .where(eq(categories.id, categoryId))
+
+  console.log('Products by category:', productsData)
+
+  // Get all images
+  const imagesData = await db.select().from(images)
+
+  // Map products and add their images as arrays
+  const result = productsData.map((data) => {
+    const product = data.products
+    // Find all images for this product
+    const productImages = imagesData.filter(
+      (img) => img.productId === product.id,
+    )
+
+    // Return the product with images as an array
+    return {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: productImages.length > 0 ? productImages[0].src : null,
+      images: productImages.map((img) => ({
+        id: img.id,
+        url: img.src,
+        alt: img.alt,
+      })),
+    }
+  })
+
+  return result
+}
+
+export async function getProductCategories(productId: string) {
+  const categoriesData = await db
+    .select()
+    .from(categories)
+    .innerJoin(
+      productCategories,
+      eq(categories.id, productCategories.categoryId),
+    )
+    .innerJoin(products, eq(productCategories.productId, products.id))
+    .where(eq(products.id, productId))
+
+  return categoriesData
+}
+
+export async function getAllCategories() {
+  // Get all categories first
+  const categoriesData = await db.select().from(categories)
+
+  return categoriesData
 }
