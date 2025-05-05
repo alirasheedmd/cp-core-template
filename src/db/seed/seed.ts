@@ -16,10 +16,10 @@ export const db_for_seed = drizzle({
   casing: 'snake_case',
 })
 async function main() {
-  // await seedProducts();
+  // await seedProducts()
   await seedImages()
-  //   await seedProductCategories()
-  // await seedCategories();
+  // await seedProductCategories()
+  // await seedCategories()
 
   // await deleteSeedData();
 }

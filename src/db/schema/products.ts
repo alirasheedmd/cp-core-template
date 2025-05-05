@@ -76,3 +76,4 @@ export const productRelations = relations(products, ({ many }) => ({
   categories: many(productCategories),
   images: many(images),
 }))
+
