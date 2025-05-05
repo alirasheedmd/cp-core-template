@@ -170,5 +170,28 @@ export async function getAllCategories() {
   // Get all categories first
   const categoriesData = await db.select().from(categories)
 
-  return categoriesData
+  // Get all images
+  const imagesData = await db.select().from(images)
+
+  // Map categories and add their images as arrays
+  const result = categoriesData.map((category) => {
+    // Find all images for this category
+    const categoryImages = imagesData.filter(
+      (img) => img.categoryId === category.id,
+    )
+
+    // Return the category with images as an array
+    return {
+      id: category.id,
+      name: category.name,
+      image: categoryImages.length > 0 ? categoryImages[0].src : null,
+      images: categoryImages.map((img) => ({
+        id: img.id,
+        url: img.src,
+        alt: img.alt,
+      })),
+    }
+  })
+
+  return result
 }
