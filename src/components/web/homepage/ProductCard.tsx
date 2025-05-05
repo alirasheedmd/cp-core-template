@@ -1,54 +1,34 @@
 import Image from 'next/image'
-import React from 'react'
+import { Card } from '@/components/ui/card'
+import Link from 'next/link'
 
-// Define a simplified type that matches what getAllProducts returns
-type SimpleProduct = {
-  id: string
-  title: string
-  description: string | null
-  price: string
-  image: string | null
-  images: Array<{ id: string; url: string; alt: string }>
-}
-
-const ProductCard = ({ product }: { product: SimpleProduct }) => {
+export default function ProductCard({ product }: { product: any }) {
+  const { title, price, image } = product
   return (
-    <div className="w-64 overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative h-48 w-full bg-gray-100">
-        {product.image ? (
+    <Link href={'#'} className="flex h-full flex-col">
+      <Card className="group flex h-full w-full flex-col justify-between border-2 border-black p-5 transition-all hover:shadow-lg">
+        <div className="mx-auto flex-shrink-0 overflow-hidden rounded-lg">
           <Image
-            src={product.image}
-            alt={product.title}
-            fill
-            className="object-cover"
+            src={image}
+            alt={title}
+            width={170}
+            height={170}
+            className="transition-all duration-500 ease-in-out group-hover:scale-103"
           />
-        ) : (
-          <Image
-            src={`https://cp-core-template.imgix.net/uploads/rachit-tank-2cFZ_FB08UM-unsplash.jpg`}
-            alt={product.title}
-            fill
-            className="object-cover"
-          />
-        )}
-      </div>
-      <div className="p-4">
-        <h2 className="truncate text-lg font-semibold text-gray-800">
-          {product.title}
-        </h2>
-        <p className="mt-2 line-clamp-2 text-sm text-gray-600">
-          {product.description}
-        </p>
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900">
-            ${Number(product.price).toFixed(2)}
-          </span>
-          <button className="rounded-md bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700">
-            View
+        </div>
+        <div className="flex flex-grow flex-col items-center justify-end gap-y-1.5">
+          <h3 className="text-center text-sm font-medium underline-offset-2 group-hover:underline">
+            {title}
+          </h3>
+          <p className="text-MediumGrey text-center text-xs uppercase">
+            Brand Name
+          </p>
+          <p className="text-gray-600">{Number(price)?.toFixed(2)}</p>
+          <button className="border-Red text-Red mt-5 rounded-full border-2 px-4 py-2 transition-all duration-300 hover:scale-105">
+            Add to Cart
           </button>
         </div>
-      </div>
-    </div>
+      </Card>
+    </Link>
   )
 }
-
-export default ProductCard
