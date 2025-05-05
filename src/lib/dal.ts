@@ -4,7 +4,7 @@ import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
 import { cache } from 'react'
-import { users, products, images } from '@/db/schema'
+import { users, products, images, productCategories } from '@/db/schema'
 
 // Current user
 export const getCurrentUser = cache(async () => {
@@ -75,12 +75,21 @@ export async function createAdminUser(data: {
   }
 }
 
-export async function getAllProducts() {
+export async function getAllProducts(byCategoryId?: string) {
   // Get all products first
   const productsData = await db.select().from(products)
 
   // Get all images
   const imagesData = await db.select().from(images)
+
+  // If byCategoryId is provided, filter products by category ID
+  if (byCategoryId) {
+    const productCategoriesData = await db.select().from(productCategories)
+
+    productCategoriesData.filter((c) => c.categoryId === byCategoryId)
+
+    console.log('productCategoriesData', productCategoriesData)
+  }
 
   // Map products and add their images as arrays
   const result = productsData.map((product) => {

@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "local-dev": "NODE_ENV=development next dev --turbopack",
-    "local-prod": "NODE_ENV=production next dev --turbopack",
+    "local-dev": "cross-env NODE_ENV=development next dev --turbopack",
+    "local-prod": "cross-env NODE_ENV=production next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -73,6 +73,7 @@
     "@types/node": "^20.17.31",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
     "drizzle-kit": "^0.31.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
