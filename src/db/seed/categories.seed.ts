@@ -1,6 +1,6 @@
-import * as schema from "../schema/index";
-import { db_for_seed as db } from "./seed";
-import { faker } from "@faker-js/faker";
+import * as schema from '../schema/index'
+import { db_for_seed as db } from './seed'
+import { faker } from '@faker-js/faker'
 import slugify from 'slugify'
 
 export default async function seedCategories() {
@@ -21,22 +21,7 @@ export default async function seedCategories() {
     })
   }
 
-<<<<<<< Updated upstream
-    for (let i = 0; i < 20; i++) {
-        categoriesData.push({
-          id: faker.string.uuid(),
-          name: faker.commerce.department(),
-          createdAt: faker.date.anytime(),
-          updatedAt: faker.date.anytime(),
-          isActive: false,
-          description: null,
-          parentId: null,
-          slug: faker.lorem.slug(),
-        })
-    }
-=======
   const result = await db.insert(schema.categories).values(categoriesData)
->>>>>>> Stashed changes
 
   console.log(`Seeding completed successfully! ${result}`)
 }
