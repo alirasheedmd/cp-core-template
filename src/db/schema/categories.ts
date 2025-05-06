@@ -8,7 +8,7 @@ export const categories = pgTable('categories', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
-  image: text('image'),
+  slug: text('slug').unique().notNull(),
   parentId: text('parent_id'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -23,5 +23,3 @@ export const categoryRelations = relations(categories, ({ many, one }) => ({
   products: many(productCategories),
   images: one(images),
 }))
-
-
