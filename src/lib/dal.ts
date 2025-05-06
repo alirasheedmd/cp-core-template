@@ -3,6 +3,7 @@
 import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
+import { isNull, not } from 'drizzle-orm/sql'
 import { cache } from 'react'
 import {
   users,
@@ -10,7 +11,6 @@ import {
   images,
   productCategories,
   categories,
-  Category,
 } from '@/db/schema'
 
 // Current user
@@ -84,32 +84,50 @@ export async function createAdminUser(data: {
 
 export async function getAllProducts() {
   // Get all products first
-  const productsData = await db.select().from(products)
+  const productsData = await db
+    .select({
+      id: products.id,
+      title: products.title,
+      description: products.description,
+      price: products.price,
+    })
+    .from(products)
 
   // Get all images
-  const imagesData = await db.select().from(images)
+  const imagesData = await db
+    .select({ src: images.src, productId: images.productId })
+    .from(images)
+    .where(not(isNull(images.productId)))
+
+  console.log('images data', imagesData)
 
   // Map products and add their images as arrays
-  const result = productsData.map((product) => {
-    // Find all images for this product
-    const productImages = imagesData.filter(
-      (img) => img.productId === product.id,
-    )
+  const result = await Promise.all(
+    productsData.map(async (data) => {
+      const product = data
 
-    // Return the product with images as an array
-    return {
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      image: productImages.length > 0 ? productImages[0].src : null,
-      images: productImages.map((img) => ({
-        id: img.id,
-        url: img.src,
-        alt: img.alt,
-      })),
-    }
-  })
+      const productCategories = await getProductCategories(product.id)
+
+      const categories = productCategories.map((c) => c.name)
+
+      console.log(categories)
+
+      // Find all images for this product
+      const productImages = imagesData.filter(
+        (img) => img.productId === product.id,
+      )
+
+      // Return the product with images as an array
+      return {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        categories: categories,
+        price: product.price,
+        image: productImages.length > 0 ? productImages[0].src : null,
+      }
+    }),
+  )
 
   return result
 }
@@ -124,50 +142,70 @@ export async function getProductsByCategory(categorySlug: string) {
     .select({ slug: categories.slug, id: categories.id })
     .from(categories)
     .where(eq(categories.slug, categorySlug))
-  const categoryId: SlugID = category[0]
+  const categoryOne: SlugID = category[0]
 
-  console.log(categoryId)
+  console.log(categoryOne)
   const productsData = await db
-    .select()
+    .select({
+      id: products.id,
+      title: products.title,
+      description: products.description,
+      price: products.price,
+      category: categories.slug,
+    })
     .from(products)
     .innerJoin(productCategories, eq(productCategories.productId, products.id))
     .innerJoin(categories, eq(productCategories.categoryId, categories.id))
-    .where(eq(categories.id, categoryId.id))
+    .where(eq(categories.id, categoryOne.id))
 
-  console.log('Products by category:', productsData)
+  console.log('Products by Category', productsData)
 
   // Get all images
-  const imagesData = await db.select().from(images)
+  const imagesData = await db
+    .select({ src: images.src, productId: images.productId })
+    .from(images)
+    .where(not(isNull(images.productId)))
+
+  console.log('images data', imagesData)
 
   // Map products and add their images as arrays
-  const result = productsData.map((data) => {
-    const product = data.products
-    // Find all images for this product
-    const productImages = imagesData.filter(
-      (img) => img.productId === product.id,
-    )
+  const result = await Promise.all(
+    productsData.map(async (data) => {
+      const product = data
 
-    // Return the product with images as an array
-    return {
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      image: productImages.length > 0 ? productImages[0].src : null,
-      images: productImages.map((img) => ({
-        id: img.id,
-        url: img.src,
-        alt: img.alt,
-      })),
-    }
-  })
+      const productCategories = await getProductCategories(product.id)
+
+      const categories = productCategories.map((c) => c.name)
+
+      console.log(categories)
+
+      // Find all images for this product
+      const productImages = imagesData.filter(
+        (img) => img.productId === product.id,
+      )
+
+      // Return the product with images as an array
+      return {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        categories: categories,
+        price: product.price,
+        image: productImages.length > 0 ? productImages[0].src : null,
+      }
+    }),
+  )
 
   return result
 }
 
 export async function getProductCategories(productId: string) {
   const categoriesData = await db
-    .select()
+    .select({
+      id: categories.id,
+      name: categories.name,
+      productID: products.id,
+    })
     .from(categories)
     .innerJoin(
       productCategories,
@@ -184,7 +222,12 @@ export async function getAllCategories() {
   const categoriesData = await db.select().from(categories)
 
   // Get all images
-  const imagesData = await db.select().from(images)
+  const imagesData = await db
+    .select({ src: images.src, categoryId: images.categoryId })
+    .from(images)
+    .where(not(isNull(images.categoryId)))
+
+  console.log('images data', imagesData)
 
   // Map categories and add their images as arrays
   const result = categoriesData.map((category) => {
@@ -198,11 +241,6 @@ export async function getAllCategories() {
       id: category.id,
       name: category.name,
       image: categoryImages.length > 0 ? categoryImages[0].src : null,
-      images: categoryImages.map((img) => ({
-        id: img.id,
-        url: img.src,
-        alt: img.alt,
-      })),
     }
   })
 

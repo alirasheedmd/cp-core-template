@@ -1,13 +1,10 @@
-import {
-  getAllCategories,
-  getAllProducts,
-  getProductsByCategory,
-} from '@/lib/dal'
+import { getAllProducts, getProductsByCategory } from '@/lib/dal'
 import ProductCard from './ProductCard'
 
 export const ProductCarousel = async () => {
-  const products = await getProductsByCategory('garden')
-  console.log(products)
+  const products = await getAllProducts()
+  const prod = await getProductsByCategory('alarms')
+  console.log(prod)
 
   return (
     <div className="w-full py-8">

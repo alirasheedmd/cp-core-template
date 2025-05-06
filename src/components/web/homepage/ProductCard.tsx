@@ -8,7 +8,6 @@ type SimpleProduct = {
   description: string | null
   price: string
   image: string | null
-  images: Array<{ id: string; url: string; alt: string }>
 }
 
 const ProductCard = ({ product }: { product: SimpleProduct }) => {
