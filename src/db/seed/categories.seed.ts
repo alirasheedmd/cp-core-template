@@ -24,14 +24,14 @@ export default async function seedCategories() {
 <<<<<<< Updated upstream
     for (let i = 0; i < 20; i++) {
         categoriesData.push({
-            id: faker.string.uuid(),
-            name: faker.commerce.department(),
-            createdAt: faker.date.anytime(),
-            updatedAt: faker.date.anytime(),
-            isActive: false,
-            description: null,
-            image: null,
-            parentId: null
+          id: faker.string.uuid(),
+          name: faker.commerce.department(),
+          createdAt: faker.date.anytime(),
+          updatedAt: faker.date.anytime(),
+          isActive: false,
+          description: null,
+          parentId: null,
+          slug: faker.lorem.slug(),
         })
     }
 =======

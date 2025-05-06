@@ -64,10 +64,7 @@ export const products = pgTable('products', {
   metaDescription: text('meta_description'),
   urlHandle: text('url_handle'),
 
-  // Store product images as JSONB
-  images: jsonb('images')
-    .$type<Array<{ url: string; alt?: string }>>()
-    .default([]),
+  slug: text('slug').unique().notNull(),
 
   // Store recommended products as JSONB
   recommendedProducts: jsonb('recommended_products').default([]),

@@ -58,6 +58,46 @@ export default async function seedProducts() {
 <<<<<<< Updated upstream
     for (let i = 0; i < 20; i++) {
         productsData.push({
+<<<<<<< Updated upstream
+            id: faker.string.uuid(),
+            title: faker.commerce.productName(),
+            sku: faker.string.uuid(),
+            status: faker.word.words(1),
+            price: faker.commerce.price(),
+            createdAt: faker.date.anytime(),
+            updatedAt: faker.date.anytime(),
+            length: null,
+            barcode: null,
+            description: null,
+            publishDate: null,
+            pricePerItem: null,
+            costPrice: null,
+            profit: null,
+            margin: null,
+            defaultPrice: null,
+            customPrice: null,
+            tax: null,
+            trackInventory: null,
+            currentStock: null,
+            lowStockThreshold: null,
+            damageStock: null,
+            isPhysicalProduct: null,
+            shippingPrice: null,
+            weight: null,
+            weightUnit: null,
+            height: null,
+            width: null,
+            country: null,
+            hsCode: null,
+            type: null,
+            collection: null,
+            organization: null,
+            tag: null,
+            pageTitle: null,
+            metaDescription: null,
+            urlHandle: null,
+            recommendedProducts: undefined
+=======
           id: faker.string.uuid(),
           title: faker.commerce.productName(),
           sku: faker.string.uuid(),
@@ -96,7 +136,8 @@ export default async function seedProducts() {
           metaDescription: null,
           urlHandle: null,
           recommendedProducts: undefined,
-          images: null,
+          slug: faker.lorem.slug(),
+>>>>>>> Stashed changes
         })
     }
 =======
