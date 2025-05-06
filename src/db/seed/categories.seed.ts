@@ -6,7 +6,7 @@ import slugify from 'slugify'
 export default async function seedCategories() {
   const categoriesData: schema.Category[] = []
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 5; i++) {
     const name = faker.commerce.department()
     const categoryNameSlug = slugify(name, { lower: true })
     categoriesData.push({

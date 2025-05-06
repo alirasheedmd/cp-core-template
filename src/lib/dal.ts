@@ -10,6 +10,7 @@ import {
   images,
   productCategories,
   categories,
+  Category,
 } from '@/db/schema'
 
 // Current user
@@ -113,13 +114,25 @@ export async function getAllProducts() {
   return result
 }
 
-export async function getProductsByCategory(categoryId: string) {
+interface SlugID {
+  slug: string
+  id: string
+}
+
+export async function getProductsByCategory(categorySlug: string) {
+  const category = await db
+    .select({ slug: categories.slug, id: categories.id })
+    .from(categories)
+    .where(eq(categories.slug, categorySlug))
+  const categoryId: SlugID = category[0]
+
+  console.log(categoryId)
   const productsData = await db
     .select()
     .from(products)
     .innerJoin(productCategories, eq(productCategories.productId, products.id))
     .innerJoin(categories, eq(productCategories.categoryId, categories.id))
-    .where(eq(categories.id, categoryId))
+    .where(eq(categories.id, categoryId.id))
 
   console.log('Products by category:', productsData)
 

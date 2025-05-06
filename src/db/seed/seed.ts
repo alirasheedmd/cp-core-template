@@ -3,10 +3,10 @@ import { drizzle } from 'drizzle-orm/neon-http'
 import * as schema from '../schema/index'
 import { neon } from '@neondatabase/serverless'
 // import seedProducts from './products.seed'
-// import seedImages from './images.seed'
+import seedImages from './images.seed'
 // import seedCategories from './categories.seed'
 // import deleteSeedData from './deleteSeedData'
-// import seedProductCategories from './product-category-join.seed'
+import seedProductCategories from './product-category-join.seed'
 import { DATABASE_URL } from '../../../base'
 
 const sql = neon(DATABASE_URL!)
@@ -17,8 +17,8 @@ export const db_for_seed = drizzle({
 })
 async function main() {
   // await seedProducts()
-  // await seedImages()
-  // await seedProductCategories()
+  await seedImages()
+  await seedProductCategories()
   // await seedCategories()
   // await deleteSeedData();
 }
