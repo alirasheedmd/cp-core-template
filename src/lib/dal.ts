@@ -99,8 +99,6 @@ export async function getAllProducts() {
     .from(images)
     .where(not(isNull(images.productId)))
 
-  console.log('images data', imagesData)
-
   // Map products and add their images as arrays
   const result = await Promise.all(
     productsData.map(async (data) => {
@@ -109,8 +107,6 @@ export async function getAllProducts() {
       const productCategories = await getProductCategories(product.id)
 
       const categories = productCategories.map((c) => c.name)
-
-      console.log(categories)
 
       // Find all images for this product
       const productImages = imagesData.filter(
@@ -144,7 +140,6 @@ export async function getProductsByCategory(categorySlug: string) {
     .where(eq(categories.slug, categorySlug))
   const categoryOne: SlugID = category[0]
 
-  console.log(categoryOne)
   const productsData = await db
     .select({
       id: products.id,
@@ -158,15 +153,11 @@ export async function getProductsByCategory(categorySlug: string) {
     .innerJoin(categories, eq(productCategories.categoryId, categories.id))
     .where(eq(categories.id, categoryOne.id))
 
-  console.log('Products by Category', productsData)
-
   // Get all images
   const imagesData = await db
     .select({ src: images.src, productId: images.productId })
     .from(images)
     .where(not(isNull(images.productId)))
-
-  console.log('images data', imagesData)
 
   // Map products and add their images as arrays
   const result = await Promise.all(
@@ -176,8 +167,6 @@ export async function getProductsByCategory(categorySlug: string) {
       const productCategories = await getProductCategories(product.id)
 
       const categories = productCategories.map((c) => c.name)
-
-      console.log(categories)
 
       // Find all images for this product
       const productImages = imagesData.filter(
@@ -227,7 +216,6 @@ export async function getAllCategories() {
     .from(images)
     .where(not(isNull(images.categoryId)))
 
-  console.log('images data', imagesData)
 
   // Map categories and add their images as arrays
   const result = categoriesData.map((category) => {
