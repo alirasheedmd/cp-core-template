@@ -1,4 +1,4 @@
-import { getAllProducts } from '@/lib/dal'
+import { getAllProducts, getProductsByCategory } from '@/lib/dal'
 import ProductCard2 from './ProductCard2'
 
 export const ProductCarousel = async () => {
