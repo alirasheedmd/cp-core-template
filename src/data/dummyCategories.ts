@@ -45,9 +45,9 @@ export const dummyCategories: ICategory[] = [
   },
   {
     _id: '3',
-    name: 'Mobile product / tools',
+    name: 'Mobile products',
     slug: {
-      current: 'mobile-product-tools',
+      current: 'mobile-products',
       _type: 'slug',
     },
   },

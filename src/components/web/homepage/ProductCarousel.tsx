@@ -1,5 +1,5 @@
-import { getAllProducts, getProductsByCategory } from '@/lib/dal'
-import ProductCard from './ProductCard'
+import { getAllProducts } from '@/lib/dal'
+import ProductCard2 from './ProductCard2'
 
 export const ProductCarousel = async () => {
   const products = await getAllProducts()
@@ -12,7 +12,7 @@ export const ProductCarousel = async () => {
       <div className="scrollbar-hide flex snap-x gap-4 overflow-x-auto px-4 pb-4">
         {products.map((product) => (
           <div key={product.id} className="flex-shrink-0 snap-start">
-            <ProductCard product={product} />
+            <ProductCard2 product={product} />
           </div>
         ))}
       </div>
