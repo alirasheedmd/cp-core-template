@@ -13,3 +13,8 @@ export const convertToMb = (bytes: number) => {
     space: false,
   });
 };
+
+export const formatCurrency = (amount: number | string) => {
+  const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+  return numericAmount.toFixed(2);
+};

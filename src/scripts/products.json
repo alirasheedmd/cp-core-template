@@ -1,0 +1,442 @@
+[
+  {
+    "name": "6\" Fire Alarm Bell",
+    "brand": "Fire Link",
+    "price": 54.95,
+    "image": "https://cp-core-template.imgix.net///uploads/9b6f6ae4-c7c7-4bbc-b66d-9d1e32e75a7b/6-Inch-Fire-Alarm-Bell.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Alarms",
+    "sku": "67B29CD1DB"
+  },
+  {
+    "name": "Conventional Electronic Sounder and Flasher",
+    "brand": "Fire Link",
+    "price": 119.95,
+    "image": "https://cp-core-template.imgix.net///uploads/eded33ea-89e3-4688-a7cd-019aa9606fec/Conventional-Electronic-Sounder-and-Flasher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Alarms",
+    "sku": "D691081AB6"
+  },
+  {
+    "name": "Conventional Indoor Sounder/Flasher 24v",
+    "brand": "SASSECO",
+    "price": 72.74,
+    "image": "https://cp-core-template.imgix.net///uploads/ccc07390-e24d-4b37-9f19-f10c26c659f8/Conventional-Indoor-Sounder---Flasher-24v--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/4953ee4b-d3c2-4709-b83e-870bd37b483e/Conventional-Indoor-Sounder---Flasher-24v--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Alarms",
+    "sku": "CDD1212AC4"
+  },
+  {
+    "name": "Conventional Outdoor Sounder/Flasher",
+    "brand": "SASSECO",
+    "price": 125.64,
+    "image": "https://cp-core-template.imgix.net///uploads/845ca994-52c0-46b9-99d2-684616161b97/Conventional-Outdoor-Sounder---Flasher--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/676c5ce1-3124-4d82-a15e-c200cf811732/Conventional-Outdoor-Sounder---Flasher--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Alarms",
+    "sku": "6E70B96028"
+  },
+  {
+    "name": "LF-AV-6127 Addressable Siren with Flasher",
+    "brand": "LIFECO",
+    "price": 136.95,
+    "image": "https://cp-core-template.imgix.net///uploads/351ae387-1dff-40d1-ad98-1a8e00f58b13/LF-AV-6127-Addressable-Siren-with-Flasher.avif?w=640&auto=format%2Ccompress&q=25",
+    "category": "Alarms",
+    "sku": "6BEABB7B65"
+  },
+  {
+    "name": "Wheelock MB Fire Alarm Bell",
+    "brand": "Eaton",
+    "price": 127.95,
+    "image": "https://cp-core-template.imgix.net///uploads/26993e46-687f-4c82-a7eb-c8b5dd185752/Wheelock-MB-Fire-Alarm-Bell.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Alarms",
+    "sku": "774AA1C61F"
+  },
+  {
+    "name": "UL-Listed 100 LB Wheeled CO2 Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 23201.25,
+    "image": "https://cp-core-template.imgix.net///uploads/2b6855e7-fcbc-4a38-bcb0-7aa5abf1808c/UL-Listed-100-LB-Wheeled-CO2-Fire-Extinguisher.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "FF09E193CD"
+  },
+  {
+    "name": "UL-Listed 50 LB Wheeled CO2 Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 16198.9,
+    "image": "https://cp-core-template.imgix.net///uploads/94582e8a-b086-4a84-8063-0e65e77951b3/UL-Listed-50-LB-Wheeled-CO2-Fire-Extinguisher.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "25ACF52E68"
+  },
+  {
+    "name": "UL-Listed 15 LB Portable CO2 Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 1495.0,
+    "image": "https://cp-core-template.imgix.net///uploads/1f3fd510-18fe-4451-9750-086b9ddb4afd/UL-Listed-15-LB-Portable-CO2-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "F9562F5A2C"
+  },
+  {
+    "name": "UL-Listed 10 LB Portable CO2 Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 1299.5,
+    "image": "https://cp-core-template.imgix.net///uploads/37dcf558-887f-4550-a82e-456319ab35f1/UL-Listed-10-LB-Portable-CO2-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "CB478E7F0C"
+  },
+  {
+    "name": "UL-Listed 5 LB Portable CO2 Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 949.9,
+    "image": "https://cp-core-template.imgix.net///uploads/a1d7367b-b2e0-4abc-b03f-5a2b8937fb70/UL-Listed-5-LB-Portable-CO2-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "4E6D579C45"
+  },
+  {
+    "name": "UL-Listed 125 LB Wheeled Dry Powder Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 18741.55,
+    "image": "https://cp-core-template.imgix.net///uploads/f6738e4a-24e2-4782-adc0-1cf8124686e8/UL-Listed-125-LB-Wheeled-Dry-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "42556F9ADB"
+  },
+  {
+    "name": "UL-Listed 50 LB Wheeled Dry Powder Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 12216.45,
+    "image": "https://cp-core-template.imgix.net///uploads/e44c7091-0e07-4bd1-9e66-b230e1de70ac/A-50-SPUL-Listed-50-LB-Wheeled-Dry-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "758D202ED1"
+  },
+  {
+    "name": "UL-Listed 30 LB Portable Powder Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 2932.5,
+    "image": "https://cp-core-template.imgix.net///uploads/5483ba80-8590-4802-9e1f-63b3303fc2ae/UL-Listed-30-LB-Portable-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "B833528685"
+  },
+  {
+    "name": "UL-Listed 20 LB Portable Powder Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 726.8,
+    "image": "https://cp-core-template.imgix.net///uploads/b4057997-99f0-4c24-ad03-00d825184269/UL-Listed-20-LB-Portable-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "1A7B82DAB7"
+  },
+  {
+    "name": "UL-Listed 10 LB Portable Powder Fire Extinguisher",
+    "brand": "Buckeye USA",
+    "price": 460.0,
+    "image": "https://cp-core-template.imgix.net///uploads/afdebd4c-5037-471a-bba8-33a0c7fe0274/UL-Listed-10-LB-Portable-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Buckeyes",
+    "sku": "E1DE5EE28A"
+  },
+  {
+    "name": "Conventional Fire Alarm Control Panel",
+    "brand": "Fire Link",
+    "price": 436.95,
+    "image": "https://cp-core-template.imgix.net///uploads/7975d59f-3e52-40d8-9946-892ebf0fa1f3/Conventional-Fire-Alarm-Control-Panel.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Control Panels",
+    "sku": "F5C062B383"
+  },
+  {
+    "name": "LF-6100A Addressable Fire Alarm Control Panel",
+    "brand": "LIFECO",
+    "price": 3449.95,
+    "image": "https://cp-core-template.imgix.net///uploads/318dd89b-7a15-46cb-bf98-429c3c649f23/LF-6100A-Addressable-Fire-Alarm-Control-Panel.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Control Panels",
+    "sku": "02257B62EF"
+  },
+  {
+    "name": "9V Smoke Detector & Alarm",
+    "brand": "SASSECO",
+    "price": 26.0,
+    "image": "https://cp-core-template.imgix.net///uploads/4f69279a-61f2-40b9-84e4-994a87cbf34e/9V-Smoke-Detector-and-Alarm--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/c01f899e-b63b-4aa5-af99-e502fcfd78c2/9V-Smoke-Detector-&-Alarm--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "7EE324DAA2"
+  },
+  {
+    "name": "Conventional Photoelectric Smoke Detector with Base",
+    "brand": "Fire Link",
+    "price": 39.95,
+    "image": "https://cp-core-template.imgix.net///uploads/5aa74910-3cf4-406c-946a-972a1da091e7/Conventional-Photoelectric-Smoke-Detector-with-Base.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "4395989C83"
+  },
+  {
+    "name": "Conventional ROR Heat Detector",
+    "brand": "Fire Link",
+    "price": 39.95,
+    "image": "https://cp-core-template.imgix.net///uploads/4e159e77-8db6-4852-ae3f-4922f0940976/Conventional-ROR-Heat-Detector.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "B6220155D0"
+  },
+  {
+    "name": "LF-HD-6202 Intelligent Heat Detector",
+    "brand": "LIFECO",
+    "price": 114.95,
+    "image": "https://cp-core-template.imgix.net///uploads/3c9009ca-4c8b-436b-bebc-d39c545a7afc/LF-HD-6202-Intelligent-Heat-Detector.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "2AE40FDC92"
+  },
+  {
+    "name": "LF-PE-6201 Intelligent Photo-electric Smoke Detector",
+    "brand": "LIFECO",
+    "price": 114.95,
+    "image": "https://cp-core-template.imgix.net///uploads/ef3ad6b9-61a7-46bd-906f-403b7c30b018/LF-PE-6201-Intelligent-Photo-electric-Smoke-Detector.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "A18C880C45"
+  },
+  {
+    "name": "LF-PHD-6110 Intelligent Combined Smoke and Heat Detector",
+    "brand": "LIFECO",
+    "price": 114.95,
+    "image": "https://cp-core-template.imgix.net///uploads/03b87714-a438-48fa-a3d6-54dbf0c4f2e2/LF-PHD-6110-Intelligent-Combined-Smoke-and-Heat-Detector.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "A0A2B783E7"
+  },
+  {
+    "name": "SD-423 Photoelectric Smoke Detector",
+    "brand": "XH Fire",
+    "price": 23.95,
+    "image": "https://cp-core-template.imgix.net///uploads/eb8b8433-f59d-4cd5-9233-f353fc1151f1/SD-423-Photoelectric-Smoke-Detector.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "C99C848E7F"
+  },
+  {
+    "name": "System Sensor 2WT-B 2-Wire Combined Smoke & Heat Detector",
+    "brand": "System Sensor",
+    "price": 219.95,
+    "image": "https://cp-core-template.imgix.net///uploads/6e230b4c-ae17-42d9-a4c0-f1e19b7b3e8e/System-Sensor-2WT-B-2-Wire-Combined-Smoke-&-Heat-Detector.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Detectors",
+    "sku": "03E4FA8EC1"
+  },
+  {
+    "name": "EM 3120 LED Emergency Light",
+    "brand": "Khind",
+    "price": 99.95,
+    "image": "https://cp-core-template.imgix.net///uploads/2a6a026e-58db-48c6-bb46-83ec2100ae41/EM-3120-LED-Emergency-Light.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Emergency Lighting",
+    "sku": "780EFF9053"
+  },
+  {
+    "name": "EM3020 Rechargeable Emergency Light",
+    "brand": "Khind",
+    "price": 88.55,
+    "image": "https://cp-core-template.imgix.net///uploads/2bf23a88-0770-4b6e-b14f-9bb47bb0edca/EM3020-Rechargeable-Emergency-Light.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Emergency Lighting",
+    "sku": "02DE01D91C"
+  },
+  {
+    "name": "Acrylic LED Emergency Exit Sign",
+    "brand": "SASSECO",
+    "price": 28.75,
+    "image": "https://cp-core-template.imgix.net///uploads/d4f1d5f8-76ae-4587-99c4-bb8d11fe3aa5/Acrylic-LED-Emergency-Exit-Sign.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Exit Signs",
+    "sku": "E0E2459752"
+  },
+  {
+    "name": "Emergency Exit Sign",
+    "brand": "SASSECO",
+    "price": 19.49,
+    "image": "https://cp-core-template.imgix.net///uploads/dc66c0cc-5459-48f3-b651-30b4fef0fc38/Emergency-Exit-Sign.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Exit Signs",
+    "sku": "7407FB5B9F"
+  },
+  {
+    "name": "Fire-Rated Emergency Exit Door (PRC)",
+    "brand": "XZIC",
+    "price": 1264.95,
+    "image": "https://cp-core-template.imgix.net///uploads/b3eca6f6-1deb-47d2-a911-c93596f15773/Fire-Rated-Emergency-Exit-Door-(PRC).webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Exit Doors",
+    "sku": "BC8AA9F849"
+  },
+  {
+    "name": "SASO/UL Fire-Rated Emergency Exit Door (IND)",
+    "brand": "Navair",
+    "price": 2182.7,
+    "image": "https://cp-core-template.imgix.net///uploads/c5a4e733-94a4-43fa-8e0b-a8ab1c19c68d/SASO-UL-Fire-Rated-Emergency-Exit-Door-(IND)--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/b0e66aa0-f7b8-47a7-9d9c-4eef28d23363/p2SASO-UL-Fire-Rated-Emergency-Exit-Door-(IND)--2.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/2981fa29-d1ed-49b3-aa6e-ff621dba01c2/SASO-UL-Fire-Rated-Emergency-Exit-Door-(IND)--3.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/c24f9ca5-7a33-4917-9ae7-3c1cf91f035e/SASO-UL-Fire-Rated-Emergency-Exit-Door-(IND)--4.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Exit Doors",
+    "sku": "E86B9C04C2"
+  },
+  {
+    "name": "UL Fire-Rated Emergency Exit Door (UAE)",
+    "brand": "Bristol",
+    "price": 2089.78,
+    "image": "https://cp-core-template.imgix.net///uploads/28f45efa-fa7c-485b-8ad9-8b3b8caadac9/UL-Fire-Rated-Emergency-Exit-Door-(UAE).webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Exit Doors",
+    "sku": "61400969E6"
+  },
+  {
+    "name": "1KG Dry Powder Fire Extinguisher",
+    "brand": "HYISAFE",
+    "price": 39.95,
+    "image": "https://cp-core-template.imgix.net///uploads/6f640e65-656f-43ba-94cb-2e885392edb0/1KG-Dry-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Extinguishers",
+    "sku": "FD5D7884BD"
+  },
+  {
+    "name": "25KG Dry Powder Fire Extinguisher",
+    "brand": "HYISAFE",
+    "price": 599.95,
+    "image": "https://cp-core-template.imgix.net///uploads/308ad84e-336d-43ab-9216-7eb04fa65807/25KG-Dry-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Extinguishers",
+    "sku": "D407F51EF5"
+  },
+  {
+    "name": "50KG Wheeled Dry Powder Fire Extinguisher",
+    "brand": "HYISAFE",
+    "price": 769.95,
+    "image": "https://cp-core-template.imgix.net///uploads/37706b46-1e96-4593-894f-70464ddd84e2/50KG-Wheeled-Dry-Powder-Fire-Extinguisher.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Extinguishers",
+    "sku": "9EAFC666D5"
+  },
+  {
+    "name": "6KG Automatic Dry Powder Fire Extinguisher",
+    "brand": "HYISAFE",
+    "price": 159.95,
+    "image": "https://cp-core-template.imgix.net///uploads/6bb5b75b-1399-413d-b1c2-a52af93d9422/6KG-Automatic-Dry-Powder-Fire-Extinguisher--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/5ac32afa-1be9-4438-a812-49ac3da67e22/6KG-Automatic-Dry-Powder-Fire-Extinguisher--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Extinguishers",
+    "sku": "EED9157820"
+  },
+  {
+    "name": "Fire Extinguisher Cover (6KG)",
+    "brand": "SASSECO",
+    "price": 16.94,
+    "image": "https://cp-core-template.imgix.net///uploads/7c8d144c-63a4-40e3-bfb6-e84d3202bf98/Fire-Extinguisher-Cover-(6KG).webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Extinguishers",
+    "sku": "D10667EE4B"
+  },
+  {
+    "name": "Fire Stop 1000ml",
+    "brand": "Fire-Stop",
+    "price": 47.95,
+    "image": "https://cp-core-template.imgix.net///uploads/dad8dc0b-2203-455b-841f-7acfcb014aaf/Fire-Stop-1000ml.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Extinguishers",
+    "sku": "20B0364FAE"
+  },
+  {
+    "name": "Auto-Fire-Off Fire Extinguishing Ball (1.3kg)",
+    "brand": "AFO",
+    "price": 54.95,
+    "image": "https://cp-core-template.imgix.net///uploads/87de8c63-8526-46c8-be86-a74bc90edcc7/Auto-Fire-Off-Fire-Extinguishing-Ball-1.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Fighting",
+    "sku": "65EC3FA454"
+  },
+  {
+    "name": "Fire Blanket 1.2x1.2",
+    "brand": "SASSECO",
+    "price": 43.95,
+    "image": "https://cp-core-template.imgix.net///uploads/4efaf8bb-1376-43f7-9167-4a0c641ab224/Fire-Blanket-1.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Fighting",
+    "sku": "12A32620FE"
+  },
+  {
+    "name": "Fire Hose Cabinet",
+    "brand": "Al-Sabeh",
+    "price": 632.5,
+    "image": "https://cp-core-template.imgix.net///uploads/b03ae8fe-28d2-4fa5-9a04-bab66b9ff6ce/Fire-Hose-Cabinet.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Fighting",
+    "sku": "AD3CA00D3A"
+  },
+  {
+    "name": "Bristol Fire Pump System",
+    "brand": "Bristol",
+    "price": 273198.16,
+    "image": "https://cp-core-template.imgix.net///uploads/0b9ac18e-7b0b-4776-b0a2-7fa79a497616/Bristol-Fire-Pump-System--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/7beefa89-bfc1-4c78-a0d8-69464751da0e/Bristol-Fire-Pump-System--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Fire Fighting",
+    "sku": "64868D84B0"
+  },
+  {
+    "name": "Black-Yellow Arrow Caution Tape",
+    "brand": "SASSECO",
+    "price": 27.95,
+    "image": "https://cp-core-template.imgix.net///uploads/0c51a2e0-36a3-4f10-9955-8474806ee368/Black-Yellow-Arrow-Caution-Tape.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Life Safety",
+    "sku": "FE728797B6"
+  },
+  {
+    "name": "Compact First Aid Kit",
+    "brand": "SASSECO",
+    "price": 36.3,
+    "image": "https://cp-core-template.imgix.net///uploads/e79d280d-7601-43b3-b2f6-2d6562e93294/Compact-First-Aid-Kit--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/6d58e9e1-93fb-42dd-851b-c9105f6577e0/Compact-First-Aid-Kit--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Life Safety",
+    "sku": "5564EF6769"
+  },
+  {
+    "name": "Convex Traffic Mirror",
+    "brand": "SASSECO",
+    "price": 56.87,
+    "image": "https://cp-core-template.imgix.net///uploads/a22015e0-82a3-426a-8954-2d655fa96f9e/Convex-Traffic-Mirror.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Life Safety",
+    "sku": "0A192768C6"
+  },
+  {
+    "name": "Personal Protective Equipment",
+    "brand": "Delta Plus",
+    "price": 19.95,
+    "image": "https://cp-core-template.imgix.net///uploads/c8ac1527-d082-4e4c-8a32-2cbe703d421b/Personal-Protective-Equipment.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Personal Protective Equipment",
+    "sku": "B2212BB064"
+  },
+  {
+    "name": "High-Ankle Safety Shoes",
+    "brand": "SASSECO",
+    "price": 54.45,
+    "image": "https://cp-core-template.imgix.net///uploads/4f75219e-f764-4595-bfa2-b2f59db15585/High-Ankle-Safety-Shoes.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Personal Protective Equipment",
+    "sku": "B88E6D9E49"
+  },
+  {
+    "name": "Reflective Traffic Cone - 50cm",
+    "brand": "SASSECO",
+    "price": 28.75,
+    "image": "https://cp-core-template.imgix.net///uploads/0e586670-943b-45f2-8c3c-81ef51869485/Reflective-Traffic-Cone---50cm--1.webp?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/9afdccba-498d-4dea-afd9-c29ea2f403b8/Reflective-Traffic-Cone---50cm--2.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Traffic Safety",
+    "sku": "E44823FC86"
+  },
+  {
+    "name": "Solar Road Warning Light",
+    "brand": "SASSECO",
+    "price": 47.75,
+    "image": "https://cp-core-template.imgix.net///uploads/63cecc39-4964-4d4f-81eb-1b09fd144a35/Solar-Road-Warning-Light.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Traffic Safety",
+    "sku": "CA0F0A12B6"
+  },
+  {
+    "name": "High Quality Traffic Cone with Reflective Bands",
+    "brand": "SASSECO",
+    "price": 44.95,
+    "image": "https://cp-core-template.imgix.net///uploads/cb0b028a-d100-46b9-8d75-1b8dda4b0cc1/High-Quality-Traffic-Cone-with-Reflective-Bands.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Traffic Safety",
+    "sku": "8C1651CD6A"
+  },
+  {
+    "name": "Red Danger Tape",
+    "brand": "SASSECO",
+    "price": 12.95,
+    "image": "https://cp-core-template.imgix.net///uploads/28daf41d-c64e-4d44-a0e9-b551d6d236e4/Red-Danger-Tape.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Traffic Safety",
+    "sku": "6E34F51611"
+  },
+  {
+    "name": "Flanged NRS Gate Valve",
+    "brand": "LEDE",
+    "price": 724.5,
+    "image": "https://cp-core-template.imgix.net///uploads/db910c63-783d-4aa1-970a-28a7ce5f9144/Flanged-NRS-Gate-Valve.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Valves",
+    "sku": "F38A6AB146"
+  },
+  {
+    "name": "Swing Check Valve Flanged 300psi",
+    "brand": "LEDE",
+    "price": 470.35,
+    "image": "https://cp-core-template.imgix.net///uploads/494e966d-07dd-4709-9af0-72501a54d2c1/Swing-Check-Valve-Flanged-300psi--1.jpg?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/8ffe1429-7c37-4b11-b120-a803ba27db2d/Swing-Check-Valve-Flanged-300psi--2.jpg?w=640&auto=format%2Ccompress&q=25\nhttps://cp-core-template.imgix.net///uploads/46a893ac-dacb-45e3-a782-deaf622be966/Swing-Check-Valve-Flanged-300psi-3.jpg?w=640&auto=format%2Ccompress&q=25",
+    "category": "Valves",
+    "sku": "A91BE127D0"
+  },
+  {
+    "name": "Test and Drain Valve",
+    "brand": "LIFECO",
+    "price": 599.95,
+    "image": "https://cp-core-template.imgix.net///uploads/19481ceb-1d4d-448a-826a-321df777ce15/Test-and-Drain-Valve.webp?w=640&auto=format%2Ccompress&q=25",
+    "category": "Valves",
+    "sku": "55926803EB"
+  }
+]

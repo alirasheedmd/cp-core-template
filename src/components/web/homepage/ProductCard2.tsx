@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import CurrencySymbol from '@/components/ui/CurrencySymbol'
 
 // Define a simplified type that matches what getAllProducts returns
 type SimpleProduct = {
@@ -39,9 +40,7 @@ const ProductCard2 = ({ product }: { product: SimpleProduct }) => {
           {product.description}
         </p>
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900">
-            ${Number(product.price).toFixed(2)}
-          </span>
+          <CurrencySymbol amount={product.price} className="text-xl font-bold text-gray-900" symbolSize={18} />
           <button className="rounded-md bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700">
             View
           </button>

@@ -13,7 +13,7 @@ import { getAllProducts, getProductSearchResults } from '@/lib/dal'
 export default async function Home() {
   const search = await getProductSearchResults('Practical')
   console.log(search)
-  const products = await getAllProducts('03f671b4-a24b-4738-a8c3-2bd1fde5d952')
+  const products = await getAllProducts()
   return (
     <main>
       <div className="container mx-auto pt-4">
@@ -37,7 +37,7 @@ export default async function Home() {
       <Categories />
 
       <Suspense fallback={<div>Loading...</div>}>
-        <FeaturedCategory category="Electronics" products={products} />
+        <FeaturedCategory category="Alarms" products={products} />
       </Suspense>
 
       {/* <div className="flex min-h-screen flex-col items-center justify-between p-24">

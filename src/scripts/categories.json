@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Alarms",
+    "image": "https://cp-core-template.imgix.net///uploads/397b93d5-c9b8-4e47-9d29-b7d98735d08c/Alarms.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Buckeyes",
+    "image": "https://cp-core-template.imgix.net///uploads/5ee333a7-0751-46ff-8ce8-ace0a6cf7bbc/Buckeyes.jpg?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Control Panels",
+    "image": "https://cp-core-template.imgix.net///uploads/c550d187-117a-4449-b8eb-1d4eab9e4268/Control-Panels.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Detectors",
+    "image": "https://cp-core-template.imgix.net///uploads/9ed91603-27ce-4299-bb1f-a6612d1d9e2a/Detectors.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Emergency Lighting",
+    "image": "https://cp-core-template.imgix.net///uploads/7b3370f0-9d64-4324-a26e-84729f891fc0/Emergency-Lighting.jpg?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Exit Signs",
+    "image": "https://cp-core-template.imgix.net///uploads/ec3a8a79-c343-4114-a6ff-c6784422247c/Exit-Signs.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Fire Exit Doors",
+    "image": "https://cp-core-template.imgix.net///uploads/31219d53-9a30-4c99-abd5-575bffdb19e0/Fire-Exit-Doors.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Fire Extinguishers",
+    "image": "https://cp-core-template.imgix.net///uploads/988cf80a-901c-4493-97cb-34cbbbaaad7c/Fire-Extinguishers.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Fire Fighting",
+    "image": "https://cp-core-template.imgix.net///uploads/e97aa384-8e79-49b6-934e-b00fc4b3b005/Fire-Fighting.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Life Safety",
+    "image": "https://cp-core-template.imgix.net///uploads/a3ae608e-6ad8-43d5-b3cc-15d657d6e188/Life-Safety.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Manual Call Points",
+    "image": "https://cp-core-template.imgix.net///uploads/94bbf8da-894c-4da4-8d00-1748c2247870/Manual-Call-Points.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Personal Protective Equipment",
+    "image": "https://cp-core-template.imgix.net///uploads/e57a8c70-057a-4667-87c2-527c7a1ce8d7/Personal-Protective-Equipment.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Traffic Safety",
+    "image": "https://cp-core-template.imgix.net///uploads/80c4d068-70e5-40ce-bd43-35fffa44a840/Traffic-Safety.webp?w=640&auto=format%2Ccompress&q=25"
+  },
+  {
+    "name": "Valves",
+    "image": "https://cp-core-template.imgix.net///uploads/ffbdaf38-92d5-4e9a-ac06-8ec0c3a00acc/Valves.webp?w=640&auto=format%2Ccompress&q=25"
+  }
+]

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
+import CurrencySymbol from '@/components/ui/CurrencySymbol'
 
 export default function ProductCard({ product }: { product: any }) {
   const { title, price, image } = product
@@ -23,7 +24,7 @@ export default function ProductCard({ product }: { product: any }) {
           <p className="text-MediumGrey text-center text-xs uppercase">
             Brand Name
           </p>
-          <p className="text-gray-600">{Number(price)?.toFixed(2)}</p>
+          <CurrencySymbol amount={price} className="text-gray-600" />
           <button className="border-Red text-Red mt-5 rounded-full border-2 px-4 py-2 transition-all duration-300 hover:scale-105">
             Add to Cart
           </button>
