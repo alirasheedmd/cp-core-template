@@ -3,7 +3,7 @@
 import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
-import { isNull, not } from 'drizzle-orm/sql'
+import { ilike, or, isNull, not } from 'drizzle-orm/sql'
 import { cache } from 'react'
 import {
   users,
@@ -216,7 +216,6 @@ export async function getAllCategories() {
     .from(images)
     .where(not(isNull(images.categoryId)))
 
-
   // Map categories and add their images as arrays
   const result = categoriesData.map((category) => {
     // Find all images for this category
@@ -233,4 +232,29 @@ export async function getAllCategories() {
   })
 
   return result
+}
+
+export async function getProductSearchResults(searchText: string) {
+  const filteredProducts = await db
+    .select({ title: products.title, slug: products.slug })
+    .from(products)
+    .where(
+      or(
+        ilike(products.title, `%${searchText}%`),
+        ilike(products.description, `%${searchText}%`),
+        ilike(products.pageTitle, `%${searchText}%`),
+        ilike(products.collection, `%${searchText}%`),
+        ilike(products.type, `%${searchText}%`),
+        ilike(products.metaDescription, `%${searchText}%`),
+        ilike(products.barcode, `%${searchText}%`),
+        ilike(products.country, `%${searchText}%`),
+        ilike(products.sku, `%${searchText}%`),
+        ilike(products.hsCode, `%${searchText}%`),
+        ilike(products.tag, `%${searchText}%`),
+        ilike(products.organization, `%${searchText}%`),
+      ),
+    )
+  console.log('Filtered products:', filteredProducts)
+
+  return filteredProducts
 }

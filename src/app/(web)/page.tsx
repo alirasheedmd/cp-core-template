@@ -8,11 +8,12 @@ import Link from 'next/link'
 import { routes } from '@/config/routes'
 import Categories from '@/components/web/homepage/Categories'
 import FeaturedCategory from '@/components/web/homepage/FeaturedCategory'
-import { getAllProducts } from '@/lib/dal'
+import { getAllProducts, getProductSearchResults } from '@/lib/dal'
 
 export default async function Home() {
+  const search = await getProductSearchResults('Practical')
+  console.log(search)
   const products = await getAllProducts('03f671b4-a24b-4738-a8c3-2bd1fde5d952')
-  console.log(products)
   return (
     <main>
       <div className="container mx-auto pt-4">
