@@ -17,9 +17,15 @@ export const db_for_seed = drizzle({
 })
 async function main() {
   // await seedProducts()
+<<<<<<< Updated upstream
   await seedImages()
   // await seedProductCategories()
   // await seedCategories()
+=======
+  // await seedImages()
+  //   await seedProductCategories()
+  await seedCategories()
+>>>>>>> Stashed changes
 
   // await deleteSeedData();
 }
