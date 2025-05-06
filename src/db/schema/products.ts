@@ -6,9 +6,15 @@ import {
   boolean,
   numeric,
   jsonb,
+  pgEnum,
 } from 'drizzle-orm/pg-core'
 import { productCategories } from './productCategories'
 import { images } from './images'
+
+export const productStatusEnum = pgEnum('product_status', [
+  'active',
+  'inactive',
+])
 
 // Products table with Shopify-like structure
 export const products = pgTable('products', {
@@ -17,7 +23,7 @@ export const products = pgTable('products', {
   sku: text('sku').notNull().unique(),
   barcode: text('barcode'),
   description: text('description'),
-  status: text('status').notNull().default('inactive'),
+  status: productStatusEnum('status').notNull().default('inactive'),
   publishDate: timestamp('publish_date'),
 
   // Price information
@@ -58,10 +64,7 @@ export const products = pgTable('products', {
   metaDescription: text('meta_description'),
   urlHandle: text('url_handle'),
 
-  // Store product images as JSONB
-  images: jsonb('images')
-    .$type<Array<{ url: string; alt?: string }>>()
-    .default([]),
+  slug: text('slug').unique().notNull(),
 
   // Store recommended products as JSONB
   recommendedProducts: jsonb('recommended_products').default([]),

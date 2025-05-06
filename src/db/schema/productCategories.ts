@@ -1,4 +1,4 @@
-import { InferSelectModel, relations } from 'drizzle-orm';
+import { InferSelectModel, relations } from 'drizzle-orm'
 import { pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
 import { products } from './products' // Import products
 import { categories } from './categories' // Import categories
@@ -21,13 +21,16 @@ export const productCategories = pgTable(
 export type ProductCategoryJoin = InferSelectModel<typeof productCategories>
 
 // Relations
-export const productCategoryRelations = relations(productCategories, ({ one }) => ({
-  product: one(products, {
-    fields: [productCategories.productId],
-    references: [products.id],
+export const productCategoryRelations = relations(
+  productCategories,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productCategories.productId],
+      references: [products.id],
+    }),
+    category: one(categories, {
+      fields: [productCategories.categoryId],
+      references: [categories.id],
+    }),
   }),
-  category: one(categories, {
-    fields: [productCategories.categoryId],
-    references: [categories.id],
-  }),
-}));
+)
