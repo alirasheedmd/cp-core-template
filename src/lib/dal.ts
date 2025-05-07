@@ -234,6 +234,26 @@ export async function getAllCategories() {
   return result
 }
 
+export async function getOneCategory(categorySlug: string) {
+  const category = await db
+    .select()
+    .from(categories)
+    .where(eq(categories.slug, categorySlug))
+  const categoryOne = category[0]
+
+  return categoryOne
+}
+
+export async function getOneProduct(productSlug: string) {
+  const product = await db
+    .select()
+    .from(products)
+    .where(eq(products.slug, productSlug))
+  const productOne = product[0]
+
+  return productOne
+}
+
 export async function getProductSearchResults(searchText: string) {
   const filteredProducts = await db
     .select({ title: products.title, slug: products.slug })
