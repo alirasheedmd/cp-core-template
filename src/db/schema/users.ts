@@ -19,6 +19,8 @@ export const users = pgTable('users', {
   isVerified: boolean('is_verified').default(false).notNull(),
   verificationCode: text('verification_code'),
   verificationCodeExpiry: timestamp('verification_code_expiry'),
+  resetPasswordToken: text('reset_password_token').unique(),
+  resetPasswordTokenExpiry: timestamp('reset_password_token_expiry'),
   lastLoginAt: timestamp('last_login_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
