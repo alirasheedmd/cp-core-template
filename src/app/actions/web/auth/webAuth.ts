@@ -1,22 +1,15 @@
 'use server'
 
-import { z } from 'zod'
 import { getUserByEmail } from '@/lib/dal'
-import { verifyPassword, createSession, createUser, storeVerificationOTP, deleteSession } from '@/lib/auth'
+import {
+  verifyPassword,
+  createSession,
+  createUser,
+  storeVerificationOTP,
+  deleteSession,
+} from '@/lib/auth'
 import { sendVerificationEmail } from '@/lib/email'
-
-// Form validation schemas
-const signinSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
-})
-
-const signupSchema = z.object({
-  firstName: z.string().nonempty("Please Enter First Name"),
-  lastName: z.string(),
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-})
+import { signinSchema, signupSchema } from '@/schemas/auth.schema'
 
 interface AuthState {
   error: string
@@ -25,9 +18,7 @@ interface AuthState {
   needsVerification?: boolean
 }
 
-export async function customerSignIn(
-  formData: FormData
-): Promise<AuthState> {
+export async function customerSignIn(formData: FormData): Promise<AuthState> {
   // Validate the form data
   const validatedFields = signinSchema.safeParse({
     email: formData.get('email'),
@@ -56,17 +47,17 @@ export async function customerSignIn(
     if (!user.isVerified) {
       // Generate new OTP
       const otp = await storeVerificationOTP(user.id)
-      
+
       if (otp) {
         // Send verification email
         await sendVerificationEmail(email, otp)
       }
-      
+
       return {
         error: 'Please verify your email address before signing in',
         userId: user.id,
         email: user.email,
-        needsVerification: true
+        needsVerification: true,
       }
     }
 
@@ -81,7 +72,7 @@ export async function customerSignIn(
 
     // Create session (isAdmin is false for regular customers)
     await createSession(user.id, user.isAdmin || false)
-    
+
     return { error: '' }
   } catch (error) {
     console.error('Customer signin error:', error)
@@ -91,13 +82,11 @@ export async function customerSignIn(
   }
 }
 
-export async function customerSignUp(
-  formData: FormData
-): Promise<AuthState> {
+export async function customerSignUp(formData: FormData): Promise<AuthState> {
   // Validate the form data
   const validatedFields = signupSchema.safeParse({
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
+    firstName: formData.get('firstName'),
+    lastName: formData.get('lastName'),
     email: formData.get('email'),
     password: formData.get('password'),
   })
@@ -131,14 +120,14 @@ export async function customerSignUp(
 
     // Generate OTP and send verification email
     const otp = await storeVerificationOTP(user.id)
-    
+
     if (otp) {
       await sendVerificationEmail(email, otp)
-      return { 
+      return {
         error: '',
         userId: user.id,
         email: user.email,
-        needsVerification: true
+        needsVerification: true,
       }
     } else {
       return {

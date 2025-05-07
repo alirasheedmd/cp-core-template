@@ -12,6 +12,7 @@ import {
   productCategories,
   categories,
 } from '@/db/schema'
+// import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
 export const getCurrentUser = cache(async () => {
@@ -228,6 +229,7 @@ export async function getAllCategories() {
       id: category.id,
       name: category.name,
       image: categoryImages.length > 0 ? categoryImages[0].src : null,
+      slug: category.slug,
     }
   })
 

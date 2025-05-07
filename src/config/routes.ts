@@ -1,14 +1,11 @@
 export const routes = {
   // Public routes
   home: '/',
-  fireFighting: '/fire-fighting',
-  fireAlarm: '/fire-alarm',
-  fireExitDoors: '/fire-exit-doors',
-  safetyEquipment: '/safety-equipment',
-  lifeSafety: '/life-safety',
-  trafficSafety: '/traffic-safety',
-  catalog: '/catalog',
+  dynamicCategory: {
+    category: (categorySlug: string) => `/collections/${categorySlug}`,
+  },
   contact: '/contact',
+  collections: '/collections',
 
   // Admin routes
   admin: {
