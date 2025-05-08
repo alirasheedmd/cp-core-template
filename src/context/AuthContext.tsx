@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -15,9 +9,18 @@ import {
 } from '@/components/ui/dialog'
 import { customerSignIn, customerSignUp } from '@/app/actions/web/auth/webAuth'
 import { VerificationForm } from '@/components/web/auth/VerificationForm'
+import ForgotPasswordForm from '@/components/web/auth/ForgotPasswordForm'
+import { ResetPasswordVerificationForm } from '@/components/web/auth/ResetPasswordVerificationForm'
+import ChangePasswordForm from '@/components/web/auth/ChangePasswordForm'
 
 // Add verification to the AuthMode options
-type AuthMode = 'signin' | 'signup' | 'verify'
+type AuthMode =
+  | 'signin'
+  | 'signup'
+  | 'verify'
+  | 'forgot-password'
+  | 'verify-reset'
+  | 'change-password'
 
 interface AuthContextType {
   isOpen: boolean
@@ -83,7 +86,11 @@ function AuthModal() {
               ? 'Sign In'
               : mode === 'signup'
                 ? 'Create Account'
-                : 'Verify Email'}
+                : mode === 'change-password'
+                  ? 'Reset Password'
+                  : mode === 'forgot-password'
+                    ? 'Forgot Password'
+                    : 'Verify Email'}
           </DialogTitle>
         </DialogHeader>
 
@@ -91,8 +98,14 @@ function AuthModal() {
           <SignInForm />
         ) : mode === 'signup' ? (
           <SignUpForm />
-        ) : (
+        ) : mode === 'verify' ? (
           <VerificationForm />
+        ) : mode === 'forgot-password' ? (
+          <ForgotPasswordForm />
+        ) : mode === 'verify-reset' ? (
+          <ResetPasswordVerificationForm />
+        ) : (
+          <ChangePasswordForm />
         )}
 
         <div className="mt-4 text-center text-sm">
@@ -116,19 +129,7 @@ function AuthModal() {
                 Sign in
               </button>
             </p>
-          ) : (
-            <p>
-              Didn't receive a code?{' '}
-              <button
-                onClick={() => {
-                  // Logic to resend code
-                }}
-                className="text-primary hover:underline"
-              >
-                Resend code
-              </button>
-            </p>
-          )}
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>
@@ -203,6 +204,14 @@ function SignInForm() {
           required
         />
       </div>
+      <div>
+        <button
+          onClick={() => setMode('forgot-password')}
+          className="text-primary hover:underline"
+        >
+          Forget Password?
+        </button>
+      </div>
       <button
         type="submit"
         disabled={isLoading}
@@ -222,7 +231,7 @@ function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { closeAuth, setMode, setUserEmail } = useAuth()
+  const { setMode, setUserEmail } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
