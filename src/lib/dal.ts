@@ -11,7 +11,6 @@ import {
   images,
   productCategories,
   categories,
-  User,
 } from '@/db/schema'
 
 // Current user
@@ -29,12 +28,11 @@ export const getCurrentUser = cache(async () => {
   }
 
   try {
-    const result = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, session.userId))
+    const result = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, session.userId),
+    })
 
-    return result[0] || null
+    return result || null
   } catch (error) {
     console.error('Error getting user by ID:', error)
     return null
