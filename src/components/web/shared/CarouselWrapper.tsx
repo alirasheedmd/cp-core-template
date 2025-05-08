@@ -27,7 +27,7 @@ export default function CarouselWrapper<T>({
       <ScrollArea className="relative">
         <div className="flex gap-3 pb-4 md:gap-5">
           {data.slice(0, itemsToShow).map((item, index) => (
-            <div key={index} className="min-w-1/5">
+            <div key={index} className="w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
               {cardComponent(item)}
             </div>
           ))}

@@ -9,7 +9,7 @@ export default function WebProductCard({ product }: { product: IWebProduct }) {
   const { title, price, image } = product
   return (
     <Link href={'#'} className="flex h-full flex-col">
-      <Card className="group flex h-full w-full flex-col gap-0 border-2 border-black p-3 transition-all hover:shadow-xl md:p-5">
+      <Card className="group flex h-full flex-col justify-between gap-0 border-2 border-black p-3 transition-all hover:shadow-xl md:p-5">
         {/* Image */}
         <div className="relative mx-auto h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg md:h-40 md:w-40">
           <Image
