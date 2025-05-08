@@ -3,12 +3,13 @@ import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import CurrencySymbol from '@/components/ui/CurrencySymbol'
 import { IWebProduct } from '@/types'
+import { AddToCart } from './AddToCartButton'
 
-export default function ProductCard({ product }: { product: IWebProduct }) {
+export default function WebProductCard({ product }: { product: IWebProduct }) {
   const { title, price, image } = product
   return (
     <Link href={'#'} className="flex h-full flex-col">
-      <Card className="group flex h-full max-w-44 flex-col border-2 border-black p-3 transition-all hover:shadow-xl md:max-w-[14.5rem] md:p-5">
+      <Card className="group flex h-full w-full flex-col gap-0 border-2 border-black p-3 transition-all hover:shadow-xl md:p-5">
         {/* Image */}
         <div className="relative mx-auto h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg md:h-40 md:w-40">
           <Image
@@ -29,9 +30,12 @@ export default function ProductCard({ product }: { product: IWebProduct }) {
           </p>
           <CurrencySymbol amount={price} className="text-gray-600" />
           {/* Add to Cart Button */}
-          <button className="border-Red text-Red mt-5 rounded-full border-2 px-4 py-2 transition-all duration-300 hover:scale-105">
-            Add to Cart
-          </button>
+          <AddToCart
+            productId={product.id}
+            name={title}
+            price={price}
+            image={image}
+          />
         </div>
       </Card>
     </Link>

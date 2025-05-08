@@ -21,8 +21,8 @@ export default function CarouselWrapper<T>({
   const remainingItems = data.length - itemsToShow
 
   return (
-    <section className="py-12">
-      <h2 className="mb-8 text-3xl font-bold">{title}</h2>
+    <section className="py-4 md:py-10">
+      <h2 className="mb-4 text-2xl font-bold md:mb-8 md:text-3xl">{title}</h2>
 
       <ScrollArea className="relative">
         <div className="flex gap-3 pb-4 md:gap-5">

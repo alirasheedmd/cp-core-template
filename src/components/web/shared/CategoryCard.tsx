@@ -13,7 +13,7 @@ export default function CategoryCard({ category }: { category: IWebCategory }) {
       key={id}
       className="mx-auto h-full min-w-full"
     >
-      <Card className="group flex h-full flex-1 flex-col justify-between border-2 border-black p-3 transition-all hover:shadow-xl md:p-5">
+      <Card className="group flex h-full flex-1 flex-col justify-between gap-0 border-2 border-black p-3 transition-all hover:shadow-xl md:p-5">
         <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-lg md:h-40 md:w-40">
           <Image
             src={image || '/default-image.png'}

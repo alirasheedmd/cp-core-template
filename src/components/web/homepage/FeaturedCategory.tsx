@@ -1,5 +1,5 @@
 import { IWebProduct } from '@/types'
-import ProductCard from '../../common/ProductCard'
+import ProductCard from '../shared/WebProductCard'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'

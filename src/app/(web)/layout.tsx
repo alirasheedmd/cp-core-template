@@ -2,6 +2,7 @@ import WebFooter from '@/components/layout/WebFooter'
 import WebHeader from '@/components/layout/WebHeader'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
 export default function RootLayout({
   children,
@@ -10,7 +11,9 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <WebHeader />
+      <Suspense fallback={<div className="h-[106px] w-full" />}>
+        <WebHeader />
+      </Suspense>
       <div className="pt-28">
         <div className="container mx-auto px-5 pt-4">
           <p className="text-center tracking-wide">

@@ -1,4 +1,4 @@
-import ProductCard from '@/components/common/ProductCard'
+import WebProductCard from '@/components/web/shared/WebProductCard'
 import { getOneCategory, getProductsByCategory } from '@/lib/dal'
 import { IWebProduct } from '@/types'
 import React, { Suspense } from 'react'
@@ -19,7 +19,7 @@ export default async function CategoryPage({
       <Suspense fallback={<div>Loading...</div>}>
         <div className="grid grid-cols-5 gap-10">
           {products.map((product: IWebProduct) => (
-            <ProductCard key={product.id} product={product} />
+            <WebProductCard key={product.id} product={product} />
           ))}
         </div>
       </Suspense>

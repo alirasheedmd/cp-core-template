@@ -6,6 +6,7 @@ export const routes = {
   },
   contact: '/contact',
   collections: '/collections',
+  cart: '/cart',
 
   // Admin routes
   admin: {

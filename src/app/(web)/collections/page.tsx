@@ -1,4 +1,4 @@
-import CategoryCard from '@/components/common/CategoryCard'
+import CategoryCard from '@/components/web/shared/CategoryCard'
 import { getAllCategories } from '@/lib/dal'
 
 export default async function Collections() {

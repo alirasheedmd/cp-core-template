@@ -1,5 +1,5 @@
 import CarouselWrapper from '@/components/web/shared/CarouselWrapper'
-import ProductCard from '@/components/common/ProductCard'
+import WebProductCard from '@/components/web/shared/WebProductCard'
 import { routes } from '@/config/routes'
 import { getOneCategory, getProductsByCategory } from '@/lib/dal'
 
@@ -10,7 +10,7 @@ const FEATURED_CATEGORIES = [
   'exit-signs',
 ]
 
-export default async function FeaturedCatogories() {
+export default async function FeaturedCategories() {
   // Fetch all categories and their products in parallel
   const categoriesData = await Promise.all(
     FEATURED_CATEGORIES.map(async (slug) => {
@@ -27,13 +27,13 @@ export default async function FeaturedCatogories() {
   )
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-0 md:space-y-8">
       {categoriesData.map((category) => (
         <CarouselWrapper
           key={category.slug}
           title={category.name}
           data={category.products}
-          cardComponent={(product) => <ProductCard product={product} />}
+          cardComponent={(product) => <WebProductCard product={product} />}
           viewMoreLink={routes.dynamicCategory.category(category.slug)}
         />
       ))}

@@ -3,28 +3,23 @@
 // import { CheckoutButton } from '@/components/web/CheckoutButton'
 // import ProductCarousel from '@/components/web/homepage/ProductCarousel'
 
-import Categories from '@/components/web/homepage/Categories'
-import FeaturedCatogories from '@/components/web/homepage/FeaturedCatogories'
-import CarouselWrapperSkeleton from '@/components/web/shared/CarouselWrapperSkeleton'
 import { Suspense } from 'react'
+import Categories from '@/components/web/homepage/Categories'
+import FeaturedCategories from '@/components/web/homepage/FeaturedCategories'
+import CarouselWrapperSkeleton from '@/components/web/shared/CarouselWrapperSkeleton'
+import HomeCategorySkeleton from '@/components/web/homepage/HomeCategorySkeleton'
 
 export default async function Home() {
   // const search = await getProductSearchResults('Practical')
   // console.log(search)
   return (
     <main>
-      <Suspense
-        fallback={
-          <div className="container mx-auto my-10">
-            Loading all categories...
-          </div>
-        }
-      >
+      <Suspense fallback={<HomeCategorySkeleton />}>
         <Categories />
       </Suspense>
 
       <Suspense fallback={<CarouselWrapperSkeleton />}>
-        <FeaturedCatogories />
+        <FeaturedCategories />
       </Suspense>
 
       {/* <FeaturedCategory

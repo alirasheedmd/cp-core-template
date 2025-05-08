@@ -52,16 +52,15 @@ export default function WebFooter() {
         <div className="text-Red flex flex-wrap items-center justify-center gap-2 text-sm">
           <p className="text-center">&copy; {year} Safety Vision</p>
           {footerLinks.map((link) => (
-            <>
+            <div key={link.label} className="flex items-center">
               <LuDot />
               <Link
                 href={link.href}
-                key={link.label}
                 className="underline-offset-2 hover:underline"
               >
                 {link.label}
               </Link>
-            </>
+            </div>
           ))}
         </div>
 
