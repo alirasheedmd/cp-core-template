@@ -11,6 +11,7 @@ import {
   images,
   productCategories,
   categories,
+  User,
 } from '@/db/schema'
 
 // Current user
@@ -43,8 +44,10 @@ export const getCurrentUser = cache(async () => {
 // Get user by email
 export const getUserByEmail = cache(async (email: string) => {
   try {
-    const result = await db.select().from(users).where(eq(users.email, email))
-    return result[0] || null
+    const result = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.email, email),
+    })
+    return result || null
   } catch (error) {
     console.error('Error getting user by email:', error)
     return null
@@ -54,8 +57,10 @@ export const getUserByEmail = cache(async (email: string) => {
 // Get user by ID (non-cached version for use in middleware and server actions)
 export async function getUserById(userId: string) {
   try {
-    const result = await db.select().from(users).where(eq(users.id, userId))
-    return result[0] || null
+    const result = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, userId),
+    })
+    return result || null
   } catch (error) {
     console.error('Error getting user by ID:', error)
     return null
