@@ -6,7 +6,7 @@ import CategoryCard from '@/components/common/CategoryCard'
 
 export default async function Categories() {
   const categories = await getAllCategories()
-  // console.log('categories', categories)
+
   return (
     <section className="my-10">
       {/* Heading */}
@@ -22,7 +22,7 @@ export default async function Categories() {
       </div>
 
       {/* Category Card */}
-      <div className="grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-10 lg:grid-cols-4 xl:grid-cols-6">
         {categories.slice(0, 6).map((category) => (
           <CategoryCard key={category.id} category={category} />
         ))}

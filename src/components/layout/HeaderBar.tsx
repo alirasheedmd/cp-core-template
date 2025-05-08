@@ -28,14 +28,8 @@ export default function HeaderBar() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
 
-      if (currentScrollY > lastScrollY) {
-        // Scrolling down
-        setIsVisible(false)
-      } else {
-        // Scrolling up
-        setIsVisible(true)
-      }
-
+      // Only show header when at the top of the page
+      setIsVisible(currentScrollY === 0)
       setLastScrollY(currentScrollY)
     }
 
@@ -49,12 +43,12 @@ export default function HeaderBar() {
   return (
     <div
       className={`bg-Red relative w-full overflow-hidden transition-all duration-300 ease-in-out ${
-        isVisible ? 'h-[40px] opacity-100' : 'h-0 opacity-0'
+        isVisible ? 'h-[30px] opacity-100' : 'h-0 opacity-0'
       }`}
     >
-      <div className="container mx-auto py-2">
-        <p className="text-center text-sm font-semibold tracking-wider text-white">
-          Free shipping in Riyadh, Dammam, Al-Khobar on all orders above 200 SAR
+      <div className="flex h-full items-center justify-center">
+        <p className="text-center text-xs font-semibold tracking-wider text-white lg:text-sm">
+          Free shipping in Riyadh, Dammam, Al-Khobar
         </p>
         {/* <Swiper
           modules={[Navigation, EffectFade]}

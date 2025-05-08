@@ -24,13 +24,16 @@ const staticLinks = [
 export default function NavLinks({ className, categories }: NavLinksProps) {
   return (
     <div
-      className={cn('flex flex-col gap-x-3 lg:flex-row xl:gap-x-5', className)}
+      className={cn(
+        'flex flex-col gap-y-1 lg:flex-row lg:gap-x-3 xl:gap-x-5',
+        className,
+      )}
     >
-      {categories.slice(0, 6).map((category) => (
+      {categories.map((category) => (
         <Link
           key={category.id}
           href={routes.dynamicCategory.category(category.slug)}
-          className="text-Red font-medium underline-offset-2 hover:underline"
+          className="text-Red py-2 font-medium underline-offset-2 hover:underline lg:py-0"
         >
           {category.name}
         </Link>
@@ -39,7 +42,7 @@ export default function NavLinks({ className, categories }: NavLinksProps) {
         <Link
           key={link.id}
           href={link.href}
-          className="text-Red font-medium underline-offset-2 hover:underline"
+          className="text-Red py-2 font-medium underline-offset-2 hover:underline lg:py-0"
         >
           {link.name}
         </Link>

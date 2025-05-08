@@ -1,3 +1,4 @@
+import WebFooter from '@/components/layout/WebFooter'
 import WebHeader from '@/components/layout/WebHeader'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -10,7 +11,7 @@ export default function RootLayout({
   return (
     <div>
       <WebHeader />
-      <div className="pt-32">
+      <div className="pt-28">
         <div className="container mx-auto px-5 pt-4">
           <p className="text-center tracking-wide">
             <span className="text-Red font-medium">Safety Vision</span> provides
@@ -30,6 +31,7 @@ export default function RootLayout({
         </div>
         <div className="container mx-auto px-3 pb-5">{children}</div>
       </div>
+      <WebFooter />
     </div>
   )
 }

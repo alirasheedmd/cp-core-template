@@ -13,8 +13,8 @@ export default function CategoryCard({ category }: { category: IWebCategory }) {
       key={id}
       className="mx-auto h-full min-w-full"
     >
-      <Card className="group flex h-full flex-1 flex-col justify-between border-2 border-black p-5 transition-all hover:shadow-xl">
-        <div className="relative mx-auto h-40 w-40 overflow-hidden rounded-lg">
+      <Card className="group flex h-full flex-1 flex-col justify-between border-2 border-black p-3 transition-all hover:shadow-xl md:p-5">
+        <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-lg md:h-40 md:w-40">
           <Image
             src={image || '/default-image.png'}
             alt={name}
@@ -24,10 +24,10 @@ export default function CategoryCard({ category }: { category: IWebCategory }) {
         </div>
 
         <div className="flex items-center justify-center gap-x-1">
-          <p className="group-hover:text-muted-foreground text-center text-xl font-semibold">
+          <p className="group-hover:text-muted-foreground text-center text-base font-semibold md:text-xl">
             {name}
           </p>
-          <IoArrowForward className="mt-1.5 shrink-0 text-xl" />
+          <IoArrowForward className="mt-1.5 shrink-0 text-base md:text-xl" />
         </div>
       </Card>
     </Link>

@@ -21,4 +21,13 @@ export const routes = {
     // Helper functions for dynamic routes
     orderDetails: (orderId: string) => `/admin/orders/${orderId}`,
   },
+
+  // Footer
+  footer: {
+    refundPolicy: '/refund-policy',
+    privacyPolicy: '/privacy-policy',
+    termsOfService: '/terms-of-service',
+    shippingPolicy: '/shipping-policy',
+    contactInformation: '/contact-information',
+  },
 }

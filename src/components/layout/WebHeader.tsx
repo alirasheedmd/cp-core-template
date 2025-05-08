@@ -8,6 +8,8 @@ import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
 import { getAllCategories } from '@/lib/dal'
 export default async function WebHeader() {
   const categories = await getAllCategories()
+  const firstSixCategories = categories.slice(0, 6)
+
   return (
     <div className="fixed z-100 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
@@ -16,10 +18,10 @@ export default async function WebHeader() {
         <WebHamburgerMenu categories={categories} />
 
         <Link href={routes.home}>
-          <Image src={'/logo.svg'} alt="logo" width={120} height={120} />
+          <Image src={'/logo.svg'} alt="logo" width={100} height={100} />
         </Link>
 
-        <NavLinks className="hidden lg:flex" categories={categories} />
+        <NavLinks className="hidden lg:flex" categories={firstSixCategories} />
 
         {/* Icons */}
         <HeaderIcons />
