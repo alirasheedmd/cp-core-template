@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { verifyEmailOTP, resendVerificationOTP } from '@/app/actions/web/auth/email-verification'
+import { getUserByEmail } from '@/lib/dal'
+import { createSession } from '@/lib/auth'
 
 export function VerificationForm() {
   const { userEmail, closeAuth } = useAuth()
@@ -10,7 +12,7 @@ export function VerificationForm() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [countdown, setCountdown] = useState(0)
-  
+
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => {
@@ -22,19 +24,25 @@ export function VerificationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!otp) {
       setError('Please enter the verification code')
       return
     }
-    
+
     setIsLoading(true)
     setError('')
-    
+
     try {
       const result = await verifyEmailOTP(userEmail, otp)
-      
+
       if (result.success) {
+        // Find user by email
+        const user = await getUserByEmail(userEmail)
+
+        // Create session (isAdmin is false for regular customers)
+        await createSession(user?.id as string, user?.isAdmin || false)
+
         // Close the modal and refresh to update auth state
         closeAuth()
         window.location.reload()
@@ -50,13 +58,13 @@ export function VerificationForm() {
 
   const handleResendCode = async () => {
     if (countdown > 0) return
-    
+
     setIsLoading(true)
     setError('')
-    
+
     try {
       const result = await resendVerificationOTP(userEmail)
-      
+
       if (result.success) {
         setCountdown(60) // Start 60 second countdown
       } else {

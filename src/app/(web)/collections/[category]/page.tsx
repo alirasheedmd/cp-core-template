@@ -1,3 +1,4 @@
+'use cache'
 import WebProductCard from '@/components/web/shared/WebProductCard'
 import { getOneCategory, getProductsByCategory } from '@/lib/dal'
 import { IWebProduct } from '@/types'

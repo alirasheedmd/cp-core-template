@@ -15,6 +15,7 @@ import {
 } from '@/lib/auth'
 import { sendVerificationEmail } from '@/lib/email'
 import { eq } from 'drizzle-orm'
+import { signupSchema } from '@/schemas/auth.schema'
 
 
 interface AuthState {
