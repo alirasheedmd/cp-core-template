@@ -5,8 +5,6 @@ import CarouselWrapperSkeleton from '@/components/web/shared/CarouselWrapperSkel
 import HomeCategorySkeleton from '@/components/web/homepage/HomeCategorySkeleton'
 
 export default async function Home() {
-  const products = await getAllProducts()
-
   return (
     <main>
       <Suspense fallback={<HomeCategorySkeleton />}>
