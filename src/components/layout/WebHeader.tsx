@@ -11,7 +11,7 @@ export default async function WebHeader() {
   const firstSixCategories = categories.slice(0, 6)
 
   return (
-    <div className="fixed w-full border-b border-b-gray-200 bg-white shadow-sm">
+    <div className="fixed z-100 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
       {/* Header */}
       <div className="container mx-auto flex items-center justify-between gap-x-5 px-3 py-2">
