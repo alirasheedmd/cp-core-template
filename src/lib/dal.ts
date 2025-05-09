@@ -240,23 +240,19 @@ export async function getAllCategories() {
 }
 
 export async function getOneCategory(categorySlug: string) {
-  const category = await db
-    .select()
-    .from(categories)
-    .where(eq(categories.slug, categorySlug))
-  const categoryOne = category[0]
+  const category = await db.query.categories.findFirst({
+    where: (categories, { eq }) => eq(categories.slug, categorySlug),
+  })
 
-  return categoryOne
+  return category
 }
 
 export async function getOneProduct(productSlug: string) {
-  const product = await db
-    .select()
-    .from(products)
-    .where(eq(products.slug, productSlug))
-  const productOne = product[0]
+  const product = await db.query.products.findFirst({
+    where: (products, { eq }) => eq(products.slug, productSlug),
+  })
 
-  return productOne
+  return product
 }
 
 export async function getProductSearchResults(searchText: string) {
