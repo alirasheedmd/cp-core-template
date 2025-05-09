@@ -48,7 +48,7 @@ export default function WebFooter() {
 
       {/* Footer Links */}
       <Separator className="my-5" />
-      <div className="container mx-auto px-2">
+      <div className="mx-auto max-w-[1500px] px-2">
         <div className="text-Red flex flex-wrap items-center justify-center gap-2 text-sm">
           <p className="text-center">&copy; {year} Safety Vision</p>
           {footerLinks.map((link) => (
@@ -65,7 +65,7 @@ export default function WebFooter() {
         </div>
 
         {/* CR - VAT */}
-        <div className="mt-5 flex items-center justify-center gap-x-10">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10">
           <p className="text-Red">
             <span className="mr-2 font-semibold">CR</span>1113003154
           </p>

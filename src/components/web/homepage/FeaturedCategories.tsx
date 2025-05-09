@@ -19,8 +19,8 @@ export default async function FeaturedCategories() {
         getProductsByCategory(slug),
       ])
       return {
-        name: category.name,
-        slug: category.slug,
+        name: category?.name,
+        slug: category?.slug,
         products,
       }
     }),
@@ -30,11 +30,11 @@ export default async function FeaturedCategories() {
     <div className="space-y-0 md:space-y-8">
       {categoriesData.map((category) => (
         <CarouselWrapper
-          key={category.slug}
-          title={category.name}
-          data={category.products}
+          key={category?.slug}
+          title={category?.name}
+          data={category?.products}
           cardComponent={(product) => <WebProductCard product={product} />}
-          viewMoreLink={routes.dynamicCategory.category(category.slug)}
+          viewMoreLink={routes.dynamicCategory.category(category?.slug)}
         />
       ))}
     </div>

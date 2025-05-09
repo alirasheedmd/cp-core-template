@@ -12,6 +12,8 @@ import { useState, useEffect } from 'react'
 import NavLinks from '@/components/layout/NavLinks'
 import { IWebCategory } from '@/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import UserIcon from '@/components/layout/UserIcon'
+import { Separator } from '@/components/ui/separator'
 
 export default function WebHamburgerMenu({
   categories,
@@ -44,8 +46,8 @@ export default function WebHamburgerMenu({
         side="left"
         className={`pb-3 ${
           isHeaderBarVisible
-            ? 'top-[106px] h-[calc(100vh-106px)]'
-            : 'top-[75px] h-[calc(100vh-75px)]'
+            ? 'top-[93px] h-[calc(100vh-93px)]'
+            : 'top-[65px] h-[calc(100vh-65px)]'
         }`}
       >
         <ScrollArea>
@@ -55,6 +57,8 @@ export default function WebHamburgerMenu({
           <div className="-mt-6 h-full px-5">
             <NavLinks categories={categories} />
           </div>
+          <Separator className="my-4" />
+          <UserIcon className="mx-5 md:hidden" />
         </ScrollArea>
       </SheetContent>
     </Sheet>

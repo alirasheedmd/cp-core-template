@@ -14,11 +14,14 @@ export default async function WebHeader() {
     <div className="fixed z-100 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
       {/* Header */}
-      <div className="container mx-auto flex items-center justify-between gap-x-5 px-3 py-2">
+      <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-x-5 px-3 py-2 md:px-5">
         <WebHamburgerMenu categories={categories} />
 
-        <Link href={routes.home}>
-          <Image src={'/logo.svg'} alt="logo" width={100} height={100} />
+        <Link
+          href={routes.home}
+          className="relative -mr-8 h-12 w-24 md:h-14 md:w-28 lg:mr-0"
+        >
+          <Image src={'/logo.svg'} alt="logo" fill className="shrink-0" />
         </Link>
 
         <NavLinks className="hidden lg:flex" categories={firstSixCategories} />
