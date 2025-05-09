@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa'
-import AdminMenu from './AdminMenu'
 import { useState, useRef, useEffect } from 'react'
 import { logout } from '@/app/actions/admin/auth/adminAuth'
 import { routes } from '@/config/routes'
+import AdminHamburgerMenu from '@/components/layout/AdminHamburgerMenu'
 
 export default function AdminHeader() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -44,7 +44,7 @@ export default function AdminHeader() {
           />
         </Link>
         {/* Hamburger */}
-        <AdminMenu />
+        <AdminHamburgerMenu />
 
         {/* Icons */}
         <div className="flex gap-x-4">

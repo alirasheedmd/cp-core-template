@@ -98,3 +98,20 @@ export interface IOrder {
   customerDetails: IOrderCustomer
   items: IOrderItem[]
 }
+
+/////////// Web Interfaces ///////////
+export interface IWebProduct {
+  id: string
+  title: string
+  description: string | null
+  categories: string[]
+  price: string
+  image: string | null
+}
+
+export interface IWebCategory {
+  id: string
+  name: string
+  slug: string
+  image: string | null
+}

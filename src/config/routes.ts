@@ -1,14 +1,12 @@
 export const routes = {
   // Public routes
   home: '/',
-  fireFighting: '/fire-fighting',
-  fireAlarm: '/fire-alarm',
-  fireExitDoors: '/fire-exit-doors',
-  safetyEquipment: '/safety-equipment',
-  lifeSafety: '/life-safety',
-  trafficSafety: '/traffic-safety',
-  catalog: '/catalog',
+  dynamicCategory: {
+    category: (categorySlug: string) => `/collections/${categorySlug}`,
+  },
   contact: '/contact',
+  collections: '/collections',
+  cart: '/cart',
 
   // Admin routes
   admin: {
@@ -23,5 +21,14 @@ export const routes = {
     addProduct: '/admin/products/add',
     // Helper functions for dynamic routes
     orderDetails: (orderId: string) => `/admin/orders/${orderId}`,
+  },
+
+  // Footer
+  footer: {
+    refundPolicy: '/refund-policy',
+    privacyPolicy: '/privacy-policy',
+    termsOfService: '/terms-of-service',
+    shippingPolicy: '/shipping-policy',
+    contactInformation: '/contact-information',
   },
 }

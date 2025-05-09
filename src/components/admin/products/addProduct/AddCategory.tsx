@@ -2,7 +2,6 @@
 
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -14,20 +13,7 @@ import { getAllSubcategories } from '@/utils/categories'
 import { dummyCategories } from '@/data/dummyCategories'
 import { MultiSelect, Option } from '@/components/common/MultiSelect'
 import { ActionButtons } from '@/components/common/ActionButtons'
-
-const categorySchema = z.object({
-  name: z.string().min(1, 'Category name is required'),
-  images: z
-    .array(
-      z.object({
-        src: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .min(1, 'At least one image is required'),
-  visibility: z.boolean().default(true),
-  subcategories: z.array(z.string()).default([]),
-})
+import { categorySchema } from '@/schemas/category.schema'
 
 type CategoryFormValues = {
   name: string

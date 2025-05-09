@@ -27,27 +27,9 @@ import {
   updateOrderShippingInfo,
   type UpdateOrderShippingInfoState,
 } from '@/app/actions/admin/main/order'
+import { editShippingSchema } from '@/schemas/update-user.schema'
 
-const shippingSchema = z.object({
-  fullName: z.string().min(1, 'Full name is required'),
-  phoneNumber: z
-    .string()
-    .min(1, 'Phone number is required')
-    .transform((val) => val.replace(/[\s\-\(\)]/g, '')) // Remove spaces, dashes, and parentheses
-    .pipe(
-      z
-        .string()
-        .regex(/^\+?[0-9]+$/, 'Must contain only numbers and optional + prefix')
-        .min(8, 'Phone number must be at least 8 digits')
-        .max(20, 'Phone number must not exceed 20 digits'),
-    ),
-  street: z.string().min(1, 'Street address is required'),
-  apartment: z.string().optional(),
-  city: z.string().min(1, 'City is required'),
-  postalCode: z.string().min(1, 'Postal code is required'),
-})
-
-type EditShippingInfoFormValues = z.infer<typeof shippingSchema>
+type EditShippingInfoFormValues = z.infer<typeof editShippingSchema>
 
 export default function EditShippingAddress({
   userAddress,
@@ -67,7 +49,7 @@ export default function EditShippingAddress({
   const order = dummyOrders.find((order) => order.orderId === orderId)
 
   const methods = useForm<EditShippingInfoFormValues>({
-    resolver: zodResolver(shippingSchema),
+    resolver: zodResolver(editShippingSchema),
     defaultValues: {
       fullName: order?.customerDetails.fullName || userAddress?.fullName || '',
       phoneNumber:

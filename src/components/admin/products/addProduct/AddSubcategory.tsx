@@ -2,7 +2,6 @@
 
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -29,20 +28,7 @@ import {
 import { useState, useRef, useEffect } from 'react'
 import { dummyCategories } from '@/data/dummyCategories'
 import { ActionButtons } from '@/components/common/ActionButtons'
-
-const categorySchema = z.object({
-  name: z.string().min(1, 'Category name is required'),
-  images: z
-    .array(
-      z.object({
-        src: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .min(1, 'At least one image is required'),
-  visibility: z.boolean().default(true),
-  parentCategory: z.string().min(1, 'Parent category is required'),
-})
+import { subCategorySchema } from '@/schemas/category.schema'
 
 type SubcategoryFormValues = {
   name: string
@@ -78,7 +64,7 @@ export default function AddSubcategory({
   }, [])
 
   const methods = useForm<SubcategoryFormValues>({
-    resolver: zodResolver(categorySchema) as Resolver<SubcategoryFormValues>,
+    resolver: zodResolver(subCategorySchema) as Resolver<SubcategoryFormValues>,
     defaultValues: {
       name: '',
       images: [],

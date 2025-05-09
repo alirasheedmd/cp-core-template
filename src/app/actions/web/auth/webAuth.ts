@@ -1,5 +1,6 @@
 'use server'
 
+
 import { z } from 'zod'
 import { db } from '@/db'
 import { users } from '@/db/schema'
@@ -15,18 +16,6 @@ import {
 import { sendVerificationEmail } from '@/lib/email'
 import { eq } from 'drizzle-orm'
 
-// Form validation schemas
-const signinSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
-})
-
-const signupSchema = z.object({
-  firstName: z.string().nonempty('Please Enter First Name'),
-  lastName: z.string(),
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-})
 
 interface AuthState {
   error: string
@@ -162,6 +151,8 @@ export async function customerSignUp(formData: FormData): Promise<AuthState> {
 export async function customerSignOut() {
   await deleteSession()
 }
+
+
 
 export const changePassword = async (email: string, password: string) => {
   try {

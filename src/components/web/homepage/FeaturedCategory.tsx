@@ -1,75 +1,47 @@
-'use client'
-
-import React, { useState } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { A11y } from 'swiper/modules'
-import 'swiper/css'
-import ProductCard from './ProductCard'
+import { IWebProduct } from '@/types'
+import ProductCard from '../shared/WebProductCard'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Card } from '@/components/ui/card'
+import Link from 'next/link'
+import { routes } from '@/config/routes'
 
 export default function FeaturedCategory({
-  category,
+  categoryName,
   products,
+  categorySlug,
 }: {
-  category: string
-  products: any[]
+  categoryName: string
+  products: IWebProduct[]
+  categorySlug: string
 }) {
-  const [currentSlide, setCurrentSlide] = useState(1)
-  const [totalSlides, setTotalSlides] = useState(products.length)
-  const [swiper, setSwiper] = useState(null)
-
+  const remainingProducts = products.length - 5
   return (
-    <section className="container mx-auto py-12">
-      <div className="mx-auto max-w-7xl">
-        <h2 className="mb-8 text-3xl font-bold text-gray-900">
-          Featured {category}
-        </h2>
+    <section className="py-12">
+      <h2 className="mb-8 text-3xl font-bold">{categoryName}</h2>
 
-        <Swiper
-          modules={[A11y]}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            1024: { slidesPerView: 5 },
-          }}
-          className="mySwiper flex items-stretch"
-          onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex + 1)}
-          onSwiper={(swiper) => {
-            setSwiper(swiper)
-            setTotalSlides(swiper.slides.length)
-          }}
-        >
-          {products.map((product) => (
-            <SwiperSlide
-              key={product._id}
-              className="flex h-auto min-h-0 flex-col py-4"
-            >
+      <ScrollArea className="relative">
+        <div className="flex gap-5 pb-4">
+          {products.slice(0, 5).map((product) => (
+            <div key={product?.id} className="min-w-1/5">
               <ProductCard product={product} />
-            </SwiperSlide>
+            </div>
           ))}
-        </Swiper>
-
-        <div className="mt-4 flex items-center justify-center space-x-2 text-lg font-medium text-gray-700">
-          <button
-            onClick={() => swiper?.slidePrev()}
-            className="rounded px-2 py-1 transition-colors hover:bg-gray-200"
-            aria-label="Previous slide"
-          >
-            &lt;
-          </button>
-          <span>
-            {currentSlide}/{totalSlides}
-          </span>
-          <button
-            onClick={() => swiper?.slideNext()}
-            className="rounded px-2 py-1 transition-colors hover:bg-gray-200"
-            aria-label="Next slide"
-          >
-            &gt;
-          </button>
+          {/* View More Products */}
+          {remainingProducts > 0 && (
+            <Card className="group min-h-full min-w-1/5 border-2 border-black p-5 transition-all hover:shadow-lg">
+              <Link
+                href={routes.dynamicCategory.category(categorySlug)}
+                className="flex h-full items-center justify-center"
+              >
+                <p className="text-Blue text-sm font-medium underline-offset-2 group-hover:underline">
+                  View More Products ({remainingProducts})
+                </p>
+              </Link>
+            </Card>
+          )}
+          <ScrollBar orientation="horizontal" hidden />
         </div>
-      </div>
+      </ScrollArea>
     </section>
   )
 }

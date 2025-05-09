@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { adminTabs } from '@/data/tabs'
 
-export default function HamburgerMenu() {
+export default function AdminHamburgerMenu() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
