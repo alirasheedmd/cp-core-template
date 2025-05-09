@@ -1,5 +1,9 @@
 'use server'
 
+
+import { z } from 'zod'
+import { db } from '@/db'
+import { users } from '@/db/schema'
 import { getUserByEmail } from '@/lib/dal'
 import {
   verifyPassword,
@@ -7,9 +11,11 @@ import {
   createUser,
   storeVerificationOTP,
   deleteSession,
+  hashPassword,
 } from '@/lib/auth'
 import { sendVerificationEmail } from '@/lib/email'
-import { signinSchema, signupSchema } from '@/schemas/auth.schema'
+import { eq } from 'drizzle-orm'
+
 
 interface AuthState {
   error: string
@@ -144,4 +150,34 @@ export async function customerSignUp(formData: FormData): Promise<AuthState> {
 
 export async function customerSignOut() {
   await deleteSession()
+}
+
+
+
+export const changePassword = async (email: string, password: string) => {
+  try {
+    const user = await getUserByEmail(email)
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    // Hash the password
+    const hashedPassword = await hashPassword(password)
+
+    await db
+      .update(users)
+      .set({
+        password: hashedPassword,
+      })
+      .where(eq(users.id, user.id))
+
+    return { success: true, user }
+  } catch (error) {
+    console.error('Error verifying email:', error)
+    return {
+      success: false,
+      error: 'An unexpected error occurred',
+    }
+  }
 }

@@ -7,6 +7,7 @@ import { adminSignIn } from '../../../actions/admin/auth/adminAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Lock, Mail, LogIn } from 'lucide-react'
+import Link from 'next/link'
 
 // Define types for our state
 interface SignInState {
@@ -99,6 +100,14 @@ export default function AdminSignInPage() {
                 className="pl-10"
               />
             </div>
+          </div>
+          <div>
+            <Link
+              className="hover:to-blue-600 hover:underline"
+              href={'/admin/reset-password'}
+            >
+              Forget Password
+            </Link>
           </div>
 
           <SignInButton />
