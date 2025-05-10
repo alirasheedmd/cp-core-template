@@ -3,6 +3,7 @@ import { IoArrowForward } from 'react-icons/io5'
 import { getAllCategories } from '@/lib/dal'
 import { routes } from '@/config/routes'
 import CategoryCard from '@/components/web/shared/CategoryCard'
+import WebContainer from '@/components/web/shared/WebContainer'
 
 export default async function Categories() {
   // Delay to test skeleton
@@ -10,7 +11,7 @@ export default async function Categories() {
   const categories = await getAllCategories()
 
   return (
-    <section className="mx-auto my-10 max-w-[1500px] px-3 md:px-5">
+    <WebContainer className="my-10">
       {/* Heading */}
       <div className="mb-8 flex items-end justify-between">
         <p className="text-2xl font-bold md:text-3xl">Categories</p>
@@ -29,6 +30,6 @@ export default async function Categories() {
           <CategoryCard key={category.id} category={category} />
         ))}
       </div>
-    </section>
+    </WebContainer>
   )
 }

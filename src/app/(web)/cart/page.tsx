@@ -3,6 +3,11 @@
 import { useCartStore } from '@/stores/useCartStore'
 import Image from 'next/image'
 import { Minus, Plus, Trash2 } from 'lucide-react'
+import { BsCartX } from 'react-icons/bs'
+import WebContainer from '@/components/web/shared/WebContainer'
+import CurrencySymbol from '@/components/ui/CurrencySymbol'
+import Link from 'next/link'
+import { routes } from '@/config/routes'
 
 export default function CartPage() {
   const {
@@ -17,18 +22,34 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-[1500px] px-4 py-8">
-        <h1 className="mb-4 text-2xl font-bold">Your Cart</h1>
-        <div className="py-8 text-center">
-          <p className="text-gray-500">Your cart is empty</p>
+      <WebContainer className="py-8 lg:max-w-[64rem]">
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-y-6 py-12 text-center">
+          <div className="relative">
+            <BsCartX className="h-24 w-24 text-gray-400 transition-all duration-300 hover:scale-110" />
+            <div className="absolute -top-2 -right-2 h-4 w-4 animate-ping rounded-full bg-red-500/30" />
+          </div>
+          <div className="space-y-3">
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Your cart is empty
+            </h2>
+            <p className="text-gray-500">
+              Looks like you haven&apos;t added anything yet
+            </p>
+          </div>
+          <Link
+            href={routes.collections}
+            className="bg-Blue hover:bg-Blue/90 mt-2 rounded-full px-8 py-3 font-medium text-white transition-all hover:shadow-lg"
+          >
+            Start Shopping
+          </Link>
         </div>
-      </div>
+      </WebContainer>
     )
   }
 
   return (
-    <div className="mx-auto max-w-[1500px] px-4 py-8">
-      <h1 className="mb-4 text-2xl font-bold">Your Cart</h1>
+    <WebContainer>
+      <h1 className="mt-9 mb-4 text-2xl font-bold">Your Cart</h1>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Cart Items */}
@@ -52,7 +73,10 @@ export default function CartPage() {
 
                 <div className="flex-1">
                   <h3 className="font-medium">{item.name}</h3>
-                  <p className="text-gray-600">${item.price.toFixed(2)}</p>
+                  <CurrencySymbol
+                    amount={item.price}
+                    className="text-gray-600"
+                  />
 
                   <div className="mt-2 flex items-center gap-2">
                     <button
@@ -71,10 +95,11 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <p className="font-medium">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </p>
+                <div className="space-x-4 text-right">
+                  <CurrencySymbol
+                    amount={item.price * item.quantity}
+                    className="font-medium"
+                  />
                   <button
                     onClick={() => removeItem(item.id)}
                     className="mt-2 text-red-500 hover:text-red-600"
@@ -102,26 +127,26 @@ export default function CartPage() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${getSubtotal().toFixed(2)}</span>
+                <CurrencySymbol amount={getSubtotal()} />
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>${shippingFee.toFixed(2)}</span>
+                <CurrencySymbol amount={shippingFee} />
               </div>
               <div className="mt-2 border-t pt-2">
                 <div className="flex justify-between font-semibold">
                   <span>Total</span>
-                  <span>${getTotal().toFixed(2)}</span>
+                  <CurrencySymbol amount={getTotal()} />
                 </div>
               </div>
             </div>
 
-            <button className="bg-primary hover:bg-primary/90 mt-4 w-full rounded-md py-2 text-white">
+            <button className="bg-Red mt-5 w-full rounded-full py-3 text-base font-semibold text-white transition-all duration-300 hover:scale-105">
               Proceed to Checkout
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </WebContainer>
   )
 }

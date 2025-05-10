@@ -107,6 +107,7 @@ export interface IWebProduct {
   categories: string[]
   price: string
   image: string | null
+  slug?: string
 }
 
 export interface IWebCategory {

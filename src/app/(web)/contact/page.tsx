@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import WebContainer from '@/components/web/shared/WebContainer'
 
 const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -53,7 +54,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl max-w-[1500px] px-4 py-8">
+    <WebContainer className="max-w-2xl py-8">
       <h1 className="mb-8 text-center text-3xl font-bold">Contact Us</h1>
       <p className="mb-8 text-center text-gray-600">
         Have a question or feedback? We&apos;d love to hear from you. Fill out
@@ -141,6 +142,6 @@ export default function ContactPage() {
           <p className="text-gray-600">+1 (555) 123-4567</p>
         </div>
       </div>
-    </div>
+    </WebContainer>
   )
 }

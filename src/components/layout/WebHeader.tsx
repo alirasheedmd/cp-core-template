@@ -3,7 +3,10 @@ import HeaderBar from '@/components/layout/HeaderBar'
 import HeaderIcons from '@/components/layout/HeaderIcons'
 import Image from 'next/image'
 import Link from 'next/link'
-import NavLinks from '@/components/layout/NavLinks'
+import { Suspense } from 'react'
+import WebContainer from '@/components/web/shared/WebContainer'
+import NavLinksWithData from '@/components/layout/NavLinksWithData'
+import NavLinksSkeleton from '@/components/layout/NavLinksSkeleton'
 import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
 import { getAllCategories, getCurrentUser } from '@/lib/dal'
 import { User } from '@/db/schema'
@@ -13,12 +16,13 @@ export default async function WebHeader() {
 
   const user = await getCurrentUser()
 
+export default function WebHeader() {
   return (
     <div className="fixed z-10 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
       {/* Header */}
-      <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-x-5 px-3 py-2 md:px-5">
-        <WebHamburgerMenu categories={categories} />
+      <WebContainer className="flex items-center justify-between gap-x-5 py-2">
+        <WebHamburgerMenu />
 
         <Link
           href={routes.home}
@@ -27,11 +31,15 @@ export default async function WebHeader() {
           <Image src={'/logo.svg'} alt="logo" fill className="shrink-0" />
         </Link>
 
-        <NavLinks className="hidden lg:flex" categories={firstSixCategories} />
+        <Suspense fallback={<NavLinksSkeleton className="hidden lg:flex" />}>
+          <NavLinksWithData className="hidden lg:flex" />
+        </Suspense>
 
         {/* Icons */}
         <HeaderIcons user={user as User} />
       </div>
+        <HeaderIcons />
+      </WebContainer>
     </div>
   )
 }
