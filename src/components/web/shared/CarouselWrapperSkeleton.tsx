@@ -1,34 +1,30 @@
-import { Skeleton } from '@/components/ui/skeleton'
 import { ProductCardSkeleton } from '@/components/web/shared/ProductCardSkeleton'
 
 export default function CarouselWrapperSkeleton() {
   return (
-    <div className="my-16 space-y-8">
+    <div className="space-y-0 md:space-y-8">
       {[1, 2, 3, 4].map((categoryIndex) => (
-        <div key={categoryIndex} className="space-y-4">
+        <section key={categoryIndex} className="overflow-hidden py-4 md:py-10">
           {/* Category Title */}
-          <div className="mb-8 flex items-center justify-between">
-            <Skeleton className="h-8 w-48" />
+          <div className="mx-auto mb-4 max-w-[1500px] px-3 md:mb-8 md:px-5">
+            <div className="h-8 w-64 md:h-10 md:w-80">
+              <div className="h-full w-full animate-pulse rounded-md bg-gray-100" />
+            </div>
           </div>
 
-          {/* Products Grid */}
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {/* Small screens: 2 cards */}
-            <ProductCardSkeleton className="md:hidden" />
-            <ProductCardSkeleton className="md:hidden" />
-
-            {/* Medium screens: 3 cards */}
-            <ProductCardSkeleton className="hidden md:flex lg:hidden" />
-            <ProductCardSkeleton className="hidden md:flex lg:hidden" />
-            <ProductCardSkeleton className="hidden md:flex lg:hidden" />
-
-            {/* Large screens: 4 cards */}
-            <ProductCardSkeleton className="hidden lg:flex" />
-            <ProductCardSkeleton className="hidden lg:flex" />
-            <ProductCardSkeleton className="hidden lg:flex" />
-            <ProductCardSkeleton className="hidden lg:flex" />
+          <div className="mx-auto max-w-[1500px]">
+            <div className="relative -mx-3 overflow-x-auto pb-3 pl-6 [-ms-overflow-style:none] [scrollbar-width:none] md:-mx-5 md:pl-10 xl:pl-9 [&::-webkit-scrollbar]:hidden">
+              <div className="flex gap-3 pb-4 md:gap-5">
+                {[...Array(5)].map((_, index) => (
+                  <div key={index} className="w-45 flex-shrink-0 md:w-57">
+                    <ProductCardSkeleton />
+                  </div>
+                ))}
+                <div className="w-3 flex-shrink-0 md:w-3" />
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       ))}
     </div>
   )
