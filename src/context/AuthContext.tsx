@@ -204,6 +204,13 @@ function SignInForm() {
           required
         />
       </div>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition disabled:opacity-50"
+      >
+        {isLoading ? 'Signing in...' : 'Sign In'}
+      </button>
       <div>
         <button
           onClick={() => setMode('forgot-password')}
@@ -212,13 +219,6 @@ function SignInForm() {
           Forget Password?
         </button>
       </div>
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition"
-      >
-        {isLoading ? 'Signing in...' : 'Sign In'}
-      </button>
     </form>
   )
 }
@@ -343,7 +343,7 @@ function SignUpForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition"
+        className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition disabled:opacity-50"
       >
         {isLoading ? 'Creating Account...' : 'Create Account'}
       </button>

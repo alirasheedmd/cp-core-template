@@ -39,43 +39,43 @@ const ChangePasswordForm = () => {
           }
     }
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            {error && <div className="text-red-500 text-sm">{error}</div>}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && <div className="text-sm text-red-500">{error}</div>}
 
-            <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
-                    Password
-                </label>
-                <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-md border p-2"
-                    required
-                />
-            </div>
-            <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="text-sm font-medium">
-                    Confirm Password
-                </label>
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full rounded-md border p-2"
-                    required
-                />
-            </div>
-            <button
-                type="submit"
-                disabled={isLoading}
-                className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition"
-            >
-                {isLoading ? 'Changing Password...' : 'Change Password'}
-            </button>
-        </form>
+        <div className="space-y-2">
+          <label htmlFor="password" className="text-sm font-medium">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-md border p-2"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="confirmPassword" className="text-sm font-medium">
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full rounded-md border p-2"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="bg-primary hover:bg-primary-dark w-full rounded-md py-2 text-white transition disabled:opacity-50"
+        >
+          {isLoading ? 'Changing Password...' : 'Change Password'}
+        </button>
+      </form>
     )
 }
 

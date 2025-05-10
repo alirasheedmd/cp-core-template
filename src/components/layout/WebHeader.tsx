@@ -5,10 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import NavLinks from '@/components/layout/NavLinks'
 import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
-import { getAllCategories } from '@/lib/dal'
+import { getAllCategories, getCurrentUser } from '@/lib/dal'
+import { User } from '@/db/schema'
 export default async function WebHeader() {
   const categories = await getAllCategories()
   const firstSixCategories = categories.slice(0, 6)
+
+  const user = await getCurrentUser()
 
   return (
     <div className="fixed z-10 w-full border-b border-b-gray-200 bg-white shadow-sm">
@@ -27,7 +30,7 @@ export default async function WebHeader() {
         <NavLinks className="hidden lg:flex" categories={firstSixCategories} />
 
         {/* Icons */}
-        <HeaderIcons />
+        <HeaderIcons user={user as User} />
       </div>
     </div>
   )
