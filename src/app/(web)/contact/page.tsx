@@ -53,7 +53,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-8">
+    <div className="mx-auto max-w-2xl max-w-[1500px] px-4 py-8">
       <h1 className="mb-8 text-center text-3xl font-bold">Contact Us</h1>
       <p className="mb-8 text-center text-gray-600">
         Have a question or feedback? We&apos;d love to hear from you. Fill out

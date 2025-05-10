@@ -2,7 +2,6 @@ import WebFooter from '@/components/layout/WebFooter'
 import WebHeader from '@/components/layout/WebHeader'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
-import { Suspense } from 'react'
 
 export default function RootLayout({
   children,
@@ -11,11 +10,9 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <Suspense fallback={<div className="h-[106px] w-full" />}>
-        <WebHeader />
-      </Suspense>
+      <WebHeader />
       <div className="pt-28">
-        <div className="container mx-auto px-5 pt-4">
+        <div className="mx-auto max-w-[1500px] px-5 pt-4">
           <p className="text-center tracking-wide">
             <span className="text-Red font-medium">Safety Vision</span> provides
             comprehensive fire protection services including{' '}
@@ -32,7 +29,7 @@ export default function RootLayout({
             for your project&apos;s fire safety needs.
           </p>
         </div>
-        <div className="container mx-auto px-3 pb-5">{children}</div>
+        <div className="pb-5">{children}</div>
       </div>
       <WebFooter />
     </div>
