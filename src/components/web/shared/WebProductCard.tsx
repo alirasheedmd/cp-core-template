@@ -5,36 +5,41 @@ import CurrencySymbol from '@/components/ui/CurrencySymbol'
 import { IWebProduct } from '@/types'
 import { AddToCart } from './AddToCartButton'
 
-export default function WebProductCard({ product }: { product: IWebProduct }) {
-  const { title, price, image } = product
+interface WebProductCardProps {
+  item: IWebProduct
+}
+
+export default function WebProductCard({ item }: WebProductCardProps) {
   return (
-    <Link href={'#'} className="flex h-full flex-col">
+    <Link href={`/products/${item?.slug}`} className="flex h-full flex-col">
       <Card className="group flex h-full flex-col justify-between gap-0 border-2 border-gray-200 p-3 transition-all hover:shadow-xl md:p-5">
         {/* Image */}
-        <div className="relative mx-auto h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg md:h-40 md:w-40">
-          <Image
-            src={image || '/default-image.png'}
-            alt={title}
-            fill
-            className="object-contain transition-all duration-500 ease-in-out group-hover:scale-103"
-          />
+        <div className="relative mx-auto h-28 w-28 flex-shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-32 md:h-40 md:w-40">
+          {item?.image && (
+            <Image
+              src={item?.image}
+              alt={item?.title}
+              fill
+              className="object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+          )}
         </div>
 
         {/* Content */}
         <div className="mt-4 flex flex-col items-center gap-y-1.5">
-          <h3 className="group-hover:text-muted-foreground text-center text-sm font-medium underline-offset-2 group-hover:underline">
-            {title}
+          <h3 className="group-hover:text-muted-foreground text-center text-xs font-medium underline-offset-2 group-hover:underline sm:text-sm">
+            {item?.title}
           </h3>
-          <p className="text-MediumGrey text-center text-xs uppercase">
+          <p className="text-MediumGrey text-center text-xs uppercase sm:text-xs">
             Brand Name
           </p>
-          <CurrencySymbol amount={price} className="text-gray-600" />
+          <CurrencySymbol amount={item?.price} className="text-gray-600" />
           {/* Add to Cart Button */}
           <AddToCart
-            productId={product.id}
-            name={title}
-            price={price}
-            image={image}
+            productId={item?.id}
+            name={item?.title}
+            price={item?.price}
+            image={item?.image}
           />
         </div>
       </Card>

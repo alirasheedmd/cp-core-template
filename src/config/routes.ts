@@ -7,6 +7,7 @@ export const routes = {
   contact: '/contact',
   collections: '/collections',
   cart: '/cart',
+  catalog: '/collections/all',
 
   // Admin routes
   admin: {
@@ -25,10 +26,10 @@ export const routes = {
 
   // Footer
   footer: {
-    refundPolicy: '/refund-policy',
-    privacyPolicy: '/privacy-policy',
-    termsOfService: '/terms-of-service',
-    shippingPolicy: '/shipping-policy',
-    contactInformation: '/contact-information',
+    refundPolicy: '#',
+    privacyPolicy: '#',
+    termsOfService: '#',
+    shippingPolicy: '#',
+    contactInformation: '#',
   },
 }

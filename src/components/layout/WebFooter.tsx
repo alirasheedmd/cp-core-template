@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import { LuDot } from 'react-icons/lu'
+import WebContainer from '@/components/web/shared/WebContainer'
 
 const footerLinks = [
   {
@@ -48,7 +49,7 @@ export default function WebFooter() {
 
       {/* Footer Links */}
       <Separator className="my-5" />
-      <div className="mx-auto max-w-[1500px] px-2">
+      <WebContainer>
         <div className="text-Red flex flex-wrap items-center justify-center gap-2 text-sm">
           <p className="text-center">&copy; {year} Safety Vision</p>
           {footerLinks.map((link) => (
@@ -73,7 +74,7 @@ export default function WebFooter() {
             <span className="mr-2 font-semibold">VAT</span>311188513200003
           </p>
         </div>
-      </div>
+      </WebContainer>
     </div>
   )
 }

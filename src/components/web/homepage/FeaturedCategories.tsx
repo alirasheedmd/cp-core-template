@@ -28,15 +28,17 @@ export default async function FeaturedCategories() {
 
   return (
     <div className="space-y-0 md:space-y-8">
-      {categoriesData.map((category) => (
-        <CarouselWrapper
-          key={category?.slug}
-          title={category?.name}
-          data={category?.products}
-          cardComponent={(product) => <WebProductCard product={product} />}
-          viewMoreLink={routes.dynamicCategory.category(category?.slug)}
-        />
-      ))}
+      {categoriesData.map((category) =>
+        category?.name && category?.slug ? (
+          <CarouselWrapper
+            key={category.slug}
+            title={category.name}
+            data={category?.products}
+            cardComponent={(product) => <WebProductCard item={product} />}
+            viewMoreLink={routes.dynamicCategory.category(category.slug)}
+          />
+        ) : null,
+      )}
     </div>
   )
 }

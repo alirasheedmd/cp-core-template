@@ -7,6 +7,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/effect-fade'
 import { useEffect, useState } from 'react'
+import WebContainer from '@/components/web/shared/WebContainer'
 
 // const data = [
 //   {
@@ -46,7 +47,7 @@ export default function HeaderBar() {
         isVisible ? 'h-[30px] opacity-100' : 'h-0 opacity-0'
       }`}
     >
-      <div className="flex h-full items-center justify-center">
+      <WebContainer className="flex h-full items-center justify-center">
         <p className="text-center text-xs font-semibold tracking-wider text-white lg:text-sm">
           Free shipping in Riyadh, Dammam, Al-Khobar
         </p>
@@ -85,7 +86,7 @@ export default function HeaderBar() {
         >
           <ChevronRight size={16} />
         </button> */}
-      </div>
+      </WebContainer>
     </div>
   )
 }

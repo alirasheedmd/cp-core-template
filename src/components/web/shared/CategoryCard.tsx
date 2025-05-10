@@ -5,7 +5,11 @@ import Image from 'next/image'
 import { IoArrowForward } from 'react-icons/io5'
 import { IWebCategory } from '@/types'
 
-export default function CategoryCard({ category }: { category: IWebCategory }) {
+interface CategoryCardProps {
+  category: IWebCategory
+}
+
+export default function CategoryCard({ category }: CategoryCardProps) {
   const { id, name, slug, image } = category
   return (
     <Link
@@ -13,7 +17,7 @@ export default function CategoryCard({ category }: { category: IWebCategory }) {
       key={id}
       className="mx-auto h-full min-w-full"
     >
-      <Card className="group flex h-full flex-1 flex-col justify-between gap-0 border-2 border-gray-200 p-3 transition-all hover:shadow-xl md:p-5">
+      <Card className="group flex h-full flex-1 flex-col justify-between gap-2 border-2 border-gray-200 p-3 transition-all hover:shadow-xl md:p-5">
         <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-lg md:h-36 md:w-36">
           <Image
             src={image || '/default-image.png'}

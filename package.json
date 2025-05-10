@@ -42,6 +42,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
+    "fslightbox-react": "^1.8.0",
     "jose": "^6.0.10",
     "ky": "^1.8.1",
     "lodash": "^4.17.21",

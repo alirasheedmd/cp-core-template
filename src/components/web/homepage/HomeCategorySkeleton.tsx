@@ -3,10 +3,11 @@ import CategoryCardSkeleton from '@/components/web/shared/CategoryCardSkeleton'
 import Link from 'next/link'
 import { IoArrowForward } from 'react-icons/io5'
 import { routes } from '@/config/routes'
+import WebContainer from '@/components/web/shared/WebContainer'
 
 export default function HomeCategorySkeleton() {
   return (
-    <section className="mx-auto my-10 max-w-[1500px] px-3 md:px-5">
+    <WebContainer className="my-10">
       {/* Heading */}
       <div className="mb-8 flex items-end justify-between">
         <p className="text-2xl font-bold md:text-3xl">Categories</p>
@@ -25,6 +26,6 @@ export default function HomeCategorySkeleton() {
           <CategoryCardSkeleton key={index} />
         ))}
       </div>
-    </section>
+    </WebContainer>
   )
 }

@@ -16,7 +16,9 @@ export default function HeaderIcons() {
       <button>
         <Search className="transition-all hover:scale-105" />
       </button>
+
       <UserIcon className="hidden md:block" />
+
       <Link href={routes.cart} className="relative">
         <ShoppingBag className="transition-all hover:scale-105" />
         <CartBadge />

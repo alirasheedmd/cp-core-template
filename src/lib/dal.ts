@@ -94,6 +94,7 @@ export async function getAllProducts() {
       title: products.title,
       description: products.description,
       price: products.price,
+      slug: products.slug,
     })
     .from(products)
 
@@ -125,6 +126,7 @@ export async function getAllProducts() {
         categories: categories,
         price: product.price,
         image: productImages.length > 0 ? productImages[0].src : null,
+        slug: product.slug,
       }
     }),
   )
@@ -151,6 +153,7 @@ export async function getProductsByCategory(categorySlug: string) {
       description: products.description,
       price: products.price,
       category: categories.slug,
+      slug: products.slug,
     })
     .from(products)
     .innerJoin(productCategories, eq(productCategories.productId, products.id))
@@ -185,6 +188,7 @@ export async function getProductsByCategory(categorySlug: string) {
         categories: categories,
         price: product.price,
         image: productImages.length > 0 ? productImages[0].src : null,
+        slug: product.slug,
       }
     }),
   )
@@ -252,7 +256,18 @@ export async function getOneProduct(productSlug: string) {
     where: (products, { eq }) => eq(products.slug, productSlug),
   })
 
-  return product
+  if (!product) return null
+
+  // Get all images for this product
+  const productImages = await db
+    .select({ src: images.src })
+    .from(images)
+    .where(eq(images.productId, product.id))
+
+  return {
+    ...product,
+    images: productImages.map((img) => img.src),
+  }
 }
 
 export async function getProductSearchResults(searchText: string) {
