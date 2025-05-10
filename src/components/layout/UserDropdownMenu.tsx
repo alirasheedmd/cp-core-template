@@ -8,9 +8,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogOutIcon } from "lucide-react";
-import LogoutButton from './SignoutButton'
 import { User } from '@/db/schema'
 import { Suspense } from 'react'
+import SignoutButton from "./SignoutButton";
 
 interface UserDropdownMenuProps {
   user: User
@@ -36,7 +36,7 @@ const UserDropdownMenu = (props: UserDropdownMenuProps) => {
         <DropdownMenuItem>
           <LogOutIcon className="mr-2 h-4 w-4" />
           <Suspense>
-            <LogoutButton />
+            <SignoutButton />
           </Suspense>
         </DropdownMenuItem>
       </DropdownMenuContent>

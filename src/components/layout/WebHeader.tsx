@@ -8,15 +8,11 @@ import WebContainer from '@/components/web/shared/WebContainer'
 import NavLinksWithData from '@/components/layout/NavLinksWithData'
 import NavLinksSkeleton from '@/components/layout/NavLinksSkeleton'
 import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
-import { getAllCategories, getCurrentUser } from '@/lib/dal'
+import { getCurrentUser } from '@/lib/dal'
 import { User } from '@/db/schema'
 export default async function WebHeader() {
-  const categories = await getAllCategories()
-  const firstSixCategories = categories.slice(0, 6)
 
   const user = await getCurrentUser()
-
-export default function WebHeader() {
   return (
     <div className="fixed z-10 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
@@ -37,8 +33,6 @@ export default function WebHeader() {
 
         {/* Icons */}
         <HeaderIcons user={user as User} />
-      </div>
-        <HeaderIcons />
       </WebContainer>
     </div>
   )
