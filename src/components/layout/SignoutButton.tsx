@@ -1,15 +1,15 @@
 import { customerSignOut } from "@/app/actions/web/auth/webAuth"
 
-const LogoutButton = async () => {
+const SignoutButton = async () => {
 
     const handleLogout = async () => {
         await customerSignOut()
     }
   return (
      <button onClick={handleLogout}>
-      Logout
+      Sign Out
     </button>
   )
 }
 
-export default LogoutButton
+export default SignoutButton

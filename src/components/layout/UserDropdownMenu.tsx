@@ -8,34 +8,39 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogOutIcon } from "lucide-react";
-import LogoutButton from "./LogoutButton";
-import { User } from "@/db/schema";
+import LogoutButton from './SignoutButton'
+import { User } from '@/db/schema'
+import { Suspense } from 'react'
 
 interface UserDropdownMenuProps {
-    user: User
+  user: User
 }
 
 const UserDropdownMenu = (props: UserDropdownMenuProps) => {
+  const { user } = props
 
-    const { user } = props
-    
   return (
     <DropdownMenu>
-                    <DropdownMenuTrigger className="focus:outline-none">
-                        <Avatar>
-                            <AvatarImage src={user?.profileImage ?? undefined} alt="Avatar" />
-                            <AvatarFallback className="text-black">BT</AvatarFallback>
-                        </Avatar>
-                </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <LogOutIcon className="w-4 h-4 mr-2"/>
-                            <LogoutButton/>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+      <DropdownMenuTrigger className="focus:outline-none">
+        <Avatar>
+          <AvatarImage src={user?.profileImage ?? undefined} alt="Avatar" />
+          <AvatarFallback className="font-semibold text-black">
+            {user.firstName?.at(0)}
+            {user.lastName?.at(0)}
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <LogOutIcon className="mr-2 h-4 w-4" />
+          <Suspense>
+            <LogoutButton />
+          </Suspense>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
