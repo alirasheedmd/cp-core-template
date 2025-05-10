@@ -57,7 +57,7 @@ export default function ProductInfo({
       <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />
 
       {/* Buttons */}
-      <div className="flex flex-col gap-3">
+      <div className="flex max-w-80 flex-col gap-3">
         <AddToCart
           productId={id}
           name={title}

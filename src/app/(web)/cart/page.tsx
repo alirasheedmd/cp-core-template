@@ -48,7 +48,7 @@ export default function CartPage() {
   }
 
   return (
-    <WebContainer className="lg:max-w-[64rem]">
+    <WebContainer>
       <h1 className="mt-9 mb-4 text-2xl font-bold">Your Cart</h1>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -95,7 +95,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <div className="text-right">
+                <div className="space-x-4 text-right">
                   <CurrencySymbol
                     amount={item.price * item.quantity}
                     className="font-medium"
@@ -141,7 +141,7 @@ export default function CartPage() {
               </div>
             </div>
 
-            <button className="bg-primary hover:bg-primary/90 mt-4 w-full rounded-md py-2 text-white">
+            <button className="bg-Red mt-5 w-full rounded-full py-3 text-base font-semibold text-white transition-all duration-300 hover:scale-105">
               Proceed to Checkout
             </button>
           </div>

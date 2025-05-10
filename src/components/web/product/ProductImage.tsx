@@ -53,7 +53,7 @@ export default function ProductImage({
               src={selectedImage}
               alt={title}
               fill
-              className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+              className={`border border-gray-200 bg-white object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               onLoadingComplete={() => setIsLoading(false)}
             />
