@@ -12,7 +12,8 @@ import {
   productCategories,
   categories,
 } from '@/db/schema'
-import { CustomerInfoFormValues } from '@/components/web/customer/customerInfo'
+import { CustomerInfoFormValues } from '@/components/web/customer/CustomerInfo'
+import { orders } from '@/db/schema/orders'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -354,4 +355,19 @@ export async function deleteUserInfo() {
     .returning()
 
   return result[0]
+}
+
+export async function createOrder(data: any) {
+  const user = await getCurrentUser()
+  if (!user) return
+
+  const order = await db
+    .insert(orders)
+    .values({
+      userId: user.id,
+      ...data,
+    })
+    .returning()
+
+  return order[0]
 }
