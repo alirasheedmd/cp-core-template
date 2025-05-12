@@ -12,6 +12,7 @@ import {
   productCategories,
   categories,
 } from '@/db/schema'
+import { CustomerInfoFormValues } from '@/components/web/customer/customerInfo'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -293,4 +294,64 @@ export async function getProductSearchResults(searchText: string) {
   console.log('Filtered products:', filteredProducts)
 
   return filteredProducts
+}
+
+export async function getCustomerProfileInfo(userId: string) {
+  const user = await db
+    .select({
+      firstName: users.firstName,
+      lastName: users.lastName,
+      phoneNumber: users.phoneNumber,
+      buildingNo: users.buildingNo,
+      street: users.street,
+      district: users.district,
+      city: users.city,
+      province: users.province,
+      postalCode: users.postalCode,
+      secondaryNumber: users.secondaryNumber,
+      shortAddress: users.shortAddress,
+      unitNumber: users.unitNumber,
+      country: users.country,
+    })
+    .from(users)
+    .where(eq(users.id, userId))
+
+  return user
+}
+
+export async function updateUserInfo(data: CustomerInfoFormValues) {
+  const user = await getCurrentUser()
+  if (!user) return
+
+  const result = await db
+    .update(users)
+    .set({ ...data })
+    .where(eq(users.id, user.id))
+    .returning()
+
+  return result[0]
+}
+
+export async function deleteUserInfo() {
+  const user = await getCurrentUser()
+  if (!user) return
+
+  const result = await db
+    .update(users)
+    .set({
+      phoneNumber: null,
+      buildingNo: null,
+      street: null,
+      district: null,
+      city: null,
+      province: null,
+      postalCode: null,
+      secondaryNumber: null,
+      unitNumber: null,
+      country: null,
+    })
+    .where(eq(users.id, user.id))
+    .returning()
+
+  return result[0]
 }
