@@ -9,6 +9,7 @@ interface AddToCartProps {
   price: string
   image?: string | null
   quantity?: number
+  slug: string
 }
 
 export function AddToCart({
@@ -17,6 +18,7 @@ export function AddToCart({
   price,
   image,
   quantity = 1,
+  slug,
 }: AddToCartProps) {
   // const requireAuth = useAuthRequired()
   const addItem = useCartStore((state) => state.addItem)
@@ -32,6 +34,7 @@ export function AddToCart({
         name,
         price: parseFloat(price),
         image: image || undefined,
+        slug,
       })
     }
     // }

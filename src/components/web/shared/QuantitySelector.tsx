@@ -29,7 +29,7 @@ export function QuantitySelector({
         </button>
         <input
           type="number"
-          className="w-12 border-0 text-center focus:ring-0"
+          className="mx-auto w-12 border-0 text-center focus:ring-0"
           value={quantity}
           min={min}
           readOnly

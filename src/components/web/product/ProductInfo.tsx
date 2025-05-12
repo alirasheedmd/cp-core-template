@@ -1,8 +1,9 @@
 'use client'
 import { useState } from 'react'
-import CurrencySymbol from '@/components/ui/CurrencySymbol'
+import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { AddToCart } from '@/components/web/shared/AddToCartButton'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
+import PrimaryButton from '@/components/common/PrimaryButton'
 
 interface ProductInfoProps {
   title: string
@@ -13,6 +14,7 @@ interface ProductInfoProps {
   descriptionTitle: string
   id: string
   image?: string | null
+  slug: string
 }
 
 export default function ProductInfo({
@@ -23,6 +25,7 @@ export default function ProductInfo({
   status,
   id,
   image,
+  slug,
 }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1)
 
@@ -64,10 +67,9 @@ export default function ProductInfo({
           price={price}
           image={image}
           quantity={quantity}
+          slug={slug}
         />
-        <button className="bg-Red w-full rounded-full py-3 text-base font-semibold text-white transition-all duration-300 hover:scale-105">
-          Buy it now
-        </button>
+        <PrimaryButton fullWidth>Buy it now</PrimaryButton>
       </div>
 
       {/* Pickup/availability info */}

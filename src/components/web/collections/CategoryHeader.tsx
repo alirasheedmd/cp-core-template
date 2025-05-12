@@ -10,5 +10,5 @@ export default async function CategoryHeader({
   const categoryData = await getOneCategory(category)
   const categoryName = categoryData?.name
 
-  return <h1 className="my-8 text-4xl font-semibold">{categoryName}</h1>
+  return <h1 className="my-8 text-2xl font-bold md:text-3xl">{categoryName}</h1>
 }

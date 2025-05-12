@@ -3,7 +3,7 @@ import WebContainer from '@/components/web/shared/WebContainer'
 export default function ProductDetailSkeleton() {
   return (
     <WebContainer>
-      <div className="mx-auto max-w-5xl py-8">
+      <div className="py-8">
         <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2">
           {/* Left Column - Product Image Skeleton */}
           <div className="space-y-4">

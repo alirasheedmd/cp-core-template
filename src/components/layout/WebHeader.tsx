@@ -11,7 +11,6 @@ import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
 import { getCurrentUser } from '@/lib/dal'
 import { User } from '@/db/schema'
 export default async function WebHeader() {
-
   const user = await getCurrentUser()
   return (
     <div className="fixed z-10 w-full border-b border-b-gray-200 bg-white shadow-sm">
