@@ -1,5 +1,7 @@
-import { InferSelectModel } from 'drizzle-orm'
-import { pgTable, text, timestamp, boolean, } from 'drizzle-orm/pg-core'
+import { InferSelectModel, relations } from 'drizzle-orm'
+import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core'
+import { orders } from './orders'
+import { cartItems } from './cartItems'
 
 // Users table
 export const users = pgTable('users', {
@@ -9,11 +11,17 @@ export const users = pgTable('users', {
   firstName: text('first_name'),
   lastName: text('last_name'),
   phoneNumber: text('phone_number'),
-  address: text('address'),
+  buildingNo: text('buildingNo'),
+  street: text('street'),
+  district: text('district'),
   city: text('city'),
   province: text('province'),
-  zipCode: text('zip_code'),
+  postalCode: text('postal_code'),
+  secondaryNumber: text('secondaryNumber'),
+  shortAddress: text('shortAddress'),
+  unitNumber: text('unitNumber'),
   country: text('country'),
+  isPromotionalEmailFlag: boolean('is_promotional_email_flag'),
   profileImage: text('profile_image'),
   isAdmin: boolean('is_admin').default(false).notNull(),
   isVerified: boolean('is_verified').default(false).notNull(),
@@ -25,3 +33,8 @@ export const users = pgTable('users', {
 })
 
 export type User = InferSelectModel<typeof users>
+
+export const userRelations = relations(users, ({ many }) => ({
+  orders: many(orders),
+  cartItems: many(cartItems),
+}))
