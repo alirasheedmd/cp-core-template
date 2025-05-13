@@ -329,6 +329,7 @@ export async function updateUserInfo(data: CustomerInfoFormValues) {
     .set({ ...data })
     .where(eq(users.id, user.id))
     .returning()
+  console.log("data result", result)
 
   return result[0]
 }

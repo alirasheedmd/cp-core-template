@@ -23,9 +23,9 @@ export async function updateUserProfile(prevState: ProfileActionState ,formData:
         revalidatePath('/profile')
 
         return {
-            status: 'success',
-            message: 'Product created successfully',
-            data: validatedData,
+          status: 'success',
+          message: 'User Info updated successfully',
+          data: validatedData,
         }
     }catch (error) {
         if (error instanceof z.ZodError) {

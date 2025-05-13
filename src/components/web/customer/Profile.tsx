@@ -11,7 +11,7 @@ const Profile = async () => {
 
     const data = await getCustomerProfileInfo(user.id as string)
     const customerInfo = data as unknown as CustomerInfoFormValues
-    console.log(customerInfo)
+    console.log('Customer', customerInfo)
 
   return (
     <div>

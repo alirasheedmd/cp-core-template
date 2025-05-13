@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 export type CustomerInfoFormValues = z.infer<typeof editContactInfoSchema>
 
 interface CustomerInfoProps {
-  data: CustomerInfoFormValues
+  data: CustomerInfoFormValues[]
 }
 
 export default function CustomerInfo(props: CustomerInfoProps) {
@@ -27,7 +27,7 @@ export default function CustomerInfo(props: CustomerInfoProps) {
     status: 'idle',
     errors: undefined,
     message: '',
-    data: props.data,
+    data: props.data[0],
   }
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
@@ -36,7 +36,7 @@ export default function CustomerInfo(props: CustomerInfoProps) {
     FormData
   >(updateUserProfile, InitialCustomerInfoState)
 
-  console.log('data', state.data[0].firstName)
+  console.log('data', state.data?.firstName)
 
   function SaveButton() {
     return (
@@ -59,19 +59,19 @@ export default function CustomerInfo(props: CustomerInfoProps) {
       editContactInfoSchema,
     ) as Resolver<CustomerInfoFormValues>,
     defaultValues: {
-      firstName: state.data[0]?.firstName,
-      lastName: state.data[0]?.lastName,
-      phoneNumber: state.data[0]?.phoneNumber,
-      buildingNo: state.data[0]?.buildingNo,
-      street: state.data[0]?.street,
-      district: state.data[0]?.district,
-      city: state.data[0]?.city,
-      province: state.data[0]?.province,
-      postalCode: state.data[0]?.postalCode,
-      secondaryNumber: state.data[0]?.secondaryNumber,
-      shortAddress: state.data[0]?.shortAddress,
-      unitNumber: state.data[0]?.unitNumber,
-      country: state.data[0]?.country,
+      firstName: state.data?.firstName,
+      lastName: state.data?.lastName,
+      phoneNumber: state.data?.phoneNumber,
+      buildingNo: state.data?.buildingNo,
+      street: state.data?.street,
+      district: state.data?.district,
+      city: state.data?.city,
+      province: state.data?.province,
+      postalCode: state.data?.postalCode,
+      secondaryNumber: state.data?.secondaryNumber,
+      shortAddress: state.data?.shortAddress,
+      unitNumber: state.data?.unitNumber,
+      country: state.data?.country,
     },
   })
 
