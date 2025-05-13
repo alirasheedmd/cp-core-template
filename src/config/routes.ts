@@ -12,6 +12,7 @@ export const routes = {
   cart: '/cart',
   catalog: '/collections/all',
   checkout: '/checkout',
+  orderConfirmation: '/order-confirmation',
 
   // Admin routes
   admin: {

@@ -22,9 +22,16 @@ export const checkoutFormSchema = z.object({
   // Shipping Information
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-  address: z.string().min(5, 'Please enter a valid address'),
+  house: z.string().min(2, 'Please enter a valid house number'),
+  street: z.string().min(2, 'Please enter a valid street name'),
+  district: z.string().min(2, 'Please enter a valid district'),
   city: z.string().min(2, 'Please enter a valid city'),
-  zipCode: z.string().optional(),
+  province: z.string().min(2, 'Please enter a valid province'),
+  country: z.string().min(2, 'Please enter a valid country'),
+  postalCode: z.string().optional(),
+  secondaryNumber: z.string().optional(),
+  unitNumber: z.string().optional(),
+  shortAddress: z.string().optional(),
 
   // Payment Information
   paymentMethod: paymentMethodEnum,

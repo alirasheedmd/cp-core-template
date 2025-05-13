@@ -22,17 +22,21 @@ export function CartContent() {
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-      <CartItemsList
-        items={items}
-        onQuantityChange={updateQuantity}
-        onRemoveItem={removeItem}
-        onClearCart={clearCart}
-      />
-      <OrderSummary
-        subtotal={getSubtotal()}
-        shippingFee={shippingFee}
-        total={getTotal()}
-      />
+      <div className="lg:col-span-2">
+        <CartItemsList
+          items={items}
+          onQuantityChange={updateQuantity}
+          onRemoveItem={removeItem}
+          onClearCart={clearCart}
+        />
+      </div>
+      <div className="lg:sticky lg:top-22 lg:self-start">
+        <OrderSummary
+          subtotal={getSubtotal()}
+          shippingFee={shippingFee}
+          total={getTotal()}
+        />
+      </div>
     </div>
   )
 }

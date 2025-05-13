@@ -18,6 +18,7 @@ import {
 } from '@/schemas/checkout-form.schema'
 import { useCartStore } from '@/stores/useCartStore'
 import { Textarea } from '@/components/ui/textarea'
+import { routes } from '@/config/routes'
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -35,9 +36,14 @@ export default function CheckoutPage() {
       phoneNumber: '',
       firstName: '',
       lastName: '',
-      address: '',
       city: '',
-      zipCode: undefined,
+      house: '',
+      street: '',
+      district: '',
+      province: '',
+      country: '',
+      shortAddress: '',
+      postalCode: undefined,
       paymentMethod: 'cash_on_delivery',
       notes: '',
     },
@@ -63,7 +69,7 @@ export default function CheckoutPage() {
           type: 'success',
           message: 'Order placed successfully!',
         })
-        router.push('/order-confirmation')
+        router.push(routes.orderConfirmation)
       } catch (error) {
         console.error('Checkout error:', error)
         setNotification({
@@ -97,29 +103,63 @@ export default function CheckoutPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {/* Contact Information */}
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Contact Information</h2>
+              <h2 className="mb-6 text-xl font-semibold">
+                Contact Information
+              </h2>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="firstName">First Name</Label>
                   <Input
-                    id="email"
-                    placeholder="Enter your email address"
-                    className="text-sm md:text-base"
-                    {...form.register('email')}
+                    id="firstName"
+                    placeholder="Enter your first name"
+                    className={`text-sm md:text-base ${form.formState.errors.firstName ? 'border-destructive' : ''}`}
+                    {...form.register('firstName')}
                   />
-                  {form.formState.errors.email && (
+                  {form.formState.errors.firstName && (
                     <p className="text-sm text-red-500">
-                      {form.formState.errors.email.message}
+                      {form.formState.errors.firstName.message}
                     </p>
                   )}
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    placeholder="Enter your last name"
+                    className={`text-sm md:text-base ${form.formState.errors.lastName ? 'border-destructive' : ''}`}
+                    {...form.register('lastName')}
+                  />
+                  {form.formState.errors.lastName && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.lastName.message}
+                    </p>
+                  )}
+                </div>
+              </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  placeholder="Enter your email address"
+                  className={`text-sm md:text-base ${form.formState.errors.email ? 'border-destructive' : ''}`}
+                  {...form.register('email')}
+                />
+                {form.formState.errors.email && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber">Phone Number</Label>
                   <Input
                     id="phoneNumber"
                     placeholder="Enter your phone number"
-                    className="text-sm md:text-base"
+                    className={`text-sm md:text-base ${form.formState.errors.phoneNumber ? 'border-destructive' : ''}`}
                     {...form.register('phoneNumber')}
                   />
                   {form.formState.errors.phoneNumber && (
@@ -128,86 +168,173 @@ export default function CheckoutPage() {
                     </p>
                   )}
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="secondaryNumber">
+                    Secondary Number
+                    <span className="text-DarkGrey mx-0.5">(Optional)</span>
+                  </Label>
+                  <Input
+                    id="secondaryNumber"
+                    placeholder="Enter your secondary number (optional)"
+                    className="text-sm md:text-base"
+                    {...form.register('secondaryNumber')}
+                  />
+                  {form.formState.errors.secondaryNumber && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.secondaryNumber.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Shipping Information */}
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input
-                      id="firstName"
-                      placeholder="Enter your first name"
-                      className="text-sm md:text-base"
-                      {...form.register('firstName')}
-                    />
-                    {form.formState.errors.firstName && (
-                      <p className="text-sm text-red-500">
-                        {form.formState.errors.firstName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      placeholder="Enter your last name"
-                      className="text-sm md:text-base"
-                      {...form.register('lastName')}
-                    />
-                    {form.formState.errors.lastName && (
-                      <p className="text-sm text-red-500">
-                        {form.formState.errors.lastName.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
+              <h2 className="mb-6 text-xl font-semibold">
+                Shipping Information
+              </h2>
 
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="house">Building No. / House No</Label>
                   <Input
-                    id="address"
-                    placeholder="Enter your address"
-                    className="text-sm md:text-base"
-                    {...form.register('address')}
+                    id="house"
+                    placeholder="Enter your house number"
+                    className={`text-sm md:text-base ${form.formState.errors.house ? 'border-destructive' : ''}`}
+                    {...form.register('house')}
                   />
-                  {form.formState.errors.address && (
+                  {form.formState.errors.house && (
                     <p className="text-sm text-red-500">
-                      {form.formState.errors.address.message}
+                      {form.formState.errors.house.message}
                     </p>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="city">City</Label>
-                    <Input
-                      id="city"
-                      placeholder="Enter your city"
-                      className="text-sm md:text-base"
-                      {...form.register('city')}
-                    />
-                    {form.formState.errors.city && (
-                      <p className="text-sm text-red-500">
-                        {form.formState.errors.city.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="zipCode">ZIP Code</Label>
-                    <Input
-                      id="zipCode"
-                      placeholder="Enter area ZIP code"
-                      className="text-sm md:text-base"
-                      {...form.register('zipCode')}
-                    />
-                    {form.formState.errors.zipCode && (
-                      <p className="text-sm text-red-500">
-                        {form.formState.errors.zipCode.message}
-                      </p>
-                    )}
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="unitNumber">
+                    Unit No.
+                    <span className="text-DarkGrey mx-0.5">(Optional)</span>
+                  </Label>
+                  <Input
+                    id="unitNumber"
+                    placeholder="Enter your unit number (optional)"
+                    className="text-sm md:text-base"
+                    {...form.register('unitNumber')}
+                  />
+                  {form.formState.errors.unitNumber && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.unitNumber.message}
+                    </p>
+                  )}
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="street">Street</Label>
+                <Input
+                  id="street"
+                  placeholder="Enter your street name"
+                  className={`text-sm md:text-base ${form.formState.errors.street ? 'border-destructive' : ''}`}
+                  {...form.register('street')}
+                />
+                {form.formState.errors.street && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.street.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="shortAddress">
+                  Short Address
+                  <span className="text-DarkGrey mx-0.5">(Optional)</span>
+                </Label>
+                <Input
+                  id="shortAddress"
+                  placeholder="Enter short address (optional)"
+                  className="text-sm md:text-base"
+                  {...form.register('shortAddress')}
+                />
+                {form.formState.errors.shortAddress && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.shortAddress.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="district">District</Label>
+                  <Input
+                    id="district"
+                    placeholder="Enter your district"
+                    className={`text-sm md:text-base ${form.formState.errors.district ? 'border-destructive' : ''}`}
+                    {...form.register('district')}
+                  />
+                  {form.formState.errors.district && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.district.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="province">Province</Label>
+                  <Input
+                    id="province"
+                    placeholder="Enter your province"
+                    className={`text-sm md:text-base ${form.formState.errors.province ? 'border-destructive' : ''}`}
+                    {...form.register('province')}
+                  />
+                  {form.formState.errors.province && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.province.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="postalCode">Postal Code</Label>
+                  <Input
+                    id="postalCode"
+                    placeholder="Enter area postal code"
+                    className={`text-sm md:text-base ${form.formState.errors.postalCode ? 'border-destructive' : ''}`}
+                    {...form.register('postalCode')}
+                  />
+                  {form.formState.errors.postalCode && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.postalCode.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="city">City</Label>
+                  <Input
+                    id="city"
+                    placeholder="Enter your city"
+                    className={`text-sm md:text-base ${form.formState.errors.city ? 'border-destructive' : ''}`}
+                    {...form.register('city')}
+                  />
+                  {form.formState.errors.city && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.city.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="country">Country</Label>
+                <Input
+                  id="country"
+                  placeholder="Enter your country"
+                  className={`text-sm md:text-base ${form.formState.errors.country ? 'border-destructive' : ''}`}
+                  {...form.register('country')}
+                />
+                {form.formState.errors.country && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.country.message}
+                  </p>
+                )}
               </div>
 
               {/* Payment Method */}
@@ -231,6 +358,21 @@ export default function CheckoutPage() {
                     <RadioGroupItem value="bank_transfer" id="bank_transfer" />
                     <Label htmlFor="bank_transfer">Bank Transfer</Label>
                   </div>
+                  {form.watch('paymentMethod') === 'bank_transfer' && (
+                    <div className="mt-2 ml-6 space-y-2 text-sm text-gray-600">
+                      <p>
+                        Choose this method if you prefer to make a direct bank
+                        deposit.
+                      </p>
+                      <p>
+                        Please follow the instructions after placing your order.
+                      </p>
+                      <p>
+                        Your order will be cancelled if the payment isn&apos;t
+                        received within 3 days of your order.
+                      </p>
+                    </div>
+                  )}
                 </RadioGroup>
                 {form.formState.errors.paymentMethod && (
                   <p className="text-sm text-red-500">
@@ -245,7 +387,10 @@ export default function CheckoutPage() {
                   Additional Information
                 </h2>
                 <div className="space-y-2">
-                  <Label htmlFor="notes">Order Notes (Optional)</Label>
+                  <Label htmlFor="notes">
+                    Order Notes
+                    <span className="text-DarkGrey mx-0.5">(Optional)</span>
+                  </Label>
                   <Textarea
                     id="notes"
                     placeholder="Add any special instructions or notes for your order (e.g., delivery instructions, preferred delivery time)."
@@ -271,7 +416,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right side - Order Summary */}
-        <div className="lg:sticky lg:top-20 lg:basis-2/5 lg:self-start">
+        <div className="lg:sticky lg:top-22 lg:basis-2/5 lg:self-start">
           <OrderSummary />
         </div>
       </div>

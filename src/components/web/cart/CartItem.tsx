@@ -16,7 +16,7 @@ interface CartItemProps {
 
 export function CartItem({ item, onQuantityChange, onRemove }: CartItemProps) {
   return (
-    <div className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center md:justify-between">
       {/* First row on mobile, first column on desktop */}
       <div className="flex items-center gap-4">
         {item.image && (
@@ -41,11 +41,19 @@ export function CartItem({ item, onQuantityChange, onRemove }: CartItemProps) {
             {item.name}
           </Link>
           <CurrencySymbol amount={item.price} className="text-gray-600" />
+          <div className="hidden md:block">
+            <QuantitySelector
+              quantity={item.quantity}
+              onQuantityChange={(newQuantity) =>
+                onQuantityChange(item.id, newQuantity)
+              }
+            />
+          </div>
         </div>
       </div>
 
       {/* Second row on mobile, second column on desktop */}
-      <div className="sm:flex-1">
+      <div className="sm:flex-1 md:hidden">
         <QuantitySelector
           quantity={item.quantity}
           onQuantityChange={(newQuantity) =>

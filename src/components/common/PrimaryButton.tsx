@@ -16,7 +16,7 @@ export default function PrimaryButton({
   ...props
 }: PrimaryButtonProps) {
   const baseStyles =
-    'rounded-full py-3 text-base font-semibold transition-all duration-300 hover:scale-105'
+    'rounded-full py-3 px-6 text-base font-semibold transition-all duration-300 hover:scale-105'
 
   const variants = {
     primary: 'bg-Red text-white',
