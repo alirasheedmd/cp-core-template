@@ -357,7 +357,7 @@ export async function deleteUserInfo() {
   return result[0]
 }
 
-export async function createOrder(data: any) {
+export async function createOrder(oata: any) {
   const user = await getCurrentUser()
   if (!user) return
 
@@ -368,6 +368,8 @@ export async function createOrder(data: any) {
       ...data,
     })
     .returning()
+  
+  const orderItems = await db.
 
   return order[0]
 }

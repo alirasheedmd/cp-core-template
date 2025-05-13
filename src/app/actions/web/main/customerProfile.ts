@@ -1,6 +1,6 @@
 "use server"
 
-import { CustomerInfoFormValues } from "@/components/web/customer/customerInfo"
+import { CustomerInfoFormValues } from '@/components/web/customer/CustomerInfo'
 import { updateUserInfo } from "@/lib/dal"
 import { editContactInfoSchema } from "@/schemas/update-user.schema"
 import { revalidatePath } from "next/cache"
