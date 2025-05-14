@@ -7,10 +7,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, UserRoundPenIcon } from 'lucide-react'
 import { User } from '@/db/schema'
 import { Suspense } from 'react'
-import SignoutButton from "./SignoutButton";
+import SignoutButton from './SignoutButton'
+import Link from 'next/link'
 
 interface UserDropdownMenuProps {
   user: User
@@ -38,6 +39,12 @@ const UserDropdownMenu = (props: UserDropdownMenuProps) => {
           <Suspense>
             <SignoutButton />
           </Suspense>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <UserRoundPenIcon className="mr-2 h-4 w-4" />
+          <Link href="/account/profile">
+            <button className="focus:outline-none">Profile</button>
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

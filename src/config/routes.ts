@@ -13,6 +13,7 @@ export const routes = {
   catalog: '/collections/all',
   checkout: '/checkout',
   orderConfirmation: '/order-confirmation',
+  profile: '/account/profile',
 
   // Admin routes
   admin: {
