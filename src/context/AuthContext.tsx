@@ -111,7 +111,7 @@ function AuthModal() {
         <div className="mt-4 text-center text-sm">
           {mode === 'signin' ? (
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <button
                 onClick={() => setMode('signup')}
                 className="text-primary hover:underline"
@@ -169,7 +169,7 @@ function SignInForm() {
         window.location.reload()
       }
     } catch (error) {
-      setError('An unexpected error occurred')
+      setError('An unexpected error occurred' + error)
     } finally {
       setIsLoading(false)
     }
@@ -265,7 +265,7 @@ function SignUpForm() {
         window.location.reload()
       }
     } catch (error) {
-      setError('An unexpected error occurred')
+      setError('An unexpected error occurred' + error)
     } finally {
       setIsLoading(false)
     }
