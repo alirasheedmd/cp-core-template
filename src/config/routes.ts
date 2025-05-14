@@ -8,6 +8,7 @@ export const routes = {
   collections: '/collections',
   cart: '/cart',
   catalog: '/collections/all',
+  profile: '/account/profile',
 
   // Admin routes
   admin: {

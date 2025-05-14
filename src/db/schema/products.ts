@@ -10,6 +10,8 @@ import {
 } from 'drizzle-orm/pg-core'
 import { productCategories } from './productCategories'
 import { images } from './images'
+import { orderItems } from './orderItems'
+import { cartItems } from './cartItems'
 
 export const productStatusEnum = pgEnum('product_status', [
   'active',
@@ -78,4 +80,6 @@ export type Product = InferSelectModel<typeof products>
 export const productRelations = relations(products, ({ many }) => ({
   categories: many(productCategories),
   images: many(images),
+  orderItems: many(orderItems),
+  cartItems: many(cartItems),
 }))

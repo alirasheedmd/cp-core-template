@@ -3,6 +3,8 @@ import { z } from 'zod'
 ////////////// Edit Contact Information //////////////
 
 export const editContactInfoSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
   phoneNumber: z
     .string()
     .min(1, 'Phone number is required')
@@ -14,6 +16,16 @@ export const editContactInfoSchema = z.object({
         .min(8, 'Phone number must be at least 8 digits')
         .max(20, 'Phone number must not exceed 20 digits'),
     ),
+  buildingNo: z.string().min(1, 'House No./ Building No. is required'),
+  street: z.string().min(1, 'Street name/no. is required'),
+  district: z.string().min(1, 'District is required'),
+  city: z.string().min(1, 'City is required'),
+  province: z.string().min(1, 'Province is required'),
+  postalCode: z.string().min(1, 'Postal code is required'),
+  secondaryNumber: z.string().optional(),
+  shortAddress: z.string().optional(),
+  unitNumber: z.string().optional(),
+  country: z.string().min(1, 'Country is required'),
 })
 
 ////////////// Edit Shipping Address //////////////
@@ -31,8 +43,14 @@ export const editShippingSchema = z.object({
         .min(8, 'Phone number must be at least 8 digits')
         .max(20, 'Phone number must not exceed 20 digits'),
     ),
-  street: z.string().min(1, 'Street address is required'),
-  apartment: z.string().optional(),
+  buildingNo: z.string().min(1, 'House No./ Building No. is required'),
+  street: z.string().min(1, 'Street name/no. is required'),
+  district: z.string().min(1, 'District is required'),
   city: z.string().min(1, 'City is required'),
+  province: z.string().min(1, 'Province is required'),
   postalCode: z.string().min(1, 'Postal code is required'),
+  country: z.string().min(1, 'Country is required'),
+  secondaryNumber: z.string().optional(),
+  shortAddress: z.string().optional(),
+  unitNumber: z.string().optional(),
 })
