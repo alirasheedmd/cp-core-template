@@ -23,6 +23,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
             src={image || '/default-image.png'}
             alt={name}
             fill
+            sizes="(max-width: 768px) 7rem, 9rem"
             className="shrink-0 object-contain transition-all duration-500 ease-in-out group-hover:scale-103"
           />
         </div>

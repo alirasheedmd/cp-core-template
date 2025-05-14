@@ -4,10 +4,15 @@ export const routes = {
   dynamicCategory: {
     category: (categorySlug: string) => `/collections/${categorySlug}`,
   },
+  dynamicProduct: {
+    product: (productSlug: string) => `/products/${productSlug}`,
+  },
   contact: '/contact',
   collections: '/collections',
   cart: '/cart',
   catalog: '/collections/all',
+  checkout: '/checkout',
+  orderConfirmation: '/order-confirmation',
   profile: '/account/profile',
 
   // Admin routes

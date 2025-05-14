@@ -1,17 +1,23 @@
 import Image from 'next/image'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
-import CurrencySymbol from '@/components/ui/CurrencySymbol'
+import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { IWebProduct } from '@/types'
 import { AddToCart } from './AddToCartButton'
+import { routes } from '@/config/routes'
 
 interface WebProductCardProps {
   item: IWebProduct
 }
 
 export default function WebProductCard({ item }: WebProductCardProps) {
+  if (!item?.slug) return null
+
   return (
-    <Link href={`/products/${item?.slug}`} className="flex h-full flex-col">
+    <Link
+      href={routes.dynamicProduct.product(item.slug)}
+      className="flex h-full flex-col"
+    >
       <Card className="group flex h-full flex-col justify-between gap-0 border-2 border-gray-200 p-3 transition-all hover:shadow-xl md:p-5">
         {/* Image */}
         <div className="relative mx-auto h-28 w-28 flex-shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-32 md:h-40 md:w-40">
@@ -20,6 +26,7 @@ export default function WebProductCard({ item }: WebProductCardProps) {
               src={item?.image}
               alt={item?.title}
               fill
+              sizes="(max-width: 640px) 7rem, (max-width: 768px) 8rem, 10rem"
               className="object-contain transition-transform duration-300 group-hover:scale-105"
             />
           )}
@@ -36,10 +43,11 @@ export default function WebProductCard({ item }: WebProductCardProps) {
           <CurrencySymbol amount={item?.price} className="text-gray-600" />
           {/* Add to Cart Button */}
           <AddToCart
-            productId={item?.id}
-            name={item?.title}
-            price={item?.price}
-            image={item?.image}
+            productId={item.id}
+            name={item.title}
+            price={item.price}
+            image={item.image}
+            slug={item.slug}
           />
         </div>
       </Card>
