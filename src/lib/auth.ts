@@ -4,7 +4,7 @@ import { compare, hash } from 'bcrypt'
 import { nanoid } from 'nanoid'
 import { cookies } from 'next/headers'
 import { db } from '@/db'
-import { users } from '@/db/schema'
+import { carts, users } from '@/db/schema'
 import * as jose from 'jose'
 import { cache } from 'react'
 import { getUserByEmail, getUserById } from './dal'
@@ -164,6 +164,33 @@ export async function createSession(userId: string, isAdmin: boolean = false) {
       sameSite: 'lax',
     })
 
+    // Handle cart merge
+    const sessionCartId = cookieStore.get('sessionCartId')?.value
+    if (!sessionCartId) {
+      console.log('no cart cookie')
+      return { error: 'Session Cart Not Found' }
+    }
+
+    const sessionCart = await db.query.carts.findFirst({
+      where: eq(carts.sessionCartId, sessionCartId),
+    })
+
+    if (sessionCart && !sessionCart.userId) {
+      const userCart = await db.query.carts.findFirst({
+        where: (carts, { eq }) => eq(carts.userId, userId),
+      })
+
+      if (userCart) {
+        cookieStore.set('beforeSigninSessionCartId', sessionCartId)
+        cookieStore.set('sessionCartId', userCart.sessionCartId)
+      } else {
+        await db
+          .update(carts)
+          .set({ userId: userId })
+          .where(eq(carts.id, sessionCart.id))
+      }
+    }
+
     return true
   } catch (error) {
     console.error('Error creating session:', error)
@@ -180,10 +207,13 @@ export const getSession = cache(async () => {
     if (!token) return null
     const payload = await verifyJWT(token)
 
+    const sessionCartId = cookieStore.get('sessionCartId')?.value as string
+
     return payload
       ? {
           userId: payload.userId,
           isAdmin: payload.isAdmin,
+          sessionCartId: sessionCartId,
         }
       : null
   } catch (error) {
@@ -271,4 +301,28 @@ export async function verifyOTP(email: string, otp: string) {
     console.error('Error verifying OTP:', error)
     return { success: false, error: 'An unexpected error occurred' }
   }
+}
+
+export async function createSessionCartId() {
+  const cookieStore = await cookies()
+  const hasSessionCartId = cookieStore.has('sessionCartId')
+
+  if (!hasSessionCartId) {
+    // Generate new sessionCartId
+    const sessionCartId = crypto.randomUUID()
+
+    // Store in cookie (secure, HTTP-only)
+    cookieStore.set({
+      name: 'sessionCartId',
+      value: sessionCartId,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: '/',
+      sameSite: 'lax',
+    })
+    console.log('cartid created')
+  }
+
+  return cookieStore.get('sessionCartId')?.value
 }

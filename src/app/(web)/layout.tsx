@@ -2,13 +2,15 @@ import WebFooter from '@/components/layout/WebFooter'
 import WebHeader from '@/components/layout/WebHeader'
 import WebContainer from '@/components/web/shared/WebContainer'
 import { routes } from '@/config/routes'
+import { createSessionCartId } from '@/lib/auth'
 import Link from 'next/link'
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  await createSessionCartId()
   return (
     <div>
       <WebHeader />

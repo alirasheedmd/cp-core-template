@@ -1,6 +1,7 @@
 'use server'
 
 import { db } from '@/db'
+import { nanoid } from 'nanoid'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
 import { ilike, or, isNull, not } from 'drizzle-orm/sql'
@@ -11,14 +12,21 @@ import {
   images,
   productCategories,
   categories,
+  carts,
 } from '@/db/schema'
 import { CustomerInfoFormValues } from '@/components/web/customer/CustomerInfo'
 import { orders } from '@/db/schema/orders'
+import { cookies } from 'next/headers'
+import { type CartItem } from '@/types'
+import { calcPrice, formatError, round2 } from './utils'
+import { revalidatePath } from 'next/cache'
+import { cartItemSchema } from '@/schemas/cart.schema'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
 export const getCurrentUser = cache(async () => {
   const session = await getSession()
+  console.log('session id', session)
   if (!session) return null
 
   // Skip database query during prerendering if we don't have a session
@@ -329,13 +337,14 @@ export async function updateUserInfo(data: CustomerInfoFormValues) {
     .set({ ...data })
     .where(eq(users.id, user.id))
     .returning()
-  console.log("data result", result)
+  console.log('data result', result)
 
   return result[0]
 }
 
 export async function deleteUserInfo() {
   const user = await getCurrentUser()
+  console.log('user', user)
   if (!user) return
 
   const result = await db
@@ -358,7 +367,7 @@ export async function deleteUserInfo() {
   return result[0]
 }
 
-export async function createOrder(oata: any) {
+export async function createOrder(data: any) {
   const user = await getCurrentUser()
   if (!user) return
 
@@ -369,8 +378,139 @@ export async function createOrder(oata: any) {
       ...data,
     })
     .returning()
-  
-  const orderItems = await db.
+
+  // const orderItems = await db.
 
   return order[0]
+}
+
+export async function getMyCart() {
+  const session = await getSession()
+  if (!session) return undefined
+  const sessionCartId = session.sessionCartId
+  const userId = session.userId
+  console.log('userId', userId)
+  console.log('sessionCartId', sessionCartId)
+  console.log('get session ......', sessionCartId)
+  if (!sessionCartId) return undefined
+  const cart = await db.query.carts.findFirst({
+    where: userId
+      ? eq(carts.userId, userId)
+      : eq(carts.sessionCartId, sessionCartId),
+  })
+
+  return cart
+}
+
+export const addItemToCart = async (data: CartItem) => {
+  try {
+    const validatedItemData = cartItemSchema.parse(data)
+
+    const sessionCartId = (await cookies()).get('sessionCartId')?.value
+    if (!sessionCartId) throw new Error('Cart Session not found')
+
+    const user = await getCurrentUser()
+    const userId = user?.id as string
+
+    const cart = await getMyCart()
+
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, validatedItemData.productId),
+    })
+
+    if (!product) throw new Error('Product not found')
+
+    if (!cart) {
+      if (Number(product?.currentStock) < 1) throw new Error('Not enough stock')
+
+      const id = nanoid()
+      await db.insert(carts).values({
+        ...calcPrice([validatedItemData]),
+        id: id,
+        userId: userId,
+        items: [validatedItemData],
+        sessionCartId,
+      })
+
+      revalidatePath(`/product/${product.slug}`)
+      return {
+        success: true,
+        message: 'Item added to cart successfully',
+      }
+    } else {
+      const existItem = cart.items.find(
+        (x) => x.productId === validatedItemData.productId,
+      )
+      if (existItem) {
+        if (Number(product.currentStock) < existItem.qty + 1)
+          throw new Error('Not enough stock')
+        cart.items.find(
+          (x) => x.productId === validatedItemData.productId,
+        )!.qty = existItem.qty + 1
+      } else {
+        if (Number(product.currentStock) < 1)
+          throw new Error('Not enough stock')
+        cart.items.push(validatedItemData)
+      }
+      await db
+        .update(carts)
+        .set({
+          items: cart.items,
+          ...calcPrice(cart.items),
+        })
+        .where(eq(carts.id, cart.id))
+
+      revalidatePath(`/product/${product.slug}`)
+      return {
+        success: true,
+        message: `${product.title} ${
+          existItem ? 'updated in' : 'added to'
+        } cart successfully`,
+      }
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}
+
+export const removeItemFromCart = async (productId: string) => {
+  try {
+    const sessionCartId = (await cookies()).get('sessionCartId')?.value
+    if (!sessionCartId) throw new Error('Cart Session not found')
+
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, productId),
+    })
+    if (!product) throw new Error('Product not found')
+
+    const cart = await getMyCart()
+    if (!cart) throw new Error('Cart not found')
+
+    const exist = cart.items.find((x) => x.productId === productId)
+    if (!exist) throw new Error('Item not found')
+
+    if (exist.qty === 1) {
+      cart.items = cart.items.filter((x) => x.productId !== exist.productId)
+    } else {
+      cart.items.find((x) => x.productId === productId)!.qty = exist.qty - 1
+    }
+    await db
+      .update(carts)
+      .set({
+        items: cart.items,
+        ...calcPrice(cart.items),
+      })
+      .where(eq(carts.id, cart.id))
+    revalidatePath(`/product/${product.slug}`)
+    return {
+      success: true,
+      message: `${product.title}  ${
+        cart.items.find((x) => x.productId === productId)
+          ? 'updated in'
+          : 'removed from'
+      } cart successfully`,
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
 }

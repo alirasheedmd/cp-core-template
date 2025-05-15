@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
-import { AddToCart } from '@/components/web/shared/AddToCartButton'
+import AddToCart from '@/components/web/shared/AddToCartButton'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
 import PrimaryButton from '@/components/common/PrimaryButton'
 

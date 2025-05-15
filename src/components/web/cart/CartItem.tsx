@@ -7,6 +7,7 @@ import { routes } from '@/config/routes'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
 import { CartItem as CartItemType } from '@/stores/useCartStore'
+import { removeItemFromCart } from '@/lib/dal'
 
 interface CartItemProps {
   item: CartItemType
@@ -69,7 +70,10 @@ export function CartItem({ item, onQuantityChange, onRemove }: CartItemProps) {
           className="font-medium"
         />
         <button
-          onClick={() => onRemove(item.id)}
+          onClick={
+            () => removeItemFromCart(item.id)
+            // onRemove(item.id)
+          }
           className="text-red-500 hover:text-red-600 sm:ml-4"
         >
           <Trash2 className="h-5 w-5" />

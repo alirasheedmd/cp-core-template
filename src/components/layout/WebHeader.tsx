@@ -8,10 +8,12 @@ import WebContainer from '@/components/web/shared/WebContainer'
 import NavLinksWithData from '@/components/layout/NavLinksWithData'
 import NavLinksSkeleton from '@/components/layout/NavLinksSkeleton'
 import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
-import { getCurrentUser } from '@/lib/dal'
-import { User } from '@/db/schema'
+import { getCurrentUser, getMyCart } from '@/lib/dal'
+import { Cart, User } from '@/db/schema'
 export default async function WebHeader() {
   const user = await getCurrentUser()
+  const cart = await getMyCart()
+  console.log('my cart', cart)
   return (
     <div className="fixed z-10 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
@@ -31,7 +33,7 @@ export default async function WebHeader() {
         </Suspense>
 
         {/* Icons */}
-        <HeaderIcons user={user as User} />
+        <HeaderIcons user={user as User} cart={cart as Cart} />
       </WebContainer>
     </div>
   )

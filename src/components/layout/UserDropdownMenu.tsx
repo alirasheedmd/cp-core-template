@@ -35,16 +35,16 @@ const UserDropdownMenu = (props: UserDropdownMenuProps) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <LogOutIcon className="mr-2 h-4 w-4" />
-          <Suspense>
-            <SignoutButton />
-          </Suspense>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
           <UserRoundPenIcon className="mr-2 h-4 w-4" />
           <Link href="/account/profile">
             <button className="focus:outline-none">Profile</button>
           </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <LogOutIcon className="mr-2 h-4 w-4" />
+          <Suspense>
+            <SignoutButton />
+          </Suspense>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,3 +1,6 @@
+import { cartItemSchema } from '@/schemas/cart.schema'
+import { z } from 'zod'
+
 export interface IProductSlug {
   current: string
   _type: string
@@ -116,3 +119,6 @@ export interface IWebCategory {
   slug: string
   image: string | null
 }
+
+//CART
+export type CartItem = z.infer<typeof cartItemSchema>
