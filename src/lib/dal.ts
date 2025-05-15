@@ -14,7 +14,7 @@ import {
   categories,
   carts,
 } from '@/db/schema'
-import { CustomerInfoFormValues } from '@/components/web/customer/CustomerInfo'
+import { CustomerInfoFormValues } from '@/components/web/customer/CustomerForm'
 import { orders } from '@/db/schema/orders'
 import { cookies } from 'next/headers'
 import { type CartItem } from '@/types'
@@ -385,21 +385,32 @@ export async function createOrder(data: any) {
 }
 
 export async function getMyCart() {
-  const session = await getSession()
-  if (!session) return undefined
-  const sessionCartId = session.sessionCartId
-  const userId = session.userId
-  console.log('userId', userId)
-  console.log('sessionCartId', sessionCartId)
-  console.log('get session ......', sessionCartId)
-  if (!sessionCartId) return undefined
-  const cart = await db.query.carts.findFirst({
-    where: userId
-      ? eq(carts.userId, userId)
-      : eq(carts.sessionCartId, sessionCartId),
-  })
+  try {
+    const session = await getSession()
+    if (!session) return undefined
 
-  return cart
+    const sessionCartId = session.sessionCartId
+    const userId = session.userId
+
+    if (!sessionCartId) return undefined
+
+    const cart = await db.query.carts.findFirst({
+      where: userId
+        ? eq(carts.userId, userId)
+        : eq(carts.sessionCartId, sessionCartId),
+    })
+
+    return cart
+  } catch (error) {
+    // Handle cookie errors during server rendering
+    if (error instanceof Error && error.message.includes('cookies')) {
+      console.log('Cookie access error during cart fetch:', error.message)
+      return undefined
+    }
+
+    console.error('Error fetching cart:', error)
+    return undefined
+  }
 }
 
 export const addItemToCart = async (data: CartItem) => {

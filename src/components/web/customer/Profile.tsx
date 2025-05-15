@@ -1,4 +1,6 @@
-import CustomerInfo, { CustomerInfoFormValues } from '@/components/web/customer/CustomerInfo'
+import CustomerInfo, {
+  CustomerInfoFormValues,
+} from '@/components/web/customer/CustomerForm'
 import { getCurrentUser, getCustomerProfileInfo } from '@/lib/dal'
 import { redirect } from 'next/navigation'
 
@@ -9,14 +11,14 @@ const Profile = async () => {
     return redirect('/')
   }
 
-    const data = await getCustomerProfileInfo(user.id as string)
-    const customerInfo = data as unknown as CustomerInfoFormValues
-    console.log('Customer', customerInfo)
+  const data = await getCustomerProfileInfo(user.id as string)
+  const customerInfo = data as unknown as CustomerInfoFormValues
+  console.log('Customer', customerInfo)
 
   return (
     <div>
       <h1>Customer Profile Info</h1>
-        <CustomerInfo data={customerInfo} />
+      <CustomerInfo data={customerInfo} />
     </div>
   )
 }

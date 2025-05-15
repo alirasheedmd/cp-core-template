@@ -1,6 +1,5 @@
 import { routes } from '@/config/routes'
 import HeaderBar from '@/components/layout/HeaderBar'
-import HeaderIcons from '@/components/layout/HeaderIcons'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -8,12 +7,11 @@ import WebContainer from '@/components/web/shared/WebContainer'
 import NavLinksWithData from '@/components/layout/NavLinksWithData'
 import NavLinksSkeleton from '@/components/layout/NavLinksSkeleton'
 import WebHamburgerMenu from '@/components/layout/WebHamburgerMenu'
-import { getCurrentUser, getMyCart } from '@/lib/dal'
-import { Cart, User } from '@/db/schema'
+import UserMenuButton from './UserMenuButton'
+import WebHeaderCart from './WebHeaderCart'
+import { Search } from 'lucide-react'
+
 export default async function WebHeader() {
-  const user = await getCurrentUser()
-  const cart = await getMyCart()
-  console.log('my cart', cart)
   return (
     <div className="fixed z-10 w-full border-b border-b-gray-200 bg-white shadow-sm">
       <HeaderBar />
@@ -33,7 +31,15 @@ export default async function WebHeader() {
         </Suspense>
 
         {/* Icons */}
-        <HeaderIcons user={user as User} cart={cart as Cart} />
+        <div className="text-Red flex items-center gap-3">
+          <button>
+            <Search className="transition-all hover:scale-105" />
+          </button>
+          <UserMenuButton />
+          <Suspense fallback={<div className="h-6 w-6"></div>}>
+            <WebHeaderCart />
+          </Suspense>
+        </div>
       </WebContainer>
     </div>
   )

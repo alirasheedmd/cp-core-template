@@ -201,6 +201,14 @@ export async function createSession(userId: string, isAdmin: boolean = false) {
 // Get current session from JWT
 export const getSession = cache(async () => {
   try {
+    // During build time or static rendering, return null to avoid cookie errors
+    if (
+      typeof window === 'undefined' &&
+      process.env.NEXT_PHASE === 'phase-production-build'
+    ) {
+      return null
+    }
+
     const cookieStore = await cookies()
     const token = cookieStore.get('session')?.value
 
@@ -217,13 +225,14 @@ export const getSession = cache(async () => {
         }
       : null
   } catch (error) {
-    // Handle the specific prerendering error
+    // Handle the specific prerendering or cookie access errors
     if (
       error instanceof Error &&
-      error.message.includes('During prerendering, `cookies()` rejects')
+      (error.message.includes('During prerendering, `cookies()` rejects') ||
+        error.message.includes('cookies'))
     ) {
       console.log(
-        'Cookies not available during prerendering, returning null session',
+        'Cookies not available during rendering, returning null session',
       )
       return null
     }
