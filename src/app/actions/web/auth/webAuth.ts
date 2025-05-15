@@ -1,6 +1,5 @@
 'use server'
 
-
 import { db } from '@/db'
 import { users } from '@/db/schema'
 import { getUserByEmail } from '@/lib/dal'
@@ -11,11 +10,11 @@ import {
   storeVerificationOTP,
   deleteSession,
   hashPassword,
+  createSessionCartId,
 } from '@/lib/auth'
 import { sendVerificationEmail } from '@/lib/email'
 import { eq } from 'drizzle-orm'
 import { signinSchema, signupSchema } from '@/schemas/auth.schema'
-
 
 interface AuthState {
   error: string
@@ -152,8 +151,6 @@ export async function customerSignOut() {
   await deleteSession()
 }
 
-
-
 export const changePassword = async (email: string, password: string) => {
   try {
     const user = await getUserByEmail(email)
@@ -180,4 +177,9 @@ export const changePassword = async (email: string, password: string) => {
       error: 'An unexpected error occurred',
     }
   }
+}
+
+export const genereateSessionCartId = async () => {
+  const cartId = await createSessionCartId()
+  return cartId
 }

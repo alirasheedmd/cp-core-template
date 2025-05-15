@@ -1,9 +1,18 @@
-import { createSessionCartId } from "@/lib/auth"
+'use client'
 
-const WebCartSession = async () => {
-    const session = await createSessionCartId()
-    console.log("session Cart id ", session)
-  return <></>
+import { useEffect } from 'react'
+import { genereateSessionCartId } from '@/app/actions/web/auth/webAuth'
+
+const WebCartSession = () => {
+  useEffect(() => {
+    const initCart = async () => {
+      await genereateSessionCartId()
+    }
+
+    initCart()
+  }, [])
+
+  return null
 }
 
 export default WebCartSession
