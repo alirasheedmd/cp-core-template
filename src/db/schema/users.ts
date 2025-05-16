@@ -21,6 +21,7 @@ export const users = pgTable('users', {
   shortAddress: text('shortAddress'),
   unitNumber: text('unitNumber'),
   country: text('country'),
+  paymentMethod: text('payment_method'),
   isPromotionalEmailFlag: boolean('is_promotional_email_flag'),
   profileImage: text('profile_image'),
   isAdmin: boolean('is_admin').default(false).notNull(),

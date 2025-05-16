@@ -6,15 +6,12 @@ import { IWebProduct } from '@/types'
 import AddToCart from './AddToCartButton'
 import { routes } from '@/config/routes'
 import { round2 } from '@/lib/utils'
-import { Cart } from '@/db/schema'
-import { getMyCart } from '@/lib/dal'
 
 interface WebProductCardProps {
   item: IWebProduct
 }
 
 export default async function WebProductCard({ item }: WebProductCardProps) {
-  const cart = await getMyCart()
   if (!item?.slug) return null
 
   return (
@@ -54,7 +51,6 @@ export default async function WebProductCard({ item }: WebProductCardProps) {
             slug={item.slug}
           /> */}
           <AddToCart
-            cart={cart as Cart}
             item={{
               productId: item.id,
               name: item.title,

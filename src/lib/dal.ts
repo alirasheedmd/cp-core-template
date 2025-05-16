@@ -21,6 +21,10 @@ import { calcPrice, formatError } from './utils'
 import { revalidatePath } from 'next/cache'
 import { cartItemSchema } from '@/schemas/cart.schema'
 import { generateSessionCartId } from '@/app/actions/web/auth/webAuth'
+import {
+  checkoutFormSchema,
+  ShippingAddress,
+} from '@/schemas/checkout-form.schema'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -342,6 +346,48 @@ export async function updateUserInfo(data: CustomerInfoFormValues) {
   return result[0]
 }
 
+export async function createOrder(data: ShippingAddress) {
+  try {
+    console.log('order data', data)
+    const user = await getCurrentUser()
+    if (!user) return
+
+    const validatedAddress = checkoutFormSchema.parse(data)
+
+    const customerInfo = {
+      firstName: validatedAddress.firstName,
+      lastName: validatedAddress.lastName,
+      phoneNumber: validatedAddress.phoneNumber,
+      buildingNo: validatedAddress.house,
+      street: validatedAddress.street,
+      district: validatedAddress.district,
+      city: validatedAddress.city,
+      province: validatedAddress.province,
+      postalCode: validatedAddress.postalCode as string,
+      country: validatedAddress.country,
+      secondaryNumber: validatedAddress.secondaryNumber,
+      shortAddress: validatedAddress.shortAddress,
+      unitNumber: validatedAddress.unitNumber,
+      paymentMethod: validatedAddress.paymentMethod,
+    }
+
+    const result = await db
+      .update(users)
+      .set({ ...customerInfo })
+      .where(eq(users.id, user.id))
+      .returning()
+    console.log('data result', result)
+
+    revalidatePath('/order-confirmation')
+    return {
+      success: true,
+      message: 'User updated successfully',
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}
+
 export async function deleteUserInfo() {
   const user = await getCurrentUser()
   console.log('user', user)
@@ -365,23 +411,6 @@ export async function deleteUserInfo() {
     .returning()
 
   return result[0]
-}
-
-export async function createOrder(data: any) {
-  const user = await getCurrentUser()
-  if (!user) return
-
-  const order = await db
-    .insert(orders)
-    .values({
-      userId: user.id,
-      ...data,
-    })
-    .returning()
-
-  // const orderItems = await db.
-
-  return order[0]
 }
 
 export async function getMyCart() {
@@ -507,7 +536,10 @@ export const addItemToCart = async (data: CartItem, currentPath: string) => {
   }
 }
 
-export const removeItemFromCart = async (productId: string) => {
+export const removeItemFromCart = async (
+  productId: string,
+  currentPath: string,
+) => {
   try {
     const sessionCartId = await generateSessionCartId()
     console.log('Session Cart ID', sessionCartId)
@@ -536,7 +568,7 @@ export const removeItemFromCart = async (productId: string) => {
         ...calcPrice(cart.items),
       })
       .where(eq(carts.id, cart.id))
-    // revalidatePath(`/product/${product.slug}`)
+    revalidatePath(currentPath)
     return {
       success: true,
       message: `${product.title}  ${

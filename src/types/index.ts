@@ -1,4 +1,5 @@
 import { cartItemSchema } from '@/schemas/cart.schema'
+import { editShippingSchema } from '@/schemas/update-user.schema'
 import { z } from 'zod'
 
 export interface IProductSlug {
@@ -122,3 +123,4 @@ export interface IWebCategory {
 
 //CART
 export type CartItem = z.infer<typeof cartItemSchema>
+

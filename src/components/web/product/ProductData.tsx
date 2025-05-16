@@ -1,15 +1,12 @@
-import { getMyCart, getOneProduct } from '@/lib/dal'
+import { getOneProduct } from '@/lib/dal'
 import WebContainer from '@/components/web/shared/WebContainer'
 import ProductImage from './ProductImage'
 import ProductInfo from './ProductInfo'
 import ProductSpecifications from './ProductSpecifications'
 import PrimaryButton from '@/components/common/PrimaryButton'
-import { Cart } from '@/db/schema'
 
 export default async function ProductData({ product }: { product: string }) {
   const productDetails = await getOneProduct(product)
-  const cart = await getMyCart()
-  console.log('my cart', cart)
 
   if (!productDetails) {
     return (
@@ -73,7 +70,6 @@ export default async function ProductData({ product }: { product: string }) {
             descriptionTitle={productDetails.title}
             image={productDetails.images?.[0]}
             slug={productDetails.slug}
-            cart={cart as Cart}
           />
         </div>
       </div>

@@ -65,59 +65,12 @@ import { toast } from 'sonner'
 // }
 
 export default function AddToCart({
-  cart,
   item,
 }: {
-  cart?: Cart
   item: Omit<CartItem, 'cardId'>
 }) {
   const [isPending, startTransition] = useTransition()
   const currentPath = usePathname()
-  // const existItem =
-  //   cart && cart.items.find((x) => x.productId === item.productId)
-  // return existItem ? (
-  //   <div>
-  //     <Button
-  //       type="button"
-  //       variant="outline"
-  //       disabled={isPending}
-  //       onClick={() => {
-  //         startTransition(async () => {
-  //           const res = await removeItemFromCart(item.productId)
-  //           toast(res.success ? 'default' : 'destructive', res.message as any)
-  //           return
-  //         })
-  //       }}
-  //     >
-  //       {isPending ? (
-  //         <Loader className="h-4 w-4 animate-spin" />
-  //       ) : (
-  //         <Minus className="h-4 w-4" />
-  //       )}
-  //       <Toaster />
-  //     </Button>
-  //     <span className="px-2">{existItem.qty}</span>
-  //     <Button
-  //       type="button"
-  //       variant="outline"
-  //       disabled={isPending}
-  //       onClick={() => {
-  //         startTransition(async () => {
-  //           const res = await addItemToCart(item, currentPath)
-  //           toast(res.success ? 'default' : 'destructive', res.message as any)
-  //           return
-  //         })
-  //       }}
-  //     >
-  //       {isPending ? (
-  //         <Loader className="h-4 w-4 animate-spin" />
-  //       ) : (
-  //         <Plus className="h-4 w-4" />
-  //       )}
-  //       <Toaster />
-  //     </Button>
-  //   </div>
-  // ) :
   return (
     <Button
       className="w-full"
