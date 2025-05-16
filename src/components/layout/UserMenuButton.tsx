@@ -3,15 +3,17 @@
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/context/AuthContext'
 import UserDropdownMenu from './UserDropdownMenu'
+import { Avatar } from '@/components/ui/avatar'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function UserMenuButton() {
   const { isAuthenticated, user, isLoading, openAuth } = useAuth()
 
   if (isLoading) {
     return (
-      <Button variant="ghost" disabled>
-        Loading...
-      </Button>
+      <Avatar className="border-Red border-2">
+        <Skeleton className="h-full w-full rounded-full bg-white" />
+      </Avatar>
     )
   }
 
