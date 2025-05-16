@@ -1,5 +1,8 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import { Minus, Plus } from 'lucide-react'
+
 interface QuantitySelectorProps {
   quantity: number
   onQuantityChange: (quantity: number) => void
@@ -19,29 +22,31 @@ export function QuantitySelector({
     <div className="flex items-center space-x-2">
       <span className="text-sm">Quantity</span>
       <div className="ml-2 flex items-center overflow-hidden rounded-md border">
-        <button
-          className="text-DarkGrey hover:bg-LightGrey px-3 py-1 text-lg"
-          onClick={handleDecrement}
-          aria-label="Decrease quantity"
+        <Button
           type="button"
+          variant="ghost"
+          aria-label="Decrease quantity"
+          className="text-DarkGrey hover:bg-LightGrey rounded-r-none px-2 py-0.5 text-base"
+          onClick={handleDecrement}
         >
-          -
-        </button>
+          <Minus className="h-3.5 w-3.5" />
+        </Button>
         <input
           type="number"
-          className="mx-auto w-12 border-0 text-center focus:ring-0"
+          className="mx-auto w-10 [appearance:textfield] border-0 text-center text-sm focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           value={quantity}
           min={min}
           readOnly
         />
-        <button
-          className="text-DarkGrey hover:bg-LightGrey px-3 py-1 text-lg"
-          onClick={handleIncrement}
-          aria-label="Increase quantity"
+        <Button
           type="button"
+          variant="ghost"
+          aria-label="Increase quantity"
+          className="text-DarkGrey hover:bg-LightGrey rounded-l-none px-2 py-0.5 text-base"
+          onClick={handleIncrement}
         >
-          +
-        </button>
+          <Plus className="h-3.5 w-3.5" />
+        </Button>
       </div>
     </div>
   )

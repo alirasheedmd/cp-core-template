@@ -1,13 +1,13 @@
 'use client'
-// import { useState } from 'react'
+
 import CurrencySymbol from '@/components/common/CurrencySymbol'
-import AddToCart from '@/components/web/shared/AddToCartButton'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
 import PrimaryButton from '@/components/common/PrimaryButton'
 import { round2 } from '@/lib/utils'
 import { Cart } from '@/db/schema'
 import { CartItem } from '@/types'
 import { useState } from 'react'
+import AddToCartButton from '@/components/web/shared/AddToCartButton'
 
 interface ProductInfoProps {
   title: string
@@ -31,22 +31,20 @@ export default function ProductInfo({
   id,
   image,
   slug,
-  cart
+  cart,
 }: ProductInfoProps) {
-
-  
   const [quantity, setQuantity] = useState(1)
-  
+
   // const quantity = cart?.items?.length
   //   ? cart.items.find((pId) => pId.productId === id)?.qty ?? 1
   //   : 1
-  const item: CartItem= {
+  const item: CartItem = {
     productId: id,
     name: title,
     slug: slug,
     qty: quantity,
     image: image as string,
-    price: round2(price)
+    price: round2(price),
   }
   const onQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) return
@@ -88,7 +86,7 @@ export default function ProductInfo({
 
       {/* Buttons */}
       <div className="flex max-w-80 flex-col gap-3">
-        <AddToCart
+        <AddToCartButton
           cart={cart}
           item={{
             productId: id,
@@ -96,7 +94,7 @@ export default function ProductInfo({
             slug: slug,
             qty: quantity,
             image: image as string,
-            price: round2(price)
+            price: round2(price),
           }}
           // productId={id}
           // name={title}

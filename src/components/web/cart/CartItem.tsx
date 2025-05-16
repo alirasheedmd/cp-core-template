@@ -2,40 +2,32 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Loader } from 'lucide-react'
 import { routes } from '@/config/routes'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
-// import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
-// import { CartItem as CartItemType } from '@/stores/useCartStore'
 import { removeAllProductItemFromCart } from '@/lib/dal'
 import { type CartItem } from '@/types'
-import {
-  // useState,
-  useTransition
-} from 'react'
+import { useTransition } from 'react'
 import CartItemQuantitySelector from './CartQuantitySelector'
 
 interface CartItemProps {
-  // item: CartItemType
   item: CartItem
-  // onQuantityChange: (id: string, quantity: number) => void
-  // onRemove: (id: string) => void
 }
 
-export function CartItem({
-  item,
-  // onQuantityChange,
-  // onRemove
-}: CartItemProps) {
+export function CartItem({ item }: CartItemProps) {
   const isValidUrl = (url: string) =>
-  url?.startsWith("/") || url?.startsWith("http");
+    url?.startsWith('/') || url?.startsWith('http')
   const [isPending, startTransition] = useTransition()
-  // const [quantity, setQuantity] = useState<number>(item.qty)
-  // const onQuantityChange = (id: string, newQuantity: number) => {
-  //   if (newQuantity < 1) return
-  //   item.qty = newQuantity
-  //   return setQuantity(newQuantity)
-  // }
+
+  const handleDeleteItem = async () => {
+    startTransition(async () => {
+      const res = await removeAllProductItemFromCart(item.productId)
+      if (!res.success) {
+        console.log('error in removing item to cart')
+      }
+    })
+  }
+
   return (
     <div className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center md:justify-between">
       {/* First row on mobile, first column on desktop */}
@@ -46,7 +38,7 @@ export function CartItem({
             className="relative h-24 w-24 flex-shrink-0"
           >
             <Image
-              src={item.image} 
+              src={item.image}
               alt={item?.name}
               fill
               className="rounded-md object-cover"
@@ -63,32 +55,14 @@ export function CartItem({
           </Link>
           <CurrencySymbol amount={item.price} className="text-gray-600" />
           <div className="hidden md:block">
-            {/* <QuantitySelector
-              quantity={quantity}
-              onQuantityChange={(newQuantity) =>
-                onQuantityChange(item.productId, newQuantity)
-              }
-            /> */}
-            <CartItemQuantitySelector
-              quantity={item.qty}
-              item={item}
-            />
+            <CartItemQuantitySelector quantity={item.qty} item={item} />
           </div>
         </div>
       </div>
 
       {/* Second row on mobile, second column on desktop */}
       <div className="sm:flex-1 md:hidden">
-        {/* <QuantitySelector
-          quantity={item.qty}
-          onQuantityChange={(newQuantity) =>
-            onQuantityChange(item.productId, newQuantity)
-          }
-        /> */}
-        <CartItemQuantitySelector
-          quantity={item.qty}
-          item={item}
-        />
+        <CartItemQuantitySelector quantity={item.qty} item={item} />
       </div>
 
       {/* Third row on mobile, third column on desktop */}
@@ -99,19 +73,15 @@ export function CartItem({
         />
         <button
           disabled={isPending}
-          onClick={
-           () =>
-            startTransition(async () => {
-              const res = await removeAllProductItemFromCart(item.productId)
-              if (!res.success) {
-                console.log('error in removing item to cart')
-              }
-            })
-            // onRemove(item.id)
-          }
-          className="text-red-500 hover:text-red-600 sm:ml-4"
+          onClick={handleDeleteItem}
+          className="text-red-500 hover:text-red-600 disabled:opacity-50 sm:ml-4"
+          aria-label="Remove item from cart"
         >
-          <Trash2 className="h-5 w-5" />
+          {isPending ? (
+            <Loader className="h-5 w-5 animate-spin" />
+          ) : (
+            <Trash2 className="h-5 w-5" />
+          )}
         </button>
       </div>
     </div>
