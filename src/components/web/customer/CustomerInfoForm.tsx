@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
-import { type CustomerInfoFormValues } from './CustomerInfo'
+import { type CustomerInfoFormValues } from './CustomerForm'
 
 export default function CustomerInfoForm() {
   const {
@@ -12,8 +12,8 @@ export default function CustomerInfoForm() {
   } = useFormContext<CustomerInfoFormValues>()
 
   return (
-    <div className="space-y-5 flex flex-row justify-">
-      <AdminContainer className="space-y-7 w-[50%]">
+    <div className="justify- flex flex-row space-y-5">
+      <AdminContainer className="w-[50%] space-y-7">
         {/* FirstName */}
         <div className="space-y-2">
           <Label htmlFor="firstName" className="text-sm">
@@ -22,12 +22,13 @@ export default function CustomerInfoForm() {
           <Input
             id="firstName"
             {...register('firstName')}
-            
             placeholder="Enter product firstName"
             className={`${errors.firstName ? 'border-destructive' : 'border-black'}`}
           />
           {errors.firstName && (
-            <p className="text-destructive text-sm">{errors.firstName.message}</p>
+            <p className="text-destructive text-sm">
+              {errors.firstName.message}
+            </p>
           )}
         </div>
 
@@ -43,7 +44,9 @@ export default function CustomerInfoForm() {
             className={`${errors.lastName ? 'border-destructive' : 'border-black'}`}
           />
           {errors.lastName && (
-            <p className="text-destructive text-sm">{errors.lastName.message}</p>
+            <p className="text-destructive text-sm">
+              {errors.lastName.message}
+            </p>
           )}
         </div>
 
@@ -59,7 +62,9 @@ export default function CustomerInfoForm() {
             className={`${errors.phoneNumber ? 'border-destructive' : 'border-black'}`}
           />
           {errors.phoneNumber && (
-            <p className="text-destructive text-sm">{errors.phoneNumber.message}</p>
+            <p className="text-destructive text-sm">
+              {errors.phoneNumber.message}
+            </p>
           )}
         </div>
 
@@ -93,9 +98,7 @@ export default function CustomerInfoForm() {
             className={`${errors.street ? 'border-destructive' : 'border-black'}`}
           />
           {errors.street && (
-            <p className="text-destructive text-sm">
-              {errors.street.message}
-            </p>
+            <p className="text-destructive text-sm">{errors.street.message}</p>
           )}
         </div>
 
@@ -129,13 +132,11 @@ export default function CustomerInfoForm() {
             className={`${errors.city ? 'border-destructive' : 'border-black'}`}
           />
           {errors.city && (
-            <p className="text-destructive text-sm">
-              {errors.city.message}
-            </p>
+            <p className="text-destructive text-sm">{errors.city.message}</p>
           )}
         </div>
-        </AdminContainer>
-        <AdminContainer className="space-y-7 w-[50%]">
+      </AdminContainer>
+      <AdminContainer className="w-[50%] space-y-7">
         {/* Province */}
         <div className="space-y-2">
           <Label htmlFor="province" className="text-sm">
@@ -166,9 +167,7 @@ export default function CustomerInfoForm() {
             className={`${errors.country ? 'border-destructive' : 'border-black'}`}
           />
           {errors.country && (
-            <p className="text-destructive text-sm">
-              {errors.country.message}
-            </p>
+            <p className="text-destructive text-sm">{errors.country.message}</p>
           )}
         </div>
 
@@ -193,7 +192,8 @@ export default function CustomerInfoForm() {
         {/* SecondaryNumber */}
         <div className="space-y-2">
           <Label htmlFor="secondaryNumber" className="text-sm">
-            Secondary Number<span className="font-normal text-gray-500">(Optional)</span>
+            Secondary Number
+            <span className="font-normal text-gray-500">(Optional)</span>
           </Label>
           <Input
             id="secondaryNumber"
@@ -211,7 +211,8 @@ export default function CustomerInfoForm() {
         {/* ShortAddress */}
         <div className="space-y-2">
           <Label htmlFor="shortAddress" className="text-sm">
-            Unit Number<span className="font-normal text-gray-500">(Optional)</span>
+            Unit Number
+            <span className="font-normal text-gray-500">(Optional)</span>
           </Label>
           <Input
             id="shortAddress"
@@ -229,7 +230,8 @@ export default function CustomerInfoForm() {
         {/* ShortAddress */}
         <div className="space-y-2">
           <Label htmlFor="shortAddress" className="text-sm">
-            Short Address<span className="font-normal text-gray-500">(Optional)</span>
+            Short Address
+            <span className="font-normal text-gray-500">(Optional)</span>
           </Label>
           <Input
             id="shortAddress"

@@ -4,7 +4,7 @@ import { compare, hash } from 'bcrypt'
 import { nanoid } from 'nanoid'
 import { cookies } from 'next/headers'
 import { db } from '@/db'
-import { users } from '@/db/schema'
+import { carts, users } from '@/db/schema'
 import * as jose from 'jose'
 import { cache } from 'react'
 import { getUserByEmail, getUserById } from './dal'
@@ -164,6 +164,33 @@ export async function createSession(userId: string, isAdmin: boolean = false) {
       sameSite: 'lax',
     })
 
+    // Handle cart merge
+    const sessionCartId = cookieStore.get('sessionCartId')?.value
+    if (!sessionCartId) {
+      console.log('no cart cookie')
+      return { error: 'Session Cart Not Found' }
+    }
+
+    const sessionCart = await db.query.carts.findFirst({
+      where: eq(carts.sessionCartId, sessionCartId),
+    })
+
+    if (sessionCart && !sessionCart.userId) {
+      const userCart = await db.query.carts.findFirst({
+        where: (carts, { eq }) => eq(carts.userId, userId),
+      })
+
+      if (userCart) {
+        cookieStore.set('beforeSigninSessionCartId', sessionCartId)
+        cookieStore.set('sessionCartId', userCart.sessionCartId)
+      } else {
+        await db
+          .update(carts)
+          .set({ userId: userId })
+          .where(eq(carts.id, sessionCart.id))
+      }
+    }
+
     return true
   } catch (error) {
     console.error('Error creating session:', error)
@@ -174,26 +201,38 @@ export async function createSession(userId: string, isAdmin: boolean = false) {
 // Get current session from JWT
 export const getSession = cache(async () => {
   try {
+    // During build time or static rendering, return null to avoid cookie errors
+    if (
+      typeof window === 'undefined' &&
+      process.env.NEXT_PHASE === 'phase-production-build'
+    ) {
+      return null
+    }
+
     const cookieStore = await cookies()
     const token = cookieStore.get('session')?.value
 
     if (!token) return null
     const payload = await verifyJWT(token)
 
+    const sessionCartId = cookieStore.get('sessionCartId')?.value as string
+
     return payload
       ? {
           userId: payload.userId,
           isAdmin: payload.isAdmin,
+          sessionCartId: sessionCartId,
         }
-      : null
+      : { sessionCartId: sessionCartId }
   } catch (error) {
-    // Handle the specific prerendering error
+    // Handle the specific prerendering or cookie access errors
     if (
       error instanceof Error &&
-      error.message.includes('During prerendering, `cookies()` rejects')
+      (error.message.includes('During prerendering, `cookies()` rejects') ||
+        error.message.includes('cookies'))
     ) {
       console.log(
-        'Cookies not available during prerendering, returning null session',
+        'Cookies not available during rendering, returning null session',
       )
       return null
     }
@@ -271,4 +310,28 @@ export async function verifyOTP(email: string, otp: string) {
     console.error('Error verifying OTP:', error)
     return { success: false, error: 'An unexpected error occurred' }
   }
+}
+
+export async function createSessionCartId() {
+  const cookieStore = await cookies()
+  const hasSessionCartId = cookieStore.has('sessionCartId')
+
+  if (!hasSessionCartId) {
+    // Generate new sessionCartId
+    const sessionCartId = crypto.randomUUID()
+
+    // Store in cookie (secure, HTTP-only)
+    cookieStore.set({
+      name: 'sessionCartId',
+      value: sessionCartId,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: '/',
+      sameSite: 'lax',
+    })
+    console.log('cartid created')
+  }
+
+  return cookieStore.get('sessionCartId')?.value
 }

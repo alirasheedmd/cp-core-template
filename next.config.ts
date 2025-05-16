@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'https',
         hostname: 'cp-core-template.imgix.net',
       },
     ],

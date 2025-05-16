@@ -1,6 +1,6 @@
 import CustomerInfo, {
   CustomerInfoFormValues,
-} from '@/components/web/customer/CustomerInfo'
+} from '@/components/web/customer/CustomerForm'
 import { getCurrentUser, getCustomerProfileInfo } from '@/lib/dal'
 import { redirect } from 'next/navigation'
 import WebContainer from '@/components/web/shared/WebContainer'

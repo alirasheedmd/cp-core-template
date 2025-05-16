@@ -1,7 +1,7 @@
 import { InferSelectModel, relations } from 'drizzle-orm'
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core'
 import { orders } from './orders'
-import { cartItems } from './cartItems'
+import { carts } from './carts'
 
 // Users table
 export const users = pgTable('users', {
@@ -34,7 +34,7 @@ export const users = pgTable('users', {
 
 export type User = InferSelectModel<typeof users>
 
-export const userRelations = relations(users, ({ many }) => ({
+export const userRelations = relations(users, ({ many, one }) => ({
   orders: many(orders),
-  cartItems: many(cartItems),
+  cart: one(carts),
 }))
