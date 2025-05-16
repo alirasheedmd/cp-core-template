@@ -4,7 +4,6 @@ import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
 import PrimaryButton from '@/components/common/PrimaryButton'
 import { round2 } from '@/lib/utils'
-import { Cart } from '@/db/schema'
 import { CartItem } from '@/types'
 import { useState } from 'react'
 import AddToCartButton from '@/components/web/shared/AddToCartButton'
@@ -19,7 +18,6 @@ interface ProductInfoProps {
   id: string
   image?: string | null
   slug: string
-  cart: Cart
 }
 
 export default function ProductInfo({
@@ -31,7 +29,6 @@ export default function ProductInfo({
   id,
   image,
   slug,
-  cart,
 }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1)
 
@@ -87,7 +84,6 @@ export default function ProductInfo({
       {/* Buttons */}
       <div className="flex max-w-80 flex-col gap-3">
         <AddToCartButton
-          cart={cart}
           item={{
             productId: id,
             name: title,
@@ -96,12 +92,6 @@ export default function ProductInfo({
             image: image as string,
             price: round2(price),
           }}
-          // productId={id}
-          // name={title}
-          // price={price}
-          // image={image}
-          // quantity={quantity}
-          // slug={slug}
         />
         <PrimaryButton fullWidth>Buy it now</PrimaryButton>
       </div>

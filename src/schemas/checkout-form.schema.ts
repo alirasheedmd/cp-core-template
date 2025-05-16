@@ -4,6 +4,8 @@ export const paymentMethodEnum = z.enum(['cash_on_delivery', 'bank_transfer'], {
   required_error: 'Please select a payment method',
 })
 
+export type PaymentMethodEnum = z.infer<typeof paymentMethodEnum>
+
 export const checkoutFormSchema = z.object({
   // Contact Information
   email: z.string().email('Please enter a valid email address'),
@@ -43,3 +45,6 @@ export const checkoutFormSchema = z.object({
 
 export type CheckoutFormValues = z.infer<typeof checkoutFormSchema>
 export type PaymentMethod = z.infer<typeof paymentMethodEnum>
+
+export type ShippingAddress = z.infer<typeof checkoutFormSchema>
+

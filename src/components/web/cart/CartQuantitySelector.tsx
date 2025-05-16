@@ -30,7 +30,7 @@ export default function CartItemQuantitySelector({
           className="text-DarkGrey hover:bg-LightGrey rounded-r-none px-2 py-0.5 text-base"
           onClick={() => {
             startTransition(async () => {
-              const res = await removeItemFromCart(item.productId)
+              const res = await removeItemFromCart(item.productId, currentPath)
               // toast(res.message)
               console.log(res.message)
 

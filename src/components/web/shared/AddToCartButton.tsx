@@ -1,6 +1,4 @@
 'use client'
-
-import { Cart } from '@/db/schema'
 import { addItemToCart } from '@/lib/dal'
 
 import { CartItem } from '@/types'
@@ -11,7 +9,6 @@ import { useTransition } from 'react'
 export default function AddToCart({
   item,
 }: {
-  cart?: Cart
   item: Omit<CartItem, 'cardId'>
 }) {
   const [isPending, startTransition] = useTransition()
