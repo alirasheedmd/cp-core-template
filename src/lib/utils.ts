@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import prettyBytes from 'pretty-bytes'
+import { CartItem } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -19,7 +20,7 @@ export const formatCurrency = (amount: number | string) => {
   return numericAmount?.toFixed(2)
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('ar-SA', {
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
   currency: 'SAR',
   style: 'currency',
   minimumFractionDigits: 2,
@@ -69,7 +70,7 @@ export const calcPrice = (items: CartItem[]) => {
   const itemsPrice = round2(
       items.reduce((acc, item) => acc + item.price * item.qty, 0),
     ),
-    shippingPrice = round2(itemsPrice > 100 ? 0 : 10),
+    shippingPrice = round2(itemsPrice > 500 ? 0 : 10),
     taxPrice = round2(0.15 * itemsPrice),
     totalPrice = round2(itemsPrice + shippingPrice + taxPrice)
   return {

@@ -179,7 +179,7 @@ export const changePassword = async (email: string, password: string) => {
   }
 }
 
-export const genereateSessionCartId = async () => {
+export const generateSessionCartId = async () => {
   const cartId = await createSessionCartId()
   return cartId
 }

@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect } from 'react'
-import { genereateSessionCartId } from '@/app/actions/web/auth/webAuth'
+import { generateSessionCartId } from '@/app/actions/web/auth/webAuth'
 
 const WebCartSession = () => {
   useEffect(() => {
     const initCart = async () => {
-      await genereateSessionCartId()
+      await generateSessionCartId()
     }
 
     initCart()

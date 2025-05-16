@@ -223,7 +223,7 @@ export const getSession = cache(async () => {
           isAdmin: payload.isAdmin,
           sessionCartId: sessionCartId,
         }
-      : null
+      : { sessionCartId: sessionCartId }
   } catch (error) {
     // Handle the specific prerendering or cookie access errors
     if (

@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { Toaster } from '@/components/ui/sonner'
 import { Cart } from '@/db/schema'
 import { addItemToCart, removeItemFromCart } from '@/lib/dal'
 // import { useAuthRequired } from '@/hooks/useAuthRequired'
 // import { useCartStore } from '@/stores/useCartStore'
 import { CartItem } from '@/types'
 import { Loader, Minus, Plus } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
@@ -69,58 +72,62 @@ export default function AddToCart({
   item: Omit<CartItem, 'cardId'>
 }) {
   const [isPending, startTransition] = useTransition()
-  const existItem =
-    cart && cart.items.find((x) => x.productId === item.productId)
-  return existItem ? (
-    <div>
-      <Button
-        type="button"
-        variant="outline"
-        disabled={isPending}
-        onClick={() => {
-          startTransition(async () => {
-            const res = await removeItemFromCart(item.productId)
-            toast(res.success ? 'default' : 'destructive', res.message as any)
-            return
-          })
-        }}
-      >
-        {isPending ? (
-          <Loader className="h-4 w-4 animate-spin" />
-        ) : (
-          <Minus className="h-4 w-4" />
-        )}
-      </Button>
-      <span className="px-2">{existItem.qty}</span>
-      <Button
-        type="button"
-        variant="outline"
-        disabled={isPending}
-        onClick={() => {
-          startTransition(async () => {
-            const res = await addItemToCart(item)
-            toast(res.success ? 'default' : 'destructive', res.message as any)
-            return
-          })
-        }}
-      >
-        {isPending ? (
-          <Loader className="h-4 w-4 animate-spin" />
-        ) : (
-          <Plus className="h-4 w-4" />
-        )}
-      </Button>
-    </div>
-  ) : (
+  const currentPath = usePathname()
+  // const existItem =
+  //   cart && cart.items.find((x) => x.productId === item.productId)
+  // return existItem ? (
+  //   <div>
+  //     <Button
+  //       type="button"
+  //       variant="outline"
+  //       disabled={isPending}
+  //       onClick={() => {
+  //         startTransition(async () => {
+  //           const res = await removeItemFromCart(item.productId)
+  //           toast(res.success ? 'default' : 'destructive', res.message as any)
+  //           return
+  //         })
+  //       }}
+  //     >
+  //       {isPending ? (
+  //         <Loader className="h-4 w-4 animate-spin" />
+  //       ) : (
+  //         <Minus className="h-4 w-4" />
+  //       )}
+  //       <Toaster />
+  //     </Button>
+  //     <span className="px-2">{existItem.qty}</span>
+  //     <Button
+  //       type="button"
+  //       variant="outline"
+  //       disabled={isPending}
+  //       onClick={() => {
+  //         startTransition(async () => {
+  //           const res = await addItemToCart(item, currentPath)
+  //           toast(res.success ? 'default' : 'destructive', res.message as any)
+  //           return
+  //         })
+  //       }}
+  //     >
+  //       {isPending ? (
+  //         <Loader className="h-4 w-4 animate-spin" />
+  //       ) : (
+  //         <Plus className="h-4 w-4" />
+  //       )}
+  //       <Toaster />
+  //     </Button>
+  //   </div>
+  // ) :
+  return (
     <Button
       className="w-full"
       type="button"
       disabled={isPending}
       onClick={() => {
         startTransition(async () => {
-          const res = await addItemToCart(item)
+          const res = await addItemToCart(item, currentPath)
           if (!res.success) {
-            toast('destructive', res.message as any)
+            toast(res.message)
             return
           }
           toast(`${item.name} added to the cart`)
@@ -128,6 +135,7 @@ export default function AddToCart({
       }}
     >
       {isPending ? <Loader className="animate-spin" /> : <Plus />}
+      <Toaster />
       Add to cart
     </Button>
   )
