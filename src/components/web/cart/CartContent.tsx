@@ -42,6 +42,7 @@ export async function CartContent() {
           // total={getTotal()}
           subtotal={Number(cart.itemsPrice)}
           shippingFee={Number(cart.shippingPrice)}
+          tax={Number(cart.taxPrice)}
           total={Number(cart.totalPrice)}
         />
       </div>

@@ -70,6 +70,8 @@ export default async function ProductData({ product }: { product: string }) {
             descriptionTitle={productDetails.title}
             image={productDetails.images?.[0]}
             slug={productDetails.slug}
+            shippingPrice={productDetails.shippingPrice as string}
+            tax={productDetails.tax as string}
           />
         </div>
       </div>

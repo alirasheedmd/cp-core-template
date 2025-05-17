@@ -12,9 +12,10 @@ import {
   productCategories,
   categories,
   carts,
+  orders,
+  orderItems,
 } from '@/db/schema'
 import { CustomerInfoFormValues } from '@/components/web/customer/CustomerForm'
-import { orders } from '@/db/schema/orders'
 import { cookies } from 'next/headers'
 import { type CartItem } from '@/types'
 import { calcPrice, formatError } from './utils'
@@ -23,8 +24,10 @@ import { cartItemSchema } from '@/schemas/cart.schema'
 import { generateSessionCartId } from '@/app/actions/web/auth/webAuth'
 import {
   checkoutFormSchema,
-  ShippingAddress,
+  CheckoutFormValues,
 } from '@/schemas/checkout-form.schema'
+import { insertOrderSchema } from '@/schemas/order.schema'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -44,7 +47,7 @@ export const getCurrentUser = cache(async () => {
 
   try {
     const result = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, session.userId),
+      where: (users, { eq }) => eq(users.id, session.userId as string),
     })
 
     return result || null
@@ -109,6 +112,8 @@ export async function getAllProducts() {
       description: products.description,
       price: products.price,
       slug: products.slug,
+      shippingPrice: products.shippingPrice,
+      tax: products.tax,
     })
     .from(products)
 
@@ -141,6 +146,8 @@ export async function getAllProducts() {
         price: product.price,
         image: productImages.length > 0 ? productImages[0].src : null,
         slug: product.slug,
+        shippingPrice: product.shippingPrice as string,
+        tax: product.tax as string,
       }
     }),
   )
@@ -168,6 +175,8 @@ export async function getProductsByCategory(categorySlug: string) {
       price: products.price,
       category: categories.slug,
       slug: products.slug,
+      shippingPrice: products.shippingPrice,
+      tax: products.tax,
     })
     .from(products)
     .innerJoin(productCategories, eq(productCategories.productId, products.id))
@@ -203,6 +212,8 @@ export async function getProductsByCategory(categorySlug: string) {
         price: product.price,
         image: productImages.length > 0 ? productImages[0].src : null,
         slug: product.slug,
+        shippingPrice: product.shippingPrice as string,
+        tax: product.tax as string,
       }
     }),
   )
@@ -346,15 +357,31 @@ export async function updateUserInfo(data: CustomerInfoFormValues) {
   return result[0]
 }
 
-export async function createOrder(data: ShippingAddress) {
+export async function createOrder(data: CheckoutFormValues) {
   try {
     console.log('order data', data)
-    const user = await getCurrentUser()
-    if (!user) return
-
     const validatedAddress = checkoutFormSchema.parse(data)
+    const user = await getCurrentUser()
+    if (!user) {
+      const existingUser = await getUserByEmail(validatedAddress.email)
+      if (!existingUser) {
+        const newUserId = crypto.randomUUID()
+        await db.insert(users).values({
+          id: newUserId,
+          email: validatedAddress.email,
+          password: '',
+        })
+      }
+    }
 
-    const customerInfo = {
+    const unauthorizedUser = await getUserByEmail(validatedAddress.email)
+
+    const cart = await getMyCart()
+    if (!cart) return
+
+    console.log('my cart order', cart)
+
+    const customerAddress = {
       firstName: validatedAddress.firstName,
       lastName: validatedAddress.lastName,
       phoneNumber: validatedAddress.phoneNumber,
@@ -370,13 +397,87 @@ export async function createOrder(data: ShippingAddress) {
       unitNumber: validatedAddress.unitNumber,
       paymentMethod: validatedAddress.paymentMethod,
     }
+    if (user) {
+      const updateUser = await db
+        .update(users)
+        .set({ ...customerAddress })
+        .where(eq(users.id, user.id))
+        .returning()
 
-    const result = await db
-      .update(users)
-      .set({ ...customerInfo })
-      .where(eq(users.id, user.id))
-      .returning()
-    console.log('data result', result)
+      console.log('data result', updateUser)
+    } else if (unauthorizedUser) {
+      const updateUser = await db
+        .update(users)
+        .set({ ...customerAddress })
+        .where(eq(users.id, unauthorizedUser.id))
+        .returning()
+
+      console.log('data result', updateUser)
+    }
+
+    const shippingAddress = {
+      firstName: validatedAddress.firstName,
+      lastName: validatedAddress.lastName,
+      phoneNumber: validatedAddress.phoneNumber,
+      buildingNo: validatedAddress.house,
+      street: validatedAddress.street,
+      district: validatedAddress.district,
+      city: validatedAddress.city,
+      province: validatedAddress.province,
+      postalCode: validatedAddress.postalCode as string,
+      country: validatedAddress.country,
+      secondaryNumber: validatedAddress.secondaryNumber,
+      shortAddress: validatedAddress.shortAddress,
+      unitNumber: validatedAddress.unitNumber,
+    }
+    const orderId = crypto.randomUUID()
+    const order = insertOrderSchema.parse({
+      id: orderId,
+      userId: user ? user.id : unauthorizedUser?.id,
+      shippingAddress: JSON.stringify(shippingAddress),
+      paymentMethod: validatedAddress.paymentMethod,
+      itemsPrice: cart.itemsPrice,
+      shippingPrice: cart.shippingPrice,
+      taxPrice: cart.taxPrice,
+      totalPrice: cart.totalPrice,
+    })
+
+    console.log('order, data ...', order)
+    const insertedOrderId = await db.transaction(async (tx) => {
+      try {
+        const insertedOrder = await tx.insert(orders).values(order).returning()
+        console.log('✅ Inserted order:', insertedOrder)
+
+        for (const item of cart.items) {
+          await tx.insert(orderItems).values({
+            ...item,
+            quantity: item.qty,
+            price: item.price.toFixed(2),
+            orderId: insertedOrder[0].id,
+          })
+        }
+
+        await tx
+          .update(carts)
+          .set({
+            items: [],
+            totalPrice: '0',
+            shippingPrice: '0',
+            taxPrice: '0',
+            itemsPrice: '0',
+          })
+          .where(eq(carts.id, cart.id))
+
+        return insertedOrder[0].id
+      } catch (err) {
+        console.error('❌ Error in transaction:', err)
+        throw err
+      }
+    })
+
+    console.log('inserted order id', insertedOrderId)
+    if (!insertedOrderId) throw new Error('Order not created')
+    // redirect(`/order/${insertedOrderId}`)
 
     revalidatePath('/order-confirmation')
     return {
@@ -384,6 +485,10 @@ export async function createOrder(data: ShippingAddress) {
       message: 'User updated successfully',
     }
   } catch (error) {
+    console.log('error creating order')
+    if (isRedirectError(error)) {
+      throw error
+    }
     return { success: false, message: formatError(error) }
   }
 }

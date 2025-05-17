@@ -17,51 +17,56 @@ import {
   type CheckoutFormValues,
   type PaymentMethod,
 } from '@/schemas/checkout-form.schema'
-import { useCartStore } from '@/stores/useCartStore'
+// import { useCartStore } from '@/stores/useCartStore'
 import { Textarea } from '@/components/ui/textarea'
 import { routes } from '@/config/routes'
-import { createOrder } from '@/lib/dal'
-import { User } from '@/db/schema'
+import { clearCart, createOrder } from '@/lib/dal'
+import { Cart, User } from '@/db/schema'
+import { CartItem } from '@/types'
 
 const STORAGE_KEY = 'checkout-form-data'
 
 interface CheckoutFormProps {
-    user?: User
+  user?: User
+  cart: Cart
 }
 
-export default function CheckoutFormPage(props : CheckoutFormProps) {
+export default function CheckoutFormPage(props: CheckoutFormProps) {
   const router = useRouter()
-    const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition()
   const [notification, setNotification] = useState<{
     type: 'success' | 'error'
     message: string
   } | null>(null)
-    const { items, clearCart } = useCartStore()
-    const { user } = props
-    if (!user) {
-        console.log("user not found ........" , user)
-    }
+  // const { items, clearCart } = useCartStore()
+  const { user, cart } = props
+  const items = cart.items as CartItem[]
+  if (!user) {
+    console.log('user not found ........', user)
+  }
 
-    const form = useForm<CheckoutFormValues>({
-        resolver: zodResolver(checkoutFormSchema),
-        defaultValues: {
-        email: user?.email ? user.email: '',
-        phoneNumber: user?.phoneNumber ? user.phoneNumber: '',
-        firstName: user?.firstName ? user.firstName: '',
-        lastName: user?.lastName ? user.lastName: '',
-        city: user?.city ? user.city: '',
-        house: user?.buildingNo ? user.buildingNo: '',
-        street: user?.street ? user.street: '',
-        district: user?.district ? user.district: '',
-        province: user?.province ? user.province: '',
-        country: user?.country ? user.country: '',
-        shortAddress: user?.shortAddress ? user.shortAddress: '',
-        postalCode: user?.phoneNumber ? user.phoneNumber : '',
-        secondaryNumber: user?.secondaryNumber ? user.secondaryNumber : '',
-        paymentMethod: user?.paymentMethod ? user.paymentMethod as PaymentMethodEnum: 'cash_on_delivery',
-        notes: '',
-        },
-    })
+  const form = useForm<CheckoutFormValues>({
+    resolver: zodResolver(checkoutFormSchema),
+    defaultValues: {
+      email: user?.email ? user.email : '',
+      phoneNumber: user?.phoneNumber ? user.phoneNumber : '',
+      firstName: user?.firstName ? user.firstName : '',
+      lastName: user?.lastName ? user.lastName : '',
+      city: user?.city ? user.city : '',
+      house: user?.buildingNo ? user.buildingNo : '',
+      street: user?.street ? user.street : '',
+      district: user?.district ? user.district : '',
+      province: user?.province ? user.province : '',
+      country: user?.country ? user.country : '',
+      shortAddress: user?.shortAddress ? user.shortAddress : '',
+      postalCode: user?.phoneNumber ? user.phoneNumber : '',
+      secondaryNumber: user?.secondaryNumber ? user.secondaryNumber : '',
+      paymentMethod: user?.paymentMethod
+        ? (user.paymentMethod as PaymentMethodEnum)
+        : 'cash_on_delivery',
+      notes: '',
+    },
+  })
 
   const { reset, watch } = form
   // Load from localStorage
@@ -90,9 +95,8 @@ export default function CheckoutFormPage(props : CheckoutFormProps) {
 
   const onSubmit = (data: CheckoutFormValues) => {
     startTransition(async () => {
-        try {
-          
-           await createOrder(data)
+      try {
+        await createOrder(data)
         // Log the order data
         console.log('Placing order:', {
           customerInfo: data,
@@ -459,7 +463,7 @@ export default function CheckoutFormPage(props : CheckoutFormProps) {
 
         {/* Right side - Order Summary */}
         <div className="lg:sticky lg:top-22 lg:basis-2/5 lg:self-start">
-          <OrderSummary />
+          <OrderSummary cart={cart as Cart} />
         </div>
       </div>
 

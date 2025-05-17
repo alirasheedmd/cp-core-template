@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/sonner'
-import { Cart } from '@/db/schema'
-import { addItemToCart, removeItemFromCart } from '@/lib/dal'
+import { addItemToCart } from '@/lib/dal'
 // import { useAuthRequired } from '@/hooks/useAuthRequired'
 // import { useCartStore } from '@/stores/useCartStore'
 import { CartItem } from '@/types'
-import { Loader, Minus, Plus } from 'lucide-react'
+import { Loader, Plus } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'

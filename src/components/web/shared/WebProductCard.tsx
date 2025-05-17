@@ -58,6 +58,8 @@ export default async function WebProductCard({ item }: WebProductCardProps) {
               price: round2(item.price),
               qty: 1,
               image: item.image as string,
+              shippingPrice: Number(item.shippingPrice),
+              tax: Number(item.tax),
             }}
           />
         </div>

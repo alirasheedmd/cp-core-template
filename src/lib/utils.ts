@@ -66,12 +66,24 @@ export const formatError = (error: any): string => {
   }
 }
 
+
+export const formatNumberWithDecimal = (num: number): string => {
+  const [int, decimal] = num.toString().split('.')
+  return decimal ? `${int}.${decimal.padEnd(2, '0')}` : int //12.1 => 12.10
+}
+
 export const calcPrice = (items: CartItem[]) => {
   const itemsPrice = round2(
       items.reduce((acc, item) => acc + item.price * item.qty, 0),
     ),
-    shippingPrice = round2(itemsPrice > 500 ? 0 : 10),
-    taxPrice = round2(0.15 * itemsPrice),
+    shippingPrice = round2(
+      itemsPrice > 999
+        ? 0
+        : items.reduce((acc, item) => acc + item.shippingPrice * item.qty, 0),
+    ),
+    taxPrice = round2(
+      items.reduce((acc, item) => acc + item.tax * item.qty, 0),
+    ),
     totalPrice = round2(itemsPrice + shippingPrice + taxPrice)
   return {
     itemsPrice: itemsPrice.toFixed(2),
