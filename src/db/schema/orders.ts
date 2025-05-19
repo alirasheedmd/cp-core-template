@@ -19,6 +19,7 @@ export const orders = pgTable('orders', {
   shippingAddress: json('shippingAddress').$type<ShippingAddress>().notNull(),
   paymentMethod: text('paymentMethod').notNull(),
   paymentResult: json('paymentResult').$type<PaymentResult>(),
+  orderNotes: text('order_notes'),
   itemsPrice: numeric('itemsPrice', { precision: 12, scale: 2 }).notNull(),
   shippingPrice: numeric('shippingPrice', {
     precision: 12,
