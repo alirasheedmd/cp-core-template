@@ -1,6 +1,12 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,6 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { customerSignIn, customerSignUp } from '@/app/actions/web/auth/webAuth'
+import { getUserStatus } from '@/app/actions/web/auth/getUserStatus'
 import { VerificationForm } from '@/components/web/auth/VerificationForm'
 import ForgotPasswordForm from '@/components/web/auth/ForgotPasswordForm'
 import { ResetPasswordVerificationForm } from '@/components/web/auth/ResetPasswordVerificationForm'
@@ -22,6 +29,12 @@ type AuthMode =
   | 'verify-reset'
   | 'change-password'
 
+type UserInfo = {
+  id: string
+  email: string
+  isAdmin: boolean
+} | null
+
 interface AuthContextType {
   isOpen: boolean
   mode: AuthMode
@@ -30,6 +43,10 @@ interface AuthContextType {
   setMode: (mode: AuthMode) => void
   userEmail: string
   setUserEmail: (email: string) => void
+  user: UserInfo
+  isAuthenticated: boolean
+  isLoading: boolean
+  refreshUserStatus: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -38,6 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
   const [mode, setMode] = useState<AuthMode>('signin')
   const [userEmail, setUserEmail] = useState('')
+  const [user, setUser] = useState<UserInfo>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const openAuth = (initialMode: AuthMode = 'signin') => {
     setMode(initialMode)
@@ -47,6 +67,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const closeAuth = () => {
     setIsOpen(false)
   }
+
+  const refreshUserStatus = async () => {
+    setIsLoading(true)
+    try {
+      const { authenticated, user } = await getUserStatus()
+      setIsAuthenticated(authenticated)
+      setUser(user)
+    } catch (error) {
+      console.error('Failed to fetch user status:', error)
+      setIsAuthenticated(false)
+      setUser(null)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    refreshUserStatus()
+  }, [])
 
   return (
     <AuthContext.Provider
@@ -58,6 +97,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setMode,
         userEmail,
         setUserEmail,
+        user,
+        isAuthenticated,
+        isLoading,
+        refreshUserStatus,
       }}
     >
       {children}
@@ -111,7 +154,7 @@ function AuthModal() {
         <div className="mt-4 text-center text-sm">
           {mode === 'signin' ? (
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <button
                 onClick={() => setMode('signup')}
                 className="text-primary hover:underline"
@@ -141,7 +184,7 @@ function SignInForm() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { closeAuth, setMode, setUserEmail } = useAuth()
+  const { closeAuth, setMode, setUserEmail, refreshUserStatus } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -164,12 +207,12 @@ function SignInForm() {
           setError(response.error)
         }
       } else {
+        // Refresh user status after successful sign in
+        await refreshUserStatus()
         closeAuth()
-        // Optionally refresh the page or update UI
-        window.location.reload()
       }
     } catch (error) {
-      setError('An unexpected error occurred')
+      setError('An unexpected error occurred' + error)
     } finally {
       setIsLoading(false)
     }
@@ -231,7 +274,7 @@ function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { setMode, setUserEmail } = useAuth()
+  const { setMode, setUserEmail, refreshUserStatus } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -251,21 +294,21 @@ function SignUpForm() {
       formData.append('firstName', firstName)
       formData.append('lastName', lastName)
 
-      // Create a server action for customer sign-up
       const response = await customerSignUp(formData)
 
       if (response.error) {
         setError(response.error)
       } else if (response.needsVerification) {
-        // Switch to verification mode in the auth context
+        // Set user email and change to verification mode
         setUserEmail(response.email || email)
         setMode('verify')
       } else {
-        // Normal flow if no verification needed
-        window.location.reload()
+        // Successful registration without needing verification
+        await refreshUserStatus()
+        setMode('signin')
       }
     } catch (error) {
-      setError('An unexpected error occurred')
+      setError('An unexpected error occurred' + error)
     } finally {
       setIsLoading(false)
     }

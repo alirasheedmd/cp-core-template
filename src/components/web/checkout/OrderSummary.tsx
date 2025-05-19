@@ -1,31 +1,36 @@
 'use client'
 
 import { Separator } from '@/components/ui/separator'
-import { useCartStore } from '@/stores/useCartStore'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
 import Image from 'next/image'
 import { routes } from '@/config/routes'
+import { CartItem } from '@/types'
+import { Cart } from '@/db/schema'
 
-export default function OrderSummary() {
-  const { items, shippingFee, getSubtotal, getTotal } = useCartStore()
+interface OrderSummaryProps {
+  cart: Cart
+}
 
-  const subtotal = getSubtotal()
-  const total = getTotal()
+export default function OrderSummary({ cart }: OrderSummaryProps) {
+  // const { items, shippingFee, getSubtotal, getTotal } = useCartStore()
 
+  // const subtotal = getSubtotal()
+  // const total = getTotal()
+  const items = cart?.items as CartItem[]
   return (
     <div className="w-full overflow-y-auto bg-gray-50 p-4 sm:p-6">
       <div className="space-y-4 sm:space-y-6">
         <div>
           <h2 className="text-lg font-semibold sm:text-xl">Order Summary</h2>
           <p className="text-muted-foreground text-xs sm:text-sm">
-            {items.length} {items.length === 1 ? 'item' : 'items'}
+            {items?.length} {items?.length === 1 ? 'item' : 'items'}
           </p>
         </div>
 
         {/* Items List */}
         <div className="space-y-3 sm:space-y-4">
-          {items.map((item) => (
-            <div key={item.id} className="flex gap-3 sm:gap-4">
+          {items?.map((item) => (
+            <div key={item.productId} className="flex gap-3 sm:gap-4">
               <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border bg-gray-100 sm:h-20 sm:w-20">
                 {item.image ? (
                   <Image
@@ -47,12 +52,12 @@ export default function OrderSummary() {
                     {item.name}
                   </h3>
                   <CurrencySymbol
-                    amount={item.price * item.quantity}
+                    amount={item.price * item.qty}
                     className="ml-2 text-xs font-medium sm:text-sm"
                   />
                 </div>
                 <p className="text-muted-foreground mt-0.5 text-xs sm:mt-1 sm:text-sm">
-                  Quantity: {item.quantity}
+                  Quantity: {item.qty}
                 </p>
                 <p className="text-muted-foreground mt-1 text-xs sm:mt-2 sm:text-sm">
                   <CurrencySymbol amount={item.price} />
@@ -68,16 +73,20 @@ export default function OrderSummary() {
         <div className="space-y-2 sm:space-y-3">
           <div className="flex justify-between text-xs sm:text-sm">
             <span className="text-DarkGrey">Subtotal</span>
-            <CurrencySymbol amount={subtotal} />
+            <CurrencySymbol amount={cart.itemsPrice} />
+          </div>
+          <div className="flex justify-between text-xs sm:text-sm">
+            <span className="text-DarkGrey">Tax</span>
+            <CurrencySymbol amount={cart.taxPrice} />
           </div>
           <div className="flex justify-between text-xs sm:text-sm">
             <span className="text-DarkGrey">Shipping Fee</span>
-            <CurrencySymbol amount={shippingFee} />
+            <CurrencySymbol amount={cart.shippingPrice} />
           </div>
           <Separator className="my-2 sm:my-3" />
           <div className="flex justify-between text-sm font-medium sm:text-base">
             <span>Total</span>
-            <CurrencySymbol amount={total} />
+            <CurrencySymbol amount={cart.totalPrice} />
           </div>
         </div>
 

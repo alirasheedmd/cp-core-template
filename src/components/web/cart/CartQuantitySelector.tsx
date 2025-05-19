@@ -1,23 +1,23 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
+import { addItemToCart, removeItemFromCart } from '@/lib/dal'
+import { CartItem } from '@/types'
 import { Minus, Plus } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { useTransition } from 'react'
 
-interface QuantitySelectorProps {
+interface CartItemQuantitySelectorProps {
   quantity: number
-  onQuantityChange: (quantity: number) => void
+  item: CartItem
   min?: number
 }
 
-export function QuantitySelector({
+export default function CartItemQuantitySelector({
   quantity,
-  onQuantityChange,
   min = 1,
-}: QuantitySelectorProps) {
-  const handleDecrement = () =>
-    onQuantityChange(quantity > min ? quantity - 1 : min)
-  const handleIncrement = () => onQuantityChange(quantity + 1)
-
+  item,
+}: CartItemQuantitySelectorProps) {
+  const [isPending, startTransition] = useTransition()
+  const currentPath = usePathname()
   return (
     <div className="flex items-center space-x-2">
       <span className="text-sm">Quantity</span>
@@ -25,11 +25,21 @@ export function QuantitySelector({
         <Button
           type="button"
           variant="ghost"
+          disabled={isPending}
           aria-label="Decrease quantity"
           className="text-DarkGrey hover:bg-LightGrey rounded-r-none px-2 py-0.5 text-base"
-          onClick={handleDecrement}
+          onClick={() => {
+            startTransition(async () => {
+              const res = await removeItemFromCart(item.productId, currentPath)
+              // toast(res.message)
+              console.log(res.message)
+
+              return
+            })
+          }}
         >
           <Minus className="h-3.5 w-3.5" />
+          {/* <Toaster /> */}
         </Button>
         <input
           type="number"
@@ -41,11 +51,20 @@ export function QuantitySelector({
         <Button
           type="button"
           variant="ghost"
-          aria-label="Increase quantity"
+          disabled={isPending}
           className="text-DarkGrey hover:bg-LightGrey rounded-l-none px-2 py-0.5 text-base"
-          onClick={handleIncrement}
+          aria-label="Increase quantity"
+          onClick={() => {
+            startTransition(async () => {
+              const res = await addItemToCart(item, currentPath)
+              // toast(res.message)
+              console.log(res.message)
+              return
+            })
+          }}
         >
           <Plus className="h-3.5 w-3.5" />
+          {/* <Toaster /> */}
         </Button>
       </div>
     </div>

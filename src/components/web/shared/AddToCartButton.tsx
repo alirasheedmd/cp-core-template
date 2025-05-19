@@ -1,55 +1,46 @@
 'use client'
+import { addItemToCart } from '@/lib/dal'
 
-// import { useAuthRequired } from '@/hooks/useAuthRequired'
-import { useCartStore } from '@/stores/useCartStore'
+import { CartItem } from '@/types'
+import { Loader } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { useTransition } from 'react'
 
-interface AddToCartProps {
-  productId: string
-  name: string
-  price: string
-  image?: string | null
-  quantity?: number
-  slug: string
-}
-
-export function AddToCart({
-  productId,
-  name,
-  price,
-  image,
-  quantity = 1,
-  slug,
-}: AddToCartProps) {
-  // const requireAuth = useAuthRequired()
-  const addItem = useCartStore((state) => state.addItem)
-
-  const handleAddToCart = async () => {
-    // const isAuthenticated = await requireAuth()
-
-    // if (isAuthenticated) {
-    // Add the item multiple times based on quantity
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        id: productId,
-        name,
-        price: parseFloat(price),
-        image: image || undefined,
-        slug,
-      })
-    }
-    // }
+export default function AddToCart({
+  item,
+}: {
+  item: Omit<CartItem, 'cardId'>
+}) {
+  const [isPending, startTransition] = useTransition()
+  const currentPath = usePathname()
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    startTransition(async () => {
+      const res = await addItemToCart(item, currentPath)
+      if (!res.success) {
+        console.log(res.message)
+        return
+      }
+      console.log(item.name + ' added to the cart')
+    })
   }
 
   return (
     <button
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        handleAddToCart()
-      }}
-      className="border-Red text-Red mt-5 rounded-full border-2 px-4 py-2 text-nowrap transition-all duration-300 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+      className="border-Red text-Red mt-5 w-full rounded-full border-2 px-4 py-2 text-nowrap transition-all duration-300 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+      type="button"
+      disabled={isPending}
+      onClick={handleAddToCart}
     >
-      Add to Cart
+      {isPending ? (
+        <div className="flex items-center justify-center gap-x-1">
+          <Loader className="inline-block animate-spin" />
+          <span>Adding...</span>
+        </div>
+      ) : (
+        'Add to cart'
+      )}
     </button>
   )
 }

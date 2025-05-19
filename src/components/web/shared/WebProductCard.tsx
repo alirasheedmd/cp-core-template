@@ -3,14 +3,15 @@ import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { IWebProduct } from '@/types'
-import { AddToCart } from './AddToCartButton'
+import AddToCart from './AddToCartButton'
 import { routes } from '@/config/routes'
+import { round2 } from '@/lib/utils'
 
 interface WebProductCardProps {
   item: IWebProduct
 }
 
-export default function WebProductCard({ item }: WebProductCardProps) {
+export default async function WebProductCard({ item }: WebProductCardProps) {
   if (!item?.slug) return null
 
   return (
@@ -42,12 +43,24 @@ export default function WebProductCard({ item }: WebProductCardProps) {
           </p>
           <CurrencySymbol amount={item?.price} className="text-gray-600" />
           {/* Add to Cart Button */}
-          <AddToCart
+          {/* <AddToCart
             productId={item.id}
             name={item.title}
             price={item.price}
             image={item.image}
             slug={item.slug}
+          /> */}
+          <AddToCart
+            item={{
+              productId: item.id,
+              name: item.title,
+              slug: item.slug,
+              price: round2(item.price),
+              qty: 1,
+              image: item.image as string,
+              shippingPrice: Number(item.shippingPrice),
+              tax: Number(item.tax),
+            }}
           />
         </div>
       </Card>

@@ -3,14 +3,15 @@ import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { routes } from '@/config/routes'
+import { OrderItem } from '@/db/schema'
 
-interface OrderItem {
-  id: string
-  name: string
-  price: number
-  quantity: number
-  image: string
-}
+// interface OrderItem {
+//   id: string
+//   name: string
+//   price: number
+//   quantity: number
+//   image: string
+// }
 
 interface OrderSummaryProps {
   items: OrderItem[]
@@ -38,10 +39,10 @@ export default function OrderSummary({
       {/* Items List */}
       <div className="space-y-4">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center gap-4">
+          <div key={item.productId} className="flex items-center gap-4">
             <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border bg-gray-50">
               <Image
-                src={'/default-image.png'}
+                src={item.image}
                 alt={item.name}
                 width={56}
                 height={56}

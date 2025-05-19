@@ -5,15 +5,17 @@ import PrimaryButton from '@/components/common/PrimaryButton'
 import Link from 'next/link'
 import { routes } from '@/config/routes'
 
-interface OrderSummaryProps {
+export interface OrderSummaryProps {
   subtotal: number
   shippingFee: number
+  tax: number
   total: number
 }
 
 export function OrderSummary({
   subtotal,
   shippingFee,
+  tax,
   total,
 }: OrderSummaryProps) {
   return (
@@ -25,6 +27,10 @@ export function OrderSummary({
           <div className="flex justify-between">
             <span>Subtotal</span>
             <CurrencySymbol amount={subtotal} />
+          </div>
+          <div className="flex justify-between">
+            <span>Tax</span>
+            <CurrencySymbol amount={tax} />
           </div>
           <div className="flex justify-between">
             <span>Shipping</span>

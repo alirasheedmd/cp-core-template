@@ -1,8 +1,11 @@
 import { z } from 'zod'
+import { editContactInfoSchema } from './update-user.schema'
 
 export const paymentMethodEnum = z.enum(['cash_on_delivery', 'bank_transfer'], {
   required_error: 'Please select a payment method',
 })
+
+export type PaymentMethodEnum = z.infer<typeof paymentMethodEnum>
 
 export const checkoutFormSchema = z.object({
   // Contact Information
@@ -41,5 +44,17 @@ export const checkoutFormSchema = z.object({
   notes: z.string().optional(),
 })
 
+export const paymentResultSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  email_address: z.string(),
+  pricePaid: z.string(),
+})
+
+export type PaymentResult = z.infer<typeof paymentResultSchema>
+
 export type CheckoutFormValues = z.infer<typeof checkoutFormSchema>
 export type PaymentMethod = z.infer<typeof paymentMethodEnum>
+
+export type ShippingAddress = z.infer<typeof editContactInfoSchema>
+

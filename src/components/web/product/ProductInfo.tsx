@@ -1,9 +1,12 @@
 'use client'
-import { useState } from 'react'
+
 import CurrencySymbol from '@/components/common/CurrencySymbol'
-import { AddToCart } from '@/components/web/shared/AddToCartButton'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
 import PrimaryButton from '@/components/common/PrimaryButton'
+import { round2 } from '@/lib/utils'
+import { CartItem } from '@/types'
+import { useState } from 'react'
+import AddToCartButton from '@/components/web/shared/AddToCartButton'
 
 interface ProductInfoProps {
   title: string
@@ -15,6 +18,8 @@ interface ProductInfoProps {
   id: string
   image?: string | null
   slug: string
+  shippingPrice: string
+  tax: string
 }
 
 export default function ProductInfo({
@@ -26,9 +31,29 @@ export default function ProductInfo({
   id,
   image,
   slug,
+  shippingPrice,
+  tax,
 }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1)
 
+  // const quantity = cart?.items?.length
+  //   ? cart.items.find((pId) => pId.productId === id)?.qty ?? 1
+  //   : 1
+  const item: CartItem = {
+    productId: id,
+    name: title,
+    slug: slug,
+    qty: quantity,
+    image: image as string,
+    price: round2(price),
+    shippingPrice: Number(shippingPrice),
+    tax: Number(tax),
+  }
+  const onQuantityChange = (newQuantity: number) => {
+    if (newQuantity < 1) return
+    item.qty = newQuantity
+    return setQuantity(newQuantity)
+  }
   return (
     <div className="space-y-6">
       <div>
@@ -57,17 +82,24 @@ export default function ProductInfo({
       </div>
 
       {/* Quantity Selector */}
-      <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />
+      <QuantitySelector
+        quantity={quantity}
+        onQuantityChange={onQuantityChange}
+      />
 
       {/* Buttons */}
       <div className="flex max-w-80 flex-col gap-3">
-        <AddToCart
-          productId={id}
-          name={title}
-          price={price}
-          image={image}
-          quantity={quantity}
-          slug={slug}
+        <AddToCartButton
+          item={{
+            productId: id,
+            name: title,
+            slug: slug,
+            qty: quantity,
+            image: image as string,
+            price: round2(price),
+            shippingPrice: Number(shippingPrice),
+            tax: Number(tax),
+          }}
         />
         <PrimaryButton fullWidth>Buy it now</PrimaryButton>
       </div>
