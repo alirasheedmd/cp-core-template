@@ -28,6 +28,8 @@ import {
 } from '@/schemas/checkout-form.schema'
 import { insertOrderSchema } from '@/schemas/order.schema'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { redirect } from 'next/navigation'
+import { customAlphabet } from 'nanoid'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -701,7 +703,9 @@ export async function createOrder(data: CheckoutFormValues) {
       shortAddress: validatedAddress.shortAddress,
       unitNumber: validatedAddress.unitNumber,
     }
-    const orderId = crypto.randomUUID()
+    const generateSixDigitId = customAlphabet('0123456789', 6)
+    const orderId = generateSixDigitId()
+
     const order = insertOrderSchema.parse({
       id: orderId,
       userId: user ? user.id : unauthorizedUser?.id,
@@ -743,9 +747,9 @@ export async function createOrder(data: CheckoutFormValues) {
 
     console.log('inserted order id', insertedOrderId)
     if (!insertedOrderId) throw new Error('Order not created')
-    // redirect(`/order/${insertedOrderId}`)
+    redirect(`/order-confirmation/${insertedOrderId}`)
 
-    revalidatePath('/order-confirmation')
+    // revalidatePath('/order-confirmation')
     return {
       success: true,
       message: 'User updated successfully',
@@ -765,7 +769,7 @@ export async function getOrderById(orderId: string) {
     with: {
       orderItems: true,
       user: {
-        columns: { firstName: true, lastName: true, email: true },
+        columns: { email: true },
       },
     },
   })
