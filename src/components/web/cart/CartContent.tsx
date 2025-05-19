@@ -20,6 +20,7 @@ export async function CartContent() {
         <OrderSummary
           subtotal={Number(cart.itemsPrice)}
           shippingFee={Number(cart.shippingPrice)}
+          tax={Number(cart.taxPrice)}
           total={Number(cart.totalPrice)}
         />
       </div>

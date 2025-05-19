@@ -1,43 +1,47 @@
-interface ShippingAddress {
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-  secondaryNumber?: string
-  house: string
-  unitNumber?: string
-  street: string
-  shortAddress?: string
-  district: string
-  province: string
-  city: string
-  country: string
-  postalCode: string
-}
+// interface ShippingAddress {
+//   firstName: string
+//   lastName: string
+//   email: string
+//   phoneNumber: string
+//   secondaryNumber?: string
+//   house: string
+//   unitNumber?: string
+//   street: string
+//   shortAddress?: string
+//   district: string
+//   province: string
+//   city: string
+//   country: string
+//   postalCode: string
+// }
+
+import { ShippingAddress } from '@/schemas/checkout-form.schema'
 
 interface OrderDetailsProps {
   shippingAddress: ShippingAddress
   paymentMethod: 'bank_transfer' | 'cash_on_delivery'
   notes?: string
-  estimatedDelivery: string
+  estimatedDelivery?: string
+  userEmail: string
 }
 
 export default function OrderDetails({
   shippingAddress,
   paymentMethod,
   notes,
-  estimatedDelivery,
+  // estimatedDelivery,
+  userEmail,
 }: OrderDetailsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 rounded-md border bg-white p-4 md:grid-cols-2">
       <div>
         <div className="mb-1 font-semibold">Contact information</div>
-        <div>{shippingAddress.email}</div>
+        <div>{userEmail}</div>
         <div className="mt-4 mb-1 font-semibold">Shipping address</div>
         <div>
           {shippingAddress.firstName} {shippingAddress.lastName}
           <br />
-          {shippingAddress.house}
+          {shippingAddress.buildingNo}
           {shippingAddress.unitNumber && `, Unit ${shippingAddress.unitNumber}`}
           <br />
           {shippingAddress.street}
@@ -78,8 +82,8 @@ export default function OrderDetails({
             <div>{notes}</div>
           </>
         )}
-        <div className="mt-4 mb-1 font-semibold">Shipping method</div>
-        <div>{estimatedDelivery}</div>
+        {/* <div className="mt-4 mb-1 font-semibold">Shipping method</div>
+        <div>{estimatedDelivery}</div> */}
       </div>
     </div>
   )

@@ -12,9 +12,10 @@ import {
   productCategories,
   categories,
   carts,
+  orders,
+  orderItems,
 } from '@/db/schema'
 import { CustomerInfoFormValues } from '@/components/web/customer/CustomerForm'
-import { orders } from '@/db/schema/orders'
 import { cookies } from 'next/headers'
 import { type CartItem } from '@/types'
 import { calcPrice, formatError } from './utils'
@@ -23,8 +24,12 @@ import { cartItemSchema } from '@/schemas/cart.schema'
 import { generateSessionCartId } from '@/app/actions/web/auth/webAuth'
 import {
   checkoutFormSchema,
-  ShippingAddress,
+  CheckoutFormValues,
 } from '@/schemas/checkout-form.schema'
+import { insertOrderSchema } from '@/schemas/order.schema'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { redirect } from 'next/navigation'
+import { customAlphabet } from 'nanoid'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -44,7 +49,7 @@ export const getCurrentUser = cache(async () => {
 
   try {
     const result = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, session.userId),
+      where: (users, { eq }) => eq(users.id, session.userId as string),
     })
 
     return result || null
@@ -109,6 +114,8 @@ export async function getAllProducts() {
       description: products.description,
       price: products.price,
       slug: products.slug,
+      shippingPrice: products.shippingPrice,
+      tax: products.tax,
     })
     .from(products)
 
@@ -141,6 +148,8 @@ export async function getAllProducts() {
         price: product.price,
         image: productImages.length > 0 ? productImages[0].src : null,
         slug: product.slug,
+        shippingPrice: product.shippingPrice as string,
+        tax: product.tax as string,
       }
     }),
   )
@@ -168,6 +177,8 @@ export async function getProductsByCategory(categorySlug: string) {
       price: products.price,
       category: categories.slug,
       slug: products.slug,
+      shippingPrice: products.shippingPrice,
+      tax: products.tax,
     })
     .from(products)
     .innerJoin(productCategories, eq(productCategories.productId, products.id))
@@ -203,6 +214,8 @@ export async function getProductsByCategory(categorySlug: string) {
         price: product.price,
         image: productImages.length > 0 ? productImages[0].src : null,
         slug: product.slug,
+        shippingPrice: product.shippingPrice as string,
+        tax: product.tax as string,
       }
     }),
   )
@@ -344,48 +357,6 @@ export async function updateUserInfo(data: CustomerInfoFormValues) {
   console.log('data result', result)
 
   return result[0]
-}
-
-export async function createOrder(data: ShippingAddress) {
-  try {
-    console.log('order data', data)
-    const user = await getCurrentUser()
-    if (!user) return
-
-    const validatedAddress = checkoutFormSchema.parse(data)
-
-    const customerInfo = {
-      firstName: validatedAddress.firstName,
-      lastName: validatedAddress.lastName,
-      phoneNumber: validatedAddress.phoneNumber,
-      buildingNo: validatedAddress.house,
-      street: validatedAddress.street,
-      district: validatedAddress.district,
-      city: validatedAddress.city,
-      province: validatedAddress.province,
-      postalCode: validatedAddress.postalCode as string,
-      country: validatedAddress.country,
-      secondaryNumber: validatedAddress.secondaryNumber,
-      shortAddress: validatedAddress.shortAddress,
-      unitNumber: validatedAddress.unitNumber,
-      paymentMethod: validatedAddress.paymentMethod,
-    }
-
-    const result = await db
-      .update(users)
-      .set({ ...customerInfo })
-      .where(eq(users.id, user.id))
-      .returning()
-    console.log('data result', result)
-
-    revalidatePath('/order-confirmation')
-    return {
-      success: true,
-      message: 'User updated successfully',
-    }
-  } catch (error) {
-    return { success: false, message: formatError(error) }
-  }
 }
 
 export async function deleteUserInfo() {
@@ -652,4 +623,155 @@ export const clearCart = async () => {
   } catch (error) {
     return { success: false, message: formatError(error) }
   }
+}
+
+export async function createOrder(data: CheckoutFormValues) {
+  try {
+    console.log('order data', data)
+    const validatedAddress = checkoutFormSchema.parse(data)
+    const user = await getCurrentUser()
+    if (!user) {
+      const existingUser = await getUserByEmail(validatedAddress.email)
+      if (!existingUser) {
+        const newUserId = crypto.randomUUID()
+        const newUser = await db
+          .insert(users)
+          .values({
+            id: newUserId,
+            email: validatedAddress.email,
+            password: '',
+            isVerified: false,
+          })
+          .returning()
+        console.log('new user', newUser)
+      }
+    }
+
+    const unauthorizedUser = await getUserByEmail(validatedAddress.email)
+
+    const cart = await getMyCart()
+    if (!cart) return
+
+    console.log('my cart order', cart)
+
+    const customerAddress = {
+      firstName: validatedAddress.firstName,
+      lastName: validatedAddress.lastName,
+      phoneNumber: validatedAddress.phoneNumber,
+      buildingNo: validatedAddress.house,
+      street: validatedAddress.street,
+      district: validatedAddress.district,
+      city: validatedAddress.city,
+      province: validatedAddress.province,
+      postalCode: validatedAddress.postalCode as string,
+      country: validatedAddress.country,
+      secondaryNumber: validatedAddress.secondaryNumber,
+      shortAddress: validatedAddress.shortAddress,
+      unitNumber: validatedAddress.unitNumber,
+      paymentMethod: validatedAddress.paymentMethod,
+    }
+    if (user) {
+      const updateUser = await db
+        .update(users)
+        .set({ ...customerAddress })
+        .where(eq(users.id, user.id))
+        .returning()
+
+      console.log('data result', updateUser)
+    } else if (unauthorizedUser) {
+      const updateUser = await db
+        .update(users)
+        .set({ ...customerAddress })
+        .where(eq(users.id, unauthorizedUser.id))
+        .returning()
+
+      console.log('data result', updateUser)
+    }
+
+    const shippingAddress = {
+      firstName: validatedAddress.firstName,
+      lastName: validatedAddress.lastName,
+      phoneNumber: validatedAddress.phoneNumber,
+      buildingNo: validatedAddress.house,
+      street: validatedAddress.street,
+      district: validatedAddress.district,
+      city: validatedAddress.city,
+      province: validatedAddress.province,
+      postalCode: validatedAddress.postalCode as string,
+      country: validatedAddress.country,
+      secondaryNumber: validatedAddress.secondaryNumber,
+      shortAddress: validatedAddress.shortAddress,
+      unitNumber: validatedAddress.unitNumber,
+    }
+    const generateSixDigitId = customAlphabet('0123456789', 6)
+    const orderId = generateSixDigitId()
+
+    const order = insertOrderSchema.parse({
+      id: orderId,
+      userId: user ? user.id : unauthorizedUser?.id,
+      shippingAddress: shippingAddress,
+      paymentMethod: validatedAddress.paymentMethod,
+      itemsPrice: cart.itemsPrice,
+      shippingPrice: cart.shippingPrice,
+      taxPrice: cart.taxPrice,
+      totalPrice: cart.totalPrice,
+      orderNotes: validatedAddress.notes,
+    })
+
+    console.log('order, data ...', order)
+    const insertedOrder = await db.insert(orders).values(order).returning()
+    console.log('✅ Inserted order:', insertedOrder)
+
+    for (const item of cart.items) {
+      await db.insert(orderItems).values({
+        ...item,
+        quantity: item.qty,
+        price: item.price.toFixed(2),
+        orderId: insertedOrder[0].id,
+      })
+    }
+    console.log('inserted items')
+
+    await db
+      .update(carts)
+      .set({
+        items: [],
+        totalPrice: '0',
+        shippingPrice: '0',
+        taxPrice: '0',
+        itemsPrice: '0',
+      })
+      .where(eq(carts.id, cart.id))
+
+    const insertedOrderId = insertedOrder[0].id
+
+    console.log('inserted order id', insertedOrderId)
+    if (!insertedOrderId) throw new Error('Order not created')
+    redirect(`/order-confirmation/${insertedOrderId}`)
+
+    // revalidatePath('/order-confirmation')
+    return {
+      success: true,
+      message: 'User updated successfully',
+    }
+  } catch (error) {
+    console.log('error creating order')
+    if (isRedirectError(error)) {
+      throw error
+    }
+    return { success: false, message: formatError(error) }
+  }
+}
+
+export async function getOrderById(orderId: string) {
+  const order = db.query.orders.findFirst({
+    where: (orders, { eq }) => eq(orders.id, orderId),
+    with: {
+      orderItems: true,
+      user: {
+        columns: { email: true },
+      },
+    },
+  })
+  return order
 }

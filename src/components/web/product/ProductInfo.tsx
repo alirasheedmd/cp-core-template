@@ -18,6 +18,8 @@ interface ProductInfoProps {
   id: string
   image?: string | null
   slug: string
+  shippingPrice: string
+  tax: string
 }
 
 export default function ProductInfo({
@@ -29,6 +31,8 @@ export default function ProductInfo({
   id,
   image,
   slug,
+  shippingPrice,
+  tax,
 }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1)
 
@@ -42,6 +46,8 @@ export default function ProductInfo({
     qty: quantity,
     image: image as string,
     price: round2(price),
+    shippingPrice: Number(shippingPrice),
+    tax: Number(tax),
   }
   const onQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) return
@@ -91,6 +97,8 @@ export default function ProductInfo({
             qty: quantity,
             image: image as string,
             price: round2(price),
+            shippingPrice: Number(shippingPrice),
+            tax: Number(tax),
           }}
         />
         <PrimaryButton fullWidth>Buy it now</PrimaryButton>

@@ -7,6 +7,9 @@ export const routes = {
   dynamicProduct: {
     product: (productSlug: string) => `/products/${productSlug}`,
   },
+  dynamicOrder: {
+    order: (orderId: string) => `/order-confirmation/${orderId}`,
+  },
   contact: '/contact',
   collections: '/collections',
   cart: '/cart',
