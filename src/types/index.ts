@@ -7,10 +7,14 @@ export interface IProductSlug {
 }
 
 export interface ICategory {
-  _id: string
+  id: string
   name: string
-  slug: IProductSlug
-  subcategories?: ICategory[]
+  slug: string
+  parentId?: string
+  status: string
+  image: string
+  productCount?: number
+  subcategoryCount?: number
 }
 
 export interface IAdditionalDetailChild {
@@ -120,6 +124,8 @@ export interface IWebCategory {
   name: string
   slug: string
   image: string | null
+  parentId: string
+  status: string
 }
 
 //CART

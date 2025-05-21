@@ -11,7 +11,7 @@ import { routes } from '@/config/routes'
 import { createUserSchema, signinSchema } from '@/schemas/auth.schema'
 
 /////// CREATE NEW ADMIN USER /////////
-interface CreateUserState {
+export interface CreateUserState {
   success: boolean
   error: string
   fields?: {

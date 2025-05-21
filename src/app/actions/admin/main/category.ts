@@ -1,23 +1,111 @@
 "use server";
 
-export async function createCategory(formData: FormData) {
-  const name = formData.get("name") as string;
-  const visibility = formData.get("visibility") === "true";
-  const images = JSON.parse(formData.get("images") as string);
+import { CategoryFormValues } from '@/components/admin/categories/addCategory/CategoryInfo'
+import { categorySchema, subCategorySchema } from '@/schemas/category.schema'
+import {
+  createCategory as createCategoryInDb,
+  createSubcategory as createSubcategoryInDb,
+} from '@/lib/dal'
+import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
+import { SubcategoryFormValues } from '@/components/admin/categories/addSubCategory/SubcategoryInfo'
 
-  // TODO: Add your API call here to create the category
-  console.log("Creating category:", { name, visibility, images });
-
-  return { success: true };
+export type CategoryActionState = {
+  status: 'idle' | 'submitting' | 'success' | 'error'
+  message?: string
+  errors?: Record<string, string[]>
+  data?: CategoryFormValues
 }
 
-export async function createSubcategory(formData: FormData) {
-  const name = formData.get("name") as string;
-  const visibility = formData.get("visibility") === "true";
-  const images = JSON.parse(formData.get("images") as string);
+export type SubcategoryActionState = {
+  status: 'idle' | 'submitting' | 'success' | 'error'
+  message?: string
+  errors?: Record<string, string[]>
+  data?: SubcategoryFormValues
+}
 
-  // TODO: Add your API call here to create the subcategory
-  console.log("Creating subcategory:", { name, visibility, images });
+export async function createCategory(
+  state: CategoryActionState,
+  formData: FormData,
+): Promise<CategoryActionState> {
+  try {
+    const rawData = Object.fromEntries(formData.entries())
+    const validatedData = categorySchema.parse(rawData)
 
-  return { success: true };
+    // Save the category to the database
+    await createCategoryInDb(validatedData)
+
+    // Revalidate the categories page to show the new category
+    revalidatePath('/admin/categories')
+
+    return {
+      status: 'success',
+      message: 'Category created successfully',
+      data: validatedData,
+    }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errors: Record<string, string[]> = {}
+      error.errors.forEach((err) => {
+        const path = err.path[0] as string
+        if (!errors[path]) {
+          errors[path] = []
+        }
+        errors[path].push(err.message)
+      })
+
+      return {
+        status: 'error',
+        message: 'Validation failed',
+        errors,
+      }
+    }
+    return {
+      status: 'error',
+      message: 'Failed to create category',
+    }
+  }
+}
+
+export async function createSubcategory(
+  state: SubcategoryActionState,
+  formData: FormData,
+): Promise<SubcategoryActionState> {
+  try {
+    const rawData = Object.fromEntries(formData.entries())
+    const validatedData = subCategorySchema.parse(rawData)
+
+    // Save the category to the database
+    await createSubcategoryInDb(validatedData)
+
+    // Revalidate the categories page to show the new category
+    revalidatePath('/admin/categories')
+
+    return {
+      status: 'success',
+      message: 'Category created successfully',
+      data: validatedData,
+    }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errors: Record<string, string[]> = {}
+      error.errors.forEach((err) => {
+        const path = err.path[0] as string
+        if (!errors[path]) {
+          errors[path] = []
+        }
+        errors[path].push(err.message)
+      })
+
+      return {
+        status: 'error',
+        message: 'Validation failed',
+        errors,
+      }
+    }
+    return {
+      status: 'error',
+      message: 'Failed to create category',
+    }
+  }
 }
