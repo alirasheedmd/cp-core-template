@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { IProduct } from '@/types' // Make sure IProduct type path is correct
 import { routes } from '@/config/routes'
+import { formatCurrency2 } from '@/lib/utils'
 
 interface ProductListMobileProps {
   products: IProduct[]
@@ -11,19 +12,18 @@ const ProductListMobile: React.FC<ProductListMobileProps> = ({ products }) => {
     <div className="space-y-4 p-2">
       {products.map((product) => (
         <div
-          key={product._id} // Assuming _id is the unique identifier
+          key={product.id} // Assuming _id is the unique identifier
           className="rounded-lg bg-white p-4 shadow-sm"
         >
-          <h3 className="text-lg font-semibold">{product.name}</h3>
+          <h3 className="text-lg font-semibold">{product.title}</h3>
           <div className="mt-2 flex items-center justify-between">
             <span className="text-sm text-gray-500">
-              {product.category?.name || 'No Category'}{' '}
+              {product.categories || 'No Category'}{' '}
               {/* Optional chaining for category */}
             </span>
             <span className="text-sm font-medium text-gray-900">
-              {/* Display price with discount if available */}$
-              {(product.discountPrice || product.originalPrice)?.toFixed(2) ||
-                'N/A'}
+              {/* Display price with discount if available */}
+              {formatCurrency2(product.price) || 'N/A'}
             </span>
           </div>
           <div className="mt-2 flex items-center justify-between">
@@ -37,7 +37,7 @@ const ProductListMobile: React.FC<ProductListMobileProps> = ({ products }) => {
               {product.status === 'active' ? 'Active' : 'Draft'}
             </span>
             {/* Ensure the link path is correct */}
-            <Link href={routes.admin.productEdit(product._id)}>
+            <Link href={routes.admin.productEdit(product.id)}>
               <button className="text-Orange text-xs hover:underline">
                 Edit
               </button>

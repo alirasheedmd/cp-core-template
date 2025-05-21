@@ -20,7 +20,7 @@ export const formatCurrency = (amount: number | string) => {
   return numericAmount?.toFixed(2)
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-SA', {
   currency: 'SAR',
   style: 'currency',
   minimumFractionDigits: 2,

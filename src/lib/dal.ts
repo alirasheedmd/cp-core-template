@@ -14,6 +14,7 @@ import {
   carts,
   orders,
   orderItems,
+  type CategoryStatus,
 } from '@/db/schema'
 import { CustomerInfoFormValues } from '@/components/web/customer/CustomerForm'
 import { cookies } from 'next/headers'
@@ -30,6 +31,10 @@ import { insertOrderSchema } from '@/schemas/order.schema'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { redirect } from 'next/navigation'
 import { customAlphabet } from 'nanoid'
+import { CategoryFormValues } from '@/components/admin/categories/addCategory/CategoryInfo'
+import { routes } from '@/config/routes'
+import { inArray } from 'drizzle-orm'
+import { SubcategoryFormValues } from '@/components/admin/categories/addSubCategory/SubcategoryInfo'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -116,6 +121,10 @@ export async function getAllProducts() {
       slug: products.slug,
       shippingPrice: products.shippingPrice,
       tax: products.tax,
+      sku: products.sku,
+      status: products.status,
+      currentStock: products.currentStock,
+      createdAt: products.createdAt,
     })
     .from(products)
 
@@ -146,10 +155,15 @@ export async function getAllProducts() {
         description: product.description,
         categories: categories,
         price: product.price,
-        image: productImages.length > 0 ? productImages[0].src : null,
+        images:
+          productImages.length > 0 ? productImages.map((img) => img.src) : null,
         slug: product.slug,
         shippingPrice: product.shippingPrice as string,
         tax: product.tax as string,
+        sku: product.sku,
+        status: product.status,
+        currentStock: product.currentStock,
+        createdAt: product.createdAt,
       }
     }),
   )
@@ -262,12 +276,77 @@ export async function getAllCategories() {
     return {
       id: category.id,
       name: category.name,
-      image: categoryImages.length > 0 ? categoryImages[0].src : null,
+      images:
+        categoryImages.length > 0 ? categoryImages.map((img) => img.src) : null,
       slug: category.slug,
+      status: category.status,
+      parentId: category.parentId,
     }
   })
 
   return result
+}
+
+export async function getSubcategoriesByParentId(parentId: string) {
+  // Get all categories first
+  const categoriesData = await db
+    .select()
+    .from(categories)
+    .where(eq(categories.parentId, parentId))
+
+  // Get all images
+  const imagesData = await db
+    .select({ src: images.src, categoryId: images.categoryId })
+    .from(images)
+    .where(not(isNull(images.categoryId)))
+
+  // Map categories and add their images as arrays
+  const result = categoriesData.map((category) => {
+    // Find all images for this category
+    const categoryImages = imagesData.filter(
+      (img) => img.categoryId === category.id,
+    )
+
+    // Return the category with images as an array
+    return {
+      id: category.id,
+      name: category.name,
+      image: categoryImages.length > 0 ? categoryImages[0].src : null,
+      slug: category.slug,
+      status: category.status,
+      parentId: category.parentId,
+    }
+  })
+
+  return result
+}
+
+export async function updateCategoryStatus(id: string, status: CategoryStatus) {
+  const category = await db
+    .update(categories)
+    .set({
+      status: status,
+    })
+    .where(eq(categories.id, id))
+    .returning({ status: categories.status })
+
+  console.log('category updated', category[0])
+
+  revalidatePath(routes.admin.categories)
+}
+
+export async function deleteCategory(id: string) {
+  await db.delete(categories).where(eq(categories.id, id))
+
+  console.log('category deleted')
+  revalidatePath(routes.admin.categories)
+}
+
+export async function deleteCategories(ids: string[]) {
+  await db.delete(categories).where(inArray(categories.id, ids))
+
+  console.log('category deleted')
+  revalidatePath(routes.admin.categories)
 }
 
 export async function getOneCategory(categorySlug: string) {
@@ -275,6 +354,43 @@ export async function getOneCategory(categorySlug: string) {
     where: (categories, { eq }) => eq(categories.slug, categorySlug),
   })
 
+  return category
+}
+
+export async function getCategory(categoryId: string) {
+  const category = await db.query.categories.findFirst({
+    where: (categories, { eq }) => eq(categories.id, categoryId),
+  })
+
+  return category
+}
+
+export async function createCategory(data: CategoryFormValues) {
+  console.log('category data', data)
+  const generateId = customAlphabet('0123456789', 10)
+  const id = generateId()
+  const category = await db
+    .insert(categories)
+    .values({
+      id: id,
+      ...data,
+    })
+    .returning()
+  console.log('category created', category)
+  return category
+}
+export async function createSubcategory(data: SubcategoryFormValues) {
+  console.log('subcategory data', data)
+  const generateId = customAlphabet('0123456789', 10)
+  const id = generateId()
+  const category = await db
+    .insert(categories)
+    .values({
+      id: id,
+      ...data,
+    })
+    .returning()
+  console.log('subcategory created', category)
   return category
 }
 
