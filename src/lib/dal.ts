@@ -121,6 +121,10 @@ export async function getAllProducts() {
       slug: products.slug,
       shippingPrice: products.shippingPrice,
       tax: products.tax,
+      sku: products.sku,
+      status: products.status,
+      currentStock: products.currentStock,
+      createdAt: products.createdAt,
     })
     .from(products)
 
@@ -151,10 +155,15 @@ export async function getAllProducts() {
         description: product.description,
         categories: categories,
         price: product.price,
-        image: productImages.length > 0 ? productImages[0].src : null,
+        images:
+          productImages.length > 0 ? productImages.map((img) => img.src) : null,
         slug: product.slug,
         shippingPrice: product.shippingPrice as string,
         tax: product.tax as string,
+        sku: product.sku,
+        status: product.status,
+        currentStock: product.currentStock,
+        createdAt: product.createdAt,
       }
     }),
   )
@@ -267,7 +276,8 @@ export async function getAllCategories() {
     return {
       id: category.id,
       name: category.name,
-      image: categoryImages.length > 0 ? categoryImages[0].src : null,
+      images:
+        categoryImages.length > 0 ? categoryImages.map((img) => img.src) : null,
       slug: category.slug,
       status: category.status,
       parentId: category.parentId,

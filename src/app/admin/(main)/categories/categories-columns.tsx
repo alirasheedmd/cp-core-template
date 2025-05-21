@@ -76,7 +76,7 @@ export const categoriesColumns: ColumnDef<ICategory>[] = [
         <div>
           <div className="relative h-8 w-8 rounded-md bg-white">
             <Image
-              src={row.original.image || '/default-image.png'}
+              src={row.original.images?.[0] ?? '/default-image.png'}
               alt={name}
               fill
               className="object-contain"
@@ -155,7 +155,6 @@ export const categoriesColumns: ColumnDef<ICategory>[] = [
     const [open, setOpen] = useState(false)
 
     const isCategory = row.original.parentId ? true : false
-    console.log('is ca', isCategory)
 
     const handleDeleteCategory = async () => {
       await deleteCategory(id)

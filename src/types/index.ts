@@ -12,7 +12,7 @@ export interface ICategory {
   slug: string
   parentId?: string
   status: string
-  image: string
+  images: string[]
   productCount?: number
   subcategoryCount?: number
 }
@@ -39,22 +39,21 @@ export interface IReview {
 }
 
 export interface IProduct {
-  _id: string
-  name: string
-  slug: IProductSlug
+  id: string
+  title: string
+  slug: string
   images: string[]
-  category: ICategory
+  categories: string[]
   description: string
-  color: string
   sku: string
-  originalPrice: number
-  discountPrice?: number
-  stock: number
-  rating: number
-  additionalDetails: IAdditionalDetail[]
-  reviews: IReview[]
-  overallRating: number
-  createdAt: string
+  price: string
+  // discountPrice?: number
+  currentStock: string
+  // rating: number
+  // additionalDetails: IAdditionalDetail[]
+  // reviews: IReview[]
+  // overallRating: number
+  createdAt: Date
   status: string
 }
 

@@ -9,6 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import { routes } from '@/config/routes'
+import { formatCurrency2 } from '@/lib/utils'
 
 export const productsColumns: ColumnDef<IProduct>[] = [
   // Checkbox column
@@ -36,9 +37,9 @@ export const productsColumns: ColumnDef<IProduct>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  // Product Name column
+  // Product Title column
   {
-    accessorKey: 'name',
+    accessorKey: 'title',
     header: ({ column }) => {
       return (
         <Button
@@ -46,14 +47,14 @@ export const productsColumns: ColumnDef<IProduct>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="font-semibold"
         >
-          Product Name
+          Product Title
           <ArrowUpDown className="h-2 w-2" />
         </Button>
       )
     },
     cell: ({ row }) => {
-      const name: string = row.getValue('name')
-      const _id: string = row.original._id || ''
+      const title: string = row.getValue('title')
+      const _id: string = row.original.id || ''
       return (
         <Link
           href={routes.admin.productEdit(_id)}
@@ -61,13 +62,13 @@ export const productsColumns: ColumnDef<IProduct>[] = [
         >
           <div className="relative h-8 w-8 rounded-md bg-white">
             <Image
-              src={row.original.images[0] || '/placeholder.jpg'}
-              alt={name}
+              src={row.original.images?.[0] ?? '/default-image.png'}
+              alt={title}
               fill
               className="object-contain"
             />
           </div>
-          <p>{name}</p>
+          <p>{title}</p>
         </Link>
       )
     },
@@ -98,10 +99,10 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return <h6 className="font-semibold">Inventory</h6>
     },
     cell: ({ row }) => {
-      const totalStock = row.original.stock
+      const totalStock = row.original.currentStock
       return (
         <div>
-          {totalStock === 0 ? (
+          {Number(totalStock) === 0 ? (
             <p>Out of stock</p>
           ) : (
             <p>{totalStock} in stock</p>
@@ -117,8 +118,8 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return <h6 className="font-semibold">Category</h6>
     },
     cell: ({ row }) => {
-      const category = row.original.category
-      return <div>{category?.name || 'Uncategorized'}</div>
+      const category = row.original.categories
+      return <div>{category || 'Uncategorized'}</div>
     },
   },
   // Price column
@@ -128,8 +129,8 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return <h6 className="font-semibold">Price</h6>
     },
     cell: ({ row }) => {
-      const price = row.original.discountPrice || row.original.originalPrice
-      return <div>Rs. {price.toLocaleString('en-PK')}</div>
+      const price = row.original.price
+      return <div>{formatCurrency2(price)}</div>
     },
   },
   // Vendor column
@@ -158,8 +159,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       )
     },
     cell: ({ row }) => {
-      const dateValue = row.getValue('createdAt') as string // Explicitly type as string
-      const date = parseISO(dateValue) // Parse ISO string to Date
+      const date = row.original.createdAt
       const formatted = format(date, 'dd/MM/yyyy')
       return <div className="ml-3">{formatted}</div>
     },
