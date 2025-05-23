@@ -265,13 +265,13 @@ export async function getOneProduct(productSlug: string) {
 
   // Get all images for this product
   const productImages = await db
-    .select({ src: images.src, alt: images.alt, base64: images.blurhash })
+    .select({ src: images.src })
     .from(images)
     .where(eq(images.productId, product.id))
 
   return {
     ...product,
-    images: productImages,
+    images: productImages.map((img) => img.src),
   }
 }
 
