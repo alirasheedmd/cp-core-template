@@ -122,7 +122,7 @@ export interface IWebCategory {
   id: string
   name: string
   slug: string
-  image: string | null
+  images: string[]
   parentId: string
   status: string
 }

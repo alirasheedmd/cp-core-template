@@ -11,14 +11,23 @@ import Inventory from './Inventory'
 import Shipping from './Shipping'
 import SearchEngineListing from './SearchEngineListing'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
+import { IWebCategory } from '@/types'
 
-export default function LeftSideForm() {
+export interface ProductFormProps {
+  categories: IWebCategory[]
+}
+
+export default function LeftSideForm({ categories }: ProductFormProps) {
   const {
     register,
+    watch,
     formState: { errors },
   } = useFormContext<ProductFormValues>()
 
   const form = useFormContext<ProductFormValues>()
+
+  const title = watch('title') || ''
+
   return (
     <div className="space-y-5">
       <AdminContainer className="space-y-7">
@@ -70,6 +79,26 @@ export default function LeftSideForm() {
           )}
         </div>
 
+        {/* Slug */}
+        <div className="space-y-2">
+          <Label htmlFor="slug" className="text-sm">
+            Slug
+          </Label>
+          <Input
+            id="slug"
+            {...register('slug')}
+            readOnly
+            value={title
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9\-]/g, '')}
+            className={`${errors.slug ? 'border-destructive' : 'border-black'}`}
+          />
+          {errors.slug && (
+            <p className="text-destructive text-sm">{errors.slug.message}</p>
+          )}
+        </div>
+
         {/* Description */}
         <div className="space-y-2">
           <Label htmlFor="description" className="text-sm">
@@ -113,7 +142,7 @@ export default function LeftSideForm() {
       {/* Categories */}
       <AdminContainer>
         <div className="space-y-2">
-          <Categories />
+          <Categories {...register('categories')} categories={categories} />
           {errors.categories && (
             <p className="text-destructive text-sm">
               {errors.categories.message}

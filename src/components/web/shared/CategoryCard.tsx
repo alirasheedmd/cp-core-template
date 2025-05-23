@@ -10,7 +10,7 @@ interface CategoryCardProps {
 }
 
 export default function CategoryCard({ category }: CategoryCardProps) {
-  const { id, name, slug, image } = category
+  const { id, name, slug, images } = category
   return (
     <Link
       href={routes.dynamicCategory.category(slug)}
@@ -20,7 +20,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       <Card className="group flex h-full flex-1 flex-col justify-between gap-2 border-2 border-gray-200 p-3 transition-all hover:shadow-xl md:p-5">
         <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-lg md:h-36 md:w-36">
           <Image
-            src={image || '/default-image.png'}
+            src={images?.[0] || '/default-image.png'}
             alt={name}
             fill
             sizes="(max-width: 768px) 7rem, 9rem"

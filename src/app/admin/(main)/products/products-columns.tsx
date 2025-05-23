@@ -118,8 +118,19 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return <h6 className="font-semibold">Category</h6>
     },
     cell: ({ row }) => {
-      const category = row.original.categories
-      return <div>{category || 'Uncategorized'}</div>
+      const category = row.original.categories || []
+
+      return (
+        <div>
+          {category.length > 0 ? (
+            category.map((cat: string, index: number) => (
+              <div key={index}>{cat}</div>
+            ))
+          ) : (
+            <div>Uncategorized</div>
+          )}
+        </div>
+      )
     },
   },
   // Price column

@@ -35,6 +35,7 @@ import { CategoryFormValues } from '@/components/admin/categories/addCategory/Ca
 import { routes } from '@/config/routes'
 import { inArray } from 'drizzle-orm'
 import { SubcategoryFormValues } from '@/components/admin/categories/addSubCategory/SubcategoryInfo'
+import { ProductFormValues } from '@/components/admin/products/addProduct/ProductInfo'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -255,6 +256,185 @@ export async function getProductCategories(productId: string) {
   return categoriesData
 }
 
+export async function getOneProduct(productSlug: string) {
+  const product = await db.query.products.findFirst({
+    where: (products, { eq }) => eq(products.slug, productSlug),
+  })
+
+  if (!product) return null
+
+  // Get all images for this product
+  const productImages = await db
+    .select({ src: images.src, alt: images.alt, base64: images.blurhash })
+    .from(images)
+    .where(eq(images.productId, product.id))
+
+  return {
+    ...product,
+    images: productImages,
+  }
+}
+
+export async function getProductSearchResults(searchText: string) {
+  const filteredProducts = await db
+    .select({ title: products.title, slug: products.slug })
+    .from(products)
+    .where(
+      or(
+        ilike(products.title, `%${searchText}%`),
+        ilike(products.description, `%${searchText}%`),
+        ilike(products.pageTitle, `%${searchText}%`),
+        ilike(products.collection, `%${searchText}%`),
+        ilike(products.type, `%${searchText}%`),
+        ilike(products.metaDescription, `%${searchText}%`),
+        ilike(products.barcode, `%${searchText}%`),
+        ilike(products.country, `%${searchText}%`),
+        ilike(products.sku, `%${searchText}%`),
+        ilike(products.hsCode, `%${searchText}%`),
+        ilike(products.tag, `%${searchText}%`),
+        ilike(products.organization, `%${searchText}%`),
+      ),
+    )
+  console.log('Filtered products:', filteredProducts)
+
+  return filteredProducts
+}
+
+export async function createProduct(data: ProductFormValues) {
+  try {
+    console.log('product data', data)
+
+    const generateId = customAlphabet('0123456789', 10)
+    const productId = generateId()
+    const publish_date = new Date(data.publishDate)
+
+    console.log('product creation begin')
+    const insertPayload = {
+      id: productId,
+      title: data.title,
+      sku: data.sku,
+      barcode: data.barcode || null,
+      description: data.description,
+      status: data.status,
+      slug: data.slug,
+      publishDate: publish_date,
+
+      price: data.price,
+      pricePerItem: data.pricePerItem || null,
+      profit: data.profit || null,
+      margin: data.margin || null,
+      defaultPrice: data.defaultPrice || null,
+      customPrice: data.customPrice || null,
+      tax: data.tax || null,
+
+      currentStock: data.currentStock || null,
+      lowStockThreshold: data.lowStock || null,
+      damageStock: data.damageProduct || null,
+
+      shippingPrice: data.shippingPrice || null,
+      weight: data.weight || null,
+      height: data.height || null,
+      width: data.width || null,
+      length: data.length || null,
+      country: data.country || null,
+      hsCode: data.hsCode || null,
+
+      type: data.type || null,
+      collection: data.collection || null,
+      organization: data.organization || null,
+      tag: data.tag || null,
+
+      pageTitle: data.pageTitle || null,
+      metaDescription: data.metaDescription || null,
+      urlHandle: data.urlHandle || null,
+
+      recommendedProducts: data.recommendedProducts || null,
+    }
+
+    console.log('Insert payload:', insertPayload)
+
+    const product = await db.insert(products).values(insertPayload).returning()
+    console.log('product created', product)
+
+    const categoryIds = data.categories
+    console.log('category ids', categoryIds)
+
+    console.log('Establishing product-category relation')
+    // Create product-category relationships
+    const productCategoryInserts = categoryIds.map((categoryId) => ({
+      productId: product[0].id,
+      categoryId,
+    }))
+
+    console.log('P-C insert data', productCategoryInserts)
+    const product_category = await db
+      .insert(productCategories)
+      .values(productCategoryInserts)
+      .returning()
+    console.log('P-C relation established ', product_category[0])
+
+    const imagesData = data.images
+
+    const imageInserts = []
+    console.log('Storing product images')
+
+    for (const img of imagesData) {
+      const id = generateId(15)
+      const imageInsert = {
+        id,
+        alt: img.alt,
+        src: img.src,
+        blurhash: img.base64,
+        productId: product[0].id,
+      }
+
+      imageInserts.push(imageInsert)
+    }
+    const imageData = await db.insert(images).values(imageInserts).returning()
+
+    console.log('Images stored', imageData)
+
+    return product
+  } catch (error) {
+    console.log('error creating product', error)
+    if (isRedirectError(error)) {
+      throw error
+    }
+    return { success: false, message: formatError(error) }
+  }
+}
+
+export async function deleteProducts(ids: string[]) {
+  await db.delete(products).where(inArray(products.id, ids))
+
+  console.log('products deleted')
+  revalidatePath(routes.admin.products)
+}
+
+export async function getProduct(productId: string) {
+  const product = await db.query.products.findFirst({
+    where: (products, { eq }) => eq(products.id, productId),
+  })
+  if (!product) return null
+
+  // Get all images for this product
+  const productImages = await db
+    .select({ src: images.src, alt: images.alt, base64: images.blurhash })
+    .from(images)
+    .where(eq(images.productId, product.id))
+
+  // Get all categories
+  const categories = await getProductCategories(product.id)
+  return {
+    ...product,
+    publishDate: product.publishDate
+      ? product.publishDate.toISOString().split('T')[0]
+      : product.publishDate,
+    images: productImages,
+    categories: categories.map((c) => c.id),
+  }
+}
+
 export async function getAllCategories() {
   // Get all categories first
   const categoriesData = await db.select().from(categories)
@@ -354,22 +534,43 @@ export async function getOneCategory(categorySlug: string) {
     where: (categories, { eq }) => eq(categories.slug, categorySlug),
   })
 
-  return category
+  if (!category) return null
+
+  // Get all images for this category
+  const categoryImages = await db
+    .select({ src: images.src })
+    .from(images)
+    .where(eq(images.categoryId, category.id))
+
+  return {
+    ...category,
+    images: categoryImages.map((img) => img.src),
+  }
 }
 
 export async function getCategory(categoryId: string) {
   const category = await db.query.categories.findFirst({
     where: (categories, { eq }) => eq(categories.id, categoryId),
   })
+  if (!category) return null
 
-  return category
+  // Get all images for this category
+  const categoryImages = await db
+    .select({ src: images.src, alt: images.alt, base64: images.blurhash })
+    .from(images)
+    .where(eq(images.categoryId, category.id))
+
+  return {
+    ...category,
+    images: categoryImages,
+  }
 }
 
 export async function createCategory(data: CategoryFormValues) {
   console.log('category data', data)
   const generateId = customAlphabet('0123456789', 10)
   const id = generateId()
-  const category = await db
+  const [category] = await db
     .insert(categories)
     .values({
       id: id,
@@ -377,13 +578,35 @@ export async function createCategory(data: CategoryFormValues) {
     })
     .returning()
   console.log('category created', category)
+
+  const imagesData = data.images
+
+  const imageInserts = []
+  console.log('Storing product images')
+
+  for (const img of imagesData) {
+    const id = generateId(15)
+    const imageInsert = {
+      id,
+      alt: img.alt,
+      src: img.src,
+      blurhash: img.base64,
+      categoryId: category.id,
+    }
+
+    imageInserts.push(imageInsert)
+  }
+  const imageData = await db.insert(images).values(imageInserts).returning()
+
+  console.log('Images stored', imageData)
+
   return category
 }
 export async function createSubcategory(data: SubcategoryFormValues) {
   console.log('subcategory data', data)
   const generateId = customAlphabet('0123456789', 10)
   const id = generateId()
-  const category = await db
+  const [category] = await db
     .insert(categories)
     .values({
       id: id,
@@ -391,51 +614,29 @@ export async function createSubcategory(data: SubcategoryFormValues) {
     })
     .returning()
   console.log('subcategory created', category)
-  return category
-}
 
-export async function getOneProduct(productSlug: string) {
-  const product = await db.query.products.findFirst({
-    where: (products, { eq }) => eq(products.slug, productSlug),
-  })
+  const imagesData = data.images
 
-  if (!product) return null
+  const imageInserts = []
+  console.log('Storing product images')
 
-  // Get all images for this product
-  const productImages = await db
-    .select({ src: images.src })
-    .from(images)
-    .where(eq(images.productId, product.id))
+  for (const img of imagesData) {
+    const id = generateId(15)
+    const imageInsert = {
+      id,
+      alt: img.alt,
+      src: img.src,
+      blurhash: img.base64,
+      categoryId: category.id,
+    }
 
-  return {
-    ...product,
-    images: productImages.map((img) => img.src),
+    imageInserts.push(imageInsert)
   }
-}
+  const imageData = await db.insert(images).values(imageInserts).returning()
 
-export async function getProductSearchResults(searchText: string) {
-  const filteredProducts = await db
-    .select({ title: products.title, slug: products.slug })
-    .from(products)
-    .where(
-      or(
-        ilike(products.title, `%${searchText}%`),
-        ilike(products.description, `%${searchText}%`),
-        ilike(products.pageTitle, `%${searchText}%`),
-        ilike(products.collection, `%${searchText}%`),
-        ilike(products.type, `%${searchText}%`),
-        ilike(products.metaDescription, `%${searchText}%`),
-        ilike(products.barcode, `%${searchText}%`),
-        ilike(products.country, `%${searchText}%`),
-        ilike(products.sku, `%${searchText}%`),
-        ilike(products.hsCode, `%${searchText}%`),
-        ilike(products.tag, `%${searchText}%`),
-        ilike(products.organization, `%${searchText}%`),
-      ),
-    )
-  console.log('Filtered products:', filteredProducts)
+  console.log('Images stored', imageData)
 
-  return filteredProducts
+  return category
 }
 
 export async function getCustomerProfileInfo(userId: string) {

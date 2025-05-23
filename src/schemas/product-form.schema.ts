@@ -4,16 +4,17 @@ export const productSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   sku: z.string().min(1, 'SKU is required'),
   barcode: z.string().optional(),
+  slug: z.string().min(1, 'Slug is required'),
   description: z.string().min(1, 'Description is required'),
   status: z.enum(['active', 'inactive']),
   publishDate: z.string().min(1, 'Publish date is required'),
   categories: z.array(z.string()).min(1, 'Select at least one category'),
-  subcategories: z.array(z.string()).default([]),
   images: z
     .array(
       z.object({
         src: z.string(),
         alt: z.string(),
+        base64: z.string(),
       }),
     )
     .min(1, 'At least one image is required'),
@@ -50,7 +51,7 @@ export const productSchema = z.object({
   recommendedProducts: z
     .array(
       z.object({
-        _id: z.string(),
+        id: z.string(),
         name: z.string(),
       }),
     )

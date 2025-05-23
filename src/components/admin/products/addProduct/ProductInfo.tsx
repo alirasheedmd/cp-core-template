@@ -6,73 +6,80 @@ import RightSideForm from './RightSideForm'
 import { FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 import { useActionState } from 'react'
-import { type ProductActionState } from '@/app/actions/admin/main/product'
+import {
+  createProduct,
+  type ProductActionState,
+} from '@/app/actions/admin/main/product'
 import { useRouter } from 'next/navigation'
-import { useRef, startTransition, useEffect } from 'react'
-import { ActionButtons } from '@/components/common/ActionButtons'
+import { useRef, useEffect } from 'react'
 import { routes } from '@/config/routes'
 import { productSchema } from '@/schemas/product-form.schema'
-
-// Dummy function to replace createProduct
-const dummyCreateProduct = async (
-  _prevState: ProductActionState,
-  formData: FormData,
-): Promise<ProductActionState> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  // Simulate success response
-  return {
-    status: 'success' as const,
-    data: {
-      status: 'active',
-      title: formData.get('title') as string,
-      sku: formData.get('sku') as string,
-      description: formData.get('description') as string,
-      publishDate: formData.get('publishDate') as string,
-      categories: [formData.get('categories') as string],
-      subcategories: [],
-      images: [{ src: '', alt: '' }],
-      price: formData.get('price') as string,
-    },
-    message: 'Product created successfully',
-  }
-}
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { IWebCategory } from '@/types'
 
 export type ProductFormValues = z.infer<typeof productSchema>
 
-export default function ProductInfo() {
+interface ProductInfoProps {
+  data?: ProductFormValues
+  categories: IWebCategory[]
+}
+
+export default function ProductInfo({ data, categories }: ProductInfoProps) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
-  const [state, formAction] = useActionState<ProductActionState, FormData>(
-    async (_prevState, formData) => dummyCreateProduct(_prevState, formData),
-    { status: 'idle' },
-  )
 
+  const InitialProductInfoState: ProductActionState = {
+    status: 'idle',
+    errors: undefined,
+    message: '',
+    data: data ?? undefined,
+  }
+
+  const [state, formAction, isPending] = useActionState<
+    ProductActionState,
+    FormData
+  >(createProduct, InitialProductInfoState)
+
+  function SaveButton() {
+    return (
+      <Button
+        type="submit"
+        className="hover:bg-LightGrey ml-2 bg-white font-normal text-black"
+        disabled={isPending}
+      >
+        {isPending ? (
+          'Saving...'
+        ) : (
+          <span className="flex items-center gap-2">Save</span>
+        )}
+      </Button>
+    )
+  }
+  function DiscardButton() {
+    return (
+      <Link href={routes.admin.categories}>
+        <Button className="hover:bg-LightGrey mr-2 bg-white font-normal text-black">
+          <span className="flex items-center gap-2">Discard</span>
+        </Button>
+      </Link>
+    )
+  }
+
+  console.log('data:', state.data)
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
-      status: 'active',
-      publishDate: new Date(performance.now()).toISOString().split('T')[0],
+      status: state.data?.status ? state.data?.status : 'active',
+      categories: state.data?.categories ? state.data?.categories : [],
+      publishDate: state.data?.publishDate
+        ? state.data?.publishDate
+        : new Date(performance.now()).toISOString().split('T')[0],
       ...(state?.data ?? {}),
     },
   })
 
-  const {
-    handleSubmit,
-    setError,
-    formState: { isSubmitting },
-  } = methods
-
-  const onSubmit = () => {
-    if (!formRef.current) return
-    const formData = new FormData(formRef.current)
-    const formValues = methods.getValues()
-    console.log('Form Values:', formValues)
-    startTransition(() => {
-      formAction(formData)
-    })
-  }
+  const { setError } = methods
 
   // Handle server-side validation errors
   useEffect(() => {
@@ -93,15 +100,13 @@ export default function ProductInfo() {
     }
   }, [state?.status, router])
 
-  const isPending = state?.status === 'submitting'
-
   return (
     <FormProvider {...methods}>
-      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} action={formAction}>
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
           {/* Left Side */}
           <div className="basis-[70%]">
-            <LeftSideForm />
+            <LeftSideForm categories={categories} />
           </div>
 
           {/* Right Side */}
@@ -111,12 +116,9 @@ export default function ProductInfo() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8">
-          <ActionButtons
-            onCancel={() => router.push(routes.admin.products)}
-            onSave={handleSubmit(onSubmit)}
-            isLoading={isPending || isSubmitting}
-          />
+        <div className="mt-8 flex flex-row justify-center">
+          <DiscardButton />
+          <SaveButton />
         </div>
 
         {/* Show general error message */}
