@@ -2,7 +2,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useFormContext } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProductFormValues } from './ProductInfo'
 import {
   Select,
@@ -23,8 +23,22 @@ export default function Shipping() {
   const [trackProduct, setTrackProduct] = useState(false)
   const {
     register,
+    watch,
     formState: { errors },
   } = useFormContext<ProductFormValues>()
+
+  const shippingPrice = watch('shippingPrice')
+
+  useEffect(() => {
+    if (
+      shippingPrice !== null &&
+      shippingPrice !== undefined &&
+      trackProduct === false
+    ) {
+      setTrackProduct(true)
+    }
+  }, [shippingPrice, trackProduct])
+
   return (
     <AdminContainer>
       <h2 className="mb-4 text-sm font-semibold">Shipping</h2>

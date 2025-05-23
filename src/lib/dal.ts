@@ -404,6 +404,138 @@ export async function createProduct(data: ProductFormValues) {
   }
 }
 
+export async function updateProduct(id: string, data: ProductFormValues) {
+  try {
+    console.log('product data', data)
+
+    const publish_date = new Date(data.publishDate)
+
+    console.log('product creation begin')
+    const insertPayload = {
+      title: data.title,
+      sku: data.sku,
+      barcode: data.barcode || null,
+      description: data.description,
+      status: data.status,
+      slug: data.slug,
+      publishDate: publish_date,
+
+      price: data.price,
+      pricePerItem: data.pricePerItem || null,
+      profit: data.profit || null,
+      margin: data.margin || null,
+      defaultPrice: data.defaultPrice || null,
+      customPrice: data.customPrice || null,
+      tax: data.tax || null,
+
+      currentStock: data.currentStock || null,
+      lowStockThreshold: data.lowStock || null,
+      damageStock: data.damageProduct || null,
+
+      shippingPrice: data.shippingPrice || null,
+      weight: data.weight || null,
+      height: data.height || null,
+      width: data.width || null,
+      length: data.length || null,
+      country: data.country || null,
+      hsCode: data.hsCode || null,
+
+      type: data.type || null,
+      collection: data.collection || null,
+      organization: data.organization || null,
+      tag: data.tag || null,
+
+      pageTitle: data.pageTitle || null,
+      metaDescription: data.metaDescription || null,
+      urlHandle: data.urlHandle || null,
+
+      recommendedProducts: data.recommendedProducts || null,
+    }
+
+    console.log('Insert payload:', insertPayload)
+
+    const [product] = await db
+      .update(products)
+      .set(insertPayload)
+      .where(eq(products.id, id))
+      .returning()
+    console.log('product updated', product)
+
+    const categoryIds = data.categories
+    console.log('category ids', categoryIds)
+
+    console.log('Checking Product-Category relations')
+    const existingRelations = await db.query.productCategories.findMany({
+      where: (productCategories, { eq }) =>
+        eq(productCategories.productId, product.id),
+    })
+
+    const existingCategoryIds = existingRelations.map((rel) => rel.categoryId)
+
+    // Filter out already existing relations
+    const newCategoryIds = categoryIds.filter(
+      (id) => !existingCategoryIds.includes(id),
+    )
+
+    console.log('New category IDs to insert', newCategoryIds)
+
+    console.log('Establishing product-category relation')
+    const productCategoryInserts = newCategoryIds.map((categoryId) => ({
+      productId: product.id, // Assuming product is not an array
+      categoryId,
+    }))
+
+    if (productCategoryInserts.length > 0) {
+      const inserted = await db
+        .insert(productCategories)
+        .values(productCategoryInserts)
+        .returning()
+
+      console.log('P-C relation established', inserted)
+    } else {
+      console.log('No new product-category relations to insert')
+    }
+
+    const imagesData = data.images
+    console.log('Checking Product-Images relations')
+
+    const existingImages = await db.query.images.findMany({
+      where: (images, { eq }) => eq(images.productId, product.id),
+    })
+
+    const existingSrcSet = new Set(existingImages.map((img) => img.src)) // Prevent duplicate src
+
+    console.log('Storing product images')
+
+    const generateId = customAlphabet('0123456789', 15)
+
+    const imageInserts = imagesData
+      .filter((img) => !existingSrcSet.has(img.src)) // Skip if src already exists
+      .map((img) => ({
+        id: generateId(),
+        alt: img.alt,
+        src: img.src,
+        blurhash: img.base64,
+        productId: product.id,
+      }))
+
+    if (imageInserts.length > 0) {
+      const imageData = await db.insert(images).values(imageInserts).returning()
+      console.log('Images stored', imageData)
+    } else {
+      console.log('No new images to insert')
+    }
+
+    return product
+  } catch (error) {
+    console.log('error creating product', error)
+    if (isRedirectError(error)) {
+      throw error
+    }
+    return { success: false, message: formatError(error) }
+  }
+}
+
 export async function deleteProducts(ids: string[]) {
   await db.delete(products).where(inArray(products.id, ids))
 
@@ -602,6 +734,52 @@ export async function createCategory(data: CategoryFormValues) {
 
   return category
 }
+
+export async function updateCategory(id: string, data: CategoryFormValues) {
+  console.log('category data', data)
+
+  const [category] = await db
+    .update(categories)
+    .set({
+      ...data,
+    })
+    .where(eq(categories.id, id))
+    .returning()
+  console.log('category updated', category)
+
+  const imagesData = data.images
+  console.log('Checking Category-Images relations')
+
+  const existingImages = await db.query.images.findMany({
+    where: (images, { eq }) => eq(images.categoryId, category.id),
+  })
+
+  const existingSrcSet = new Set(existingImages.map((img) => img.src)) // Prevent duplicate src
+
+  console.log('Storing product images')
+
+  const generateId = customAlphabet('0123456789', 15)
+
+  const imageInserts = imagesData
+    .filter((img) => !existingSrcSet.has(img.src)) // Skip if src already exists
+    .map((img) => ({
+      id: generateId(),
+      alt: img.alt,
+      src: img.src,
+      blurhash: img.base64,
+      productId: category.id,
+    }))
+
+  if (imageInserts.length > 0) {
+    const imageData = await db.insert(images).values(imageInserts).returning()
+    console.log('Images stored', imageData)
+  } else {
+    console.log('No new images to insert')
+  }
+
+  return category
+}
+
 export async function createSubcategory(data: SubcategoryFormValues) {
   console.log('subcategory data', data)
   const generateId = customAlphabet('0123456789', 10)
@@ -635,6 +813,54 @@ export async function createSubcategory(data: SubcategoryFormValues) {
   const imageData = await db.insert(images).values(imageInserts).returning()
 
   console.log('Images stored', imageData)
+
+  return category
+}
+
+export async function updateSubcategory(
+  id: string,
+  data: SubcategoryFormValues,
+) {
+  console.log('subcategory data', data)
+
+  const [category] = await db
+    .update(categories)
+    .set({
+      ...data,
+    })
+    .where(eq(categories.id, id))
+    .returning()
+  console.log('subcategory updated', category)
+
+  const imagesData = data.images
+  console.log('Checking Category-Images relations')
+
+  const existingImages = await db.query.images.findMany({
+    where: (images, { eq }) => eq(images.categoryId, category.id),
+  })
+
+  const existingSrcSet = new Set(existingImages.map((img) => img.src)) // Prevent duplicate src
+
+  console.log('Storing product images')
+
+  const generateId = customAlphabet('0123456789', 15)
+
+  const imageInserts = imagesData
+    .filter((img) => !existingSrcSet.has(img.src)) // Skip if src already exists
+    .map((img) => ({
+      id: generateId(),
+      alt: img.alt,
+      src: img.src,
+      blurhash: img.base64,
+      productId: category.id,
+    }))
+
+  if (imageInserts.length > 0) {
+    const imageData = await db.insert(images).values(imageInserts).returning()
+    console.log('Images stored', imageData)
+  } else {
+    console.log('No new images to insert')
+  }
 
   return category
 }

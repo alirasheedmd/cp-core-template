@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { useActionState } from 'react'
 import {
   createProduct,
+  updateProduct,
   type ProductActionState,
 } from '@/app/actions/admin/main/product'
 import { useRouter } from 'next/navigation'
@@ -22,10 +23,17 @@ export type ProductFormValues = z.infer<typeof productSchema>
 
 interface ProductInfoProps {
   data?: ProductFormValues
+  id?: string
   categories: IWebCategory[]
+  isEditing?: boolean
 }
 
-export default function ProductInfo({ data, categories }: ProductInfoProps) {
+export default function ProductInfo({
+  data,
+  categories,
+  id,
+  isEditing,
+}: ProductInfoProps) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -39,7 +47,27 @@ export default function ProductInfo({ data, categories }: ProductInfoProps) {
   const [state, formAction, isPending] = useActionState<
     ProductActionState,
     FormData
-  >(createProduct, InitialProductInfoState)
+  >(async (prevState: ProductActionState, formData: FormData) => {
+    try {
+      // Call the appropriate action based on whether we're editing or creating
+      const result = isEditing
+        ? await updateProduct(id as string, formData)
+        : await createProduct(formData)
+
+      // Handle successful submission
+      if (result.status === 'success') {
+        router.push(routes.admin.products)
+      }
+
+      return result
+    } catch (err) {
+      return {
+        status: 'error',
+        message: (err as Error).message || 'An error occurred',
+        errors: undefined,
+      }
+    }
+  }, InitialProductInfoState)
 
   function SaveButton() {
     return (

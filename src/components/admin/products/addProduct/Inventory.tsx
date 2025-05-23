@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
@@ -19,6 +19,7 @@ import { ActionButtons } from '@/components/common/ActionButtons'
 export default function Inventory() {
   const {
     register,
+    watch,
     formState: { errors },
   } = useFormContext<ProductFormValues>()
 
@@ -27,6 +28,18 @@ export default function Inventory() {
   const [trackingLevel, setTrackingLevel] = useState<'product' | 'variant'>(
     'product',
   )
+
+  const currentStock = watch('currentStock')
+
+  useEffect(() => {
+    if (
+      currentStock !== null &&
+      currentStock !== undefined &&
+      trackInventory === false
+    ) {
+      setTrackInventory(true)
+    }
+  }, [currentStock, trackInventory])
 
   return (
     <AdminContainer>

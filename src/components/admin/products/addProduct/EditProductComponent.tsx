@@ -11,7 +11,12 @@ const EditProductComponent = async ({ productId }: EditProductProps) => {
   const product = await getProduct(productId)
 
   return (
-   <ProductInfo categories={categories as IWebCategory[]} data={product as ProductFormValues} />
+    <ProductInfo
+      categories={categories as IWebCategory[]}
+      id={productId}
+      data={product as ProductFormValues}
+      isEditing
+    />
   )
 }
 
