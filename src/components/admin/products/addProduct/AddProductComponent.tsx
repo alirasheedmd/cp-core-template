@@ -1,11 +1,15 @@
-import { getAllCategories } from '@/lib/dal'
+import { getAllCategories, getAllProducts } from '@/lib/dal'
 import ProductInfo from './ProductInfo'
-import { IWebCategory } from '@/types'
+import { IProduct, IWebCategory } from '@/types'
 
 const AddProductComponent = async () => {
-    const categories = await getAllCategories()
+  const categories = await getAllCategories()
+  const recommendedProducts = await getAllProducts()
   return (
-   <ProductInfo  categories={categories as IWebCategory[]}/>
+    <ProductInfo
+      recommendedProducts={recommendedProducts as IProduct[]}
+      categories={categories as IWebCategory[]}
+    />
   )
 }
 

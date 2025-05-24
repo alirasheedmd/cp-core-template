@@ -5,41 +5,44 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Info } from 'lucide-react'
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from '@/components/ui/popover'
+// import { Info } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
-import { ActionButtons } from '@/components/common/ActionButtons'
+// import { ActionButtons } from '@/components/common/ActionButtons'
+import { FormControl, FormField, FormItem } from '@/components/ui/form'
 
 export default function Inventory() {
   const {
     register,
     watch,
+    control,
     formState: { errors },
   } = useFormContext<ProductFormValues>()
 
-  const [open, setOpen] = useState(false)
-  const [trackInventory, setTrackInventory] = useState(false)
+  // const [open, setOpen] = useState(false)
+  const [showDamageField, setShowDamageField] = useState(false)
+
+  const trackInventory = watch('trackInventory', true)
   const [trackingLevel, setTrackingLevel] = useState<'product' | 'variant'>(
     'product',
   )
 
-  const currentStock = watch('currentStock')
+  const damageStock = watch('damageStock')
 
   useEffect(() => {
     if (
-      currentStock !== null &&
-      currentStock !== undefined &&
-      trackInventory === false
+      damageStock !== null ||
+      (damageStock !== undefined && showDamageField === false)
     ) {
-      setTrackInventory(true)
+      setShowDamageField(true)
     }
-  }, [currentStock, trackInventory])
+  }, [damageStock, showDamageField])
 
   return (
     <AdminContainer>
@@ -47,14 +50,28 @@ export default function Inventory() {
 
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <Checkbox
-            id="trackInventory"
-            checked={trackInventory}
-            onCheckedChange={(checked) => setTrackInventory(checked as boolean)}
+          <FormField
+            control={control}
+            name="trackInventory"
+            render={({ field }) => (
+              <FormItem className="flex flex-row">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked)}
+                  />
+                </FormControl>
+                <Label htmlFor="trackInventory" className="font-normal">
+                  Track inventory
+                </Label>
+                <input
+                  type="hidden"
+                  name="trackInventory"
+                  value={field.value ? 'true' : 'false'}
+                />
+              </FormItem>
+            )}
           />
-          <Label htmlFor="trackInventory" className="font-normal">
-            Track inventory
-          </Label>
         </div>
 
         <div
@@ -111,26 +128,58 @@ export default function Inventory() {
 
                 <div className="space-y-2">
                   <Label
-                    htmlFor="lowStock"
-                    className={`${errors.lowStock ? 'border-destructive' : 'border-black'} text-sm`}
+                    htmlFor="lowStockThreshold"
+                    className={`${errors.lowStockThreshold ? 'border-destructive' : 'border-black'} text-sm`}
                   >
                     Low stock threshold
                   </Label>
                   <Input
-                    id="lowStock"
-                    {...register('lowStock')}
-                    className={`${errors.lowStock ? 'border-destructive' : 'border-black'} `}
+                    id="lowStockThreshold"
+                    {...register('lowStockThreshold')}
+                    className={`${errors.lowStockThreshold ? 'border-destructive' : 'border-black'} `}
                   />
-                  {errors.lowStock && (
+                  {errors.lowStockThreshold && (
                     <p className="text-destructive text-sm">
-                      {errors.lowStock?.message as string}
+                      {errors.lowStockThreshold?.message as string}
                     </p>
                   )}
                 </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="toggleDamageStock"
+                    checked={showDamageField}
+                    onCheckedChange={(checked) =>
+                      setShowDamageField(checked === true)
+                    }
+                  />
+                  <Label
+                    htmlFor="toggleDamageStock"
+                    className="text-sm font-normal"
+                  >
+                    Add damage product field
+                  </Label>
+                </div>
+                {showDamageField && (
+                  <div className="mt-4 space-y-2">
+                    <Label htmlFor="damageStock" className="text-sm">
+                      Damage product
+                    </Label>
+                    <Input
+                      id="damageStock"
+                      {...register('damageStock')}
+                      className={`${errors.damageStock ? 'border-destructive' : 'border-black'} text-sm`}
+                    />
+                    {errors.damageStock && (
+                      <p className="text-destructive text-sm">
+                        {errors.damageStock?.message as string}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Add field */}
-              <Popover open={open} onOpenChange={setOpen}>
+              {/* <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger className="flex items-center">
                   <Info className="mr-2 h-4 w-4" />
                   <p className="text-sm">Add field like damage product etc.</p>
@@ -141,17 +190,17 @@ export default function Inventory() {
                 >
                   <h2 className="mb-4 text-sm font-semibold">Add field</h2>
                   <div className="space-y-2">
-                    <Label htmlFor="damageProduct" className="text-sm">
+                    <Label htmlFor="damageStock" className="text-sm">
                       Damage product
                     </Label>
                     <Input
-                      id="damageProduct"
-                      {...register('damageProduct')}
-                      className={`${errors.damageProduct ? 'border-destructive' : 'border-black'}`}
+                      id="damageStock"
+                      {...register('damageStock')}
+                      className={`${errors.damageStock ? 'border-destructive' : 'border-black'}`}
                     />
-                    {errors.damageProduct && (
+                    {errors.damageStock && (
                       <p className="text-destructive text-sm">
-                        {errors.damageProduct?.message as string}
+                        {errors.damageStock?.message as string}
                       </p>
                     )}
                   </div>
@@ -164,7 +213,7 @@ export default function Inventory() {
                     }}
                   />
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
             </div>
           </div>
 

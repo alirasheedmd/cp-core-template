@@ -150,9 +150,13 @@ export async function createSubcategory(
       ? JSON.parse(formData.get('images') as string)
       : []
 
+    const parentId = formData.get('parentId')?.toString()
+    const name = formData.get('name')?.toString()
     const rawData = Object.fromEntries(formData.entries())
     const data = {
       ...rawData,
+      parentId,
+      name,
       images,
     }
     const validatedData = subCategorySchema.parse(data)
@@ -201,9 +205,14 @@ export async function updateSubcategory(
       ? JSON.parse(formData.get('images') as string)
       : []
 
+    const parentId = formData.get('parentId')?.toString()
+    const name = formData.get('name')?.toString()
     const rawData = Object.fromEntries(formData.entries())
+    console.log('Raw Data:', rawData)
     const data = {
       ...rawData,
+      parentId,
+      name,
       images,
     }
 

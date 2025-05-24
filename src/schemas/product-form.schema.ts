@@ -18,6 +18,7 @@ export const productSchema = z.object({
       }),
     )
     .min(1, 'At least one image is required'),
+
   price: z.string().min(1, 'Price is required'),
   pricePerItem: z.string().optional(),
   profit: z.string().optional(),
@@ -25,11 +26,16 @@ export const productSchema = z.object({
   defaultPrice: z.string().optional(),
   customPrice: z.string().optional(),
   tax: z.string().optional(),
+
+  trackInventory: z.boolean(),
   currentStock: z.string().optional(),
-  lowStock: z.string().optional(),
-  damageProduct: z.string().optional(),
+  lowStockThreshold: z.string().optional(),
+  damageStock: z.string().optional(),
+
+  isPhysicalProduct: z.boolean(),
   shippingPrice: z.string().optional(),
   weight: z.string().optional(),
+  weightUnit: z.string().optional(),
   width: z.string().optional(),
   length: z.string().optional(),
   height: z.string().optional(),

@@ -17,7 +17,7 @@ import { routes } from '@/config/routes'
 import { productSchema } from '@/schemas/product-form.schema'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { IWebCategory } from '@/types'
+import { IProduct, IWebCategory } from '@/types'
 
 export type ProductFormValues = z.infer<typeof productSchema>
 
@@ -26,11 +26,13 @@ interface ProductInfoProps {
   id?: string
   categories: IWebCategory[]
   isEditing?: boolean
+  recommendedProducts: IProduct[]
 }
 
 export default function ProductInfo({
   data,
   categories,
+  recommendedProducts,
   id,
   isEditing,
 }: ProductInfoProps) {
@@ -100,6 +102,15 @@ export default function ProductInfo({
     defaultValues: {
       status: state.data?.status ? state.data?.status : 'active',
       categories: state.data?.categories ? state.data?.categories : [],
+      trackInventory: state.data?.trackInventory
+        ? state.data?.trackInventory
+        : true,
+      isPhysicalProduct: state.data?.isPhysicalProduct
+        ? state.data?.isPhysicalProduct
+        : true,
+      recommendedProducts: state.data?.recommendedProducts
+        ? state.data?.recommendedProducts
+        : [],
       publishDate: state.data?.publishDate
         ? state.data?.publishDate
         : new Date(performance.now()).toISOString().split('T')[0],
@@ -107,6 +118,7 @@ export default function ProductInfo({
     },
   })
 
+  console.log('recommended product', state.data?.recommendedProducts)
   const { setError } = methods
 
   // Handle server-side validation errors
@@ -139,7 +151,9 @@ export default function ProductInfo({
 
           {/* Right Side */}
           <div className="basis-[30%] space-y-5">
-            <RightSideForm />
+            <RightSideForm
+              recommendedProducts={recommendedProducts as IProduct[]}
+            />
           </div>
         </div>
 

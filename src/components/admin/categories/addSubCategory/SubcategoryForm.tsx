@@ -35,10 +35,11 @@ export default function SubcategoryForm({ categories,  }: CategoryFormProps) {
   return (
     <div className="space-y-5">
       <AdminContainer className="space-y-7">
-
         {/* Name */}
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm">Name</Label>
+          <Label htmlFor="name" className="text-sm">
+            Name
+          </Label>
           <Input
             id="name"
             {...register('name')}
@@ -56,30 +57,38 @@ export default function SubcategoryForm({ categories,  }: CategoryFormProps) {
             control={control}
             name="status"
             render={({ field }) => (
-              <FormItem className='mt-2 w-full mr-1'>
-                <FormLabel htmlFor="status" className="text-sm">Status</FormLabel>
+              <FormItem className="mt-2 mr-1 w-full">
+                <FormLabel htmlFor="status" className="text-sm">
+                  Status
+                </FormLabel>
                 <Select onValueChange={field.onChange} {...field}>
                   <FormControl>
-                      <SelectTrigger className={`${errors.status ? 'border-destructive' : 'border-black'} w-full`}>
-                          <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
+                    <SelectTrigger
+                      className={`${errors.status ? 'border-destructive' : 'border-black'} w-full`}
+                    >
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                      <SelectItem value="enable">Enable</SelectItem>
-                      <SelectItem value="disable">Disable</SelectItem>
+                    <SelectItem value="enable">Enable</SelectItem>
+                    <SelectItem value="disable">Disable</SelectItem>
                   </SelectContent>
                 </Select>
-                 {errors.status && (
-                    <p className="text-destructive text-sm">{errors.status.message}</p>
-                  )}
-                </FormItem>
+                {errors.status && (
+                  <p className="text-destructive text-sm">
+                    {errors.status.message}
+                  </p>
+                )}
+              </FormItem>
             )}
           />
         </div>
 
         {/* Slug */}
         <div className="space-y-2">
-          <Label htmlFor="slug" className="text-sm">Slug</Label>
+          <Label htmlFor="slug" className="text-sm">
+            Slug
+          </Label>
           <Input
             id="slug"
             {...register('slug')}
@@ -97,7 +106,9 @@ export default function SubcategoryForm({ categories,  }: CategoryFormProps) {
 
         {/* Media */}
         <div className="space-y-2">
-          <Label htmlFor="images" className="text-sm">Media</Label>
+          <Label htmlFor="images" className="text-sm">
+            Media
+          </Label>
           <MultiImageUploader<SubcategoryFormValues>
             name="images"
             form={useFormContext<SubcategoryFormValues>()}
@@ -110,32 +121,38 @@ export default function SubcategoryForm({ categories,  }: CategoryFormProps) {
           )}
         </div>
 
-         {/* ParentId */}
+        {/* ParentId */}
         <div className="space-y-2">
           <FormField
             control={control}
             name="parentId"
             render={({ field }) => (
-              <FormItem className='mt-2 w-full mr-1'>
-                <FormLabel htmlFor="parentId" className="text-sm">ParentId</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+              <FormItem className="mt-2 mr-1 w-full">
+                <FormLabel htmlFor="parentId" className="text-sm">
+                  ParentId
+                </FormLabel>
+                <Select onValueChange={field.onChange} {...field}>
                   <FormControl>
-                      <SelectTrigger className={`${errors.parentId ? 'border-destructive' : 'border-black'} w-full`}>
-                          <SelectValue placeholder="Select parentId" />
-                      </SelectTrigger>
+                    <SelectTrigger
+                      className={`${errors.parentId ? 'border-destructive' : 'border-black'} w-full`}
+                    >
+                      <SelectValue placeholder="Select parentId" />
+                    </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                      {categories.map((c) => (
-                          <SelectItem key={c.id} value={c.id}>
-                              {c.name}
-                          </SelectItem>
-                      ))}
+                    {categories.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-                 {errors.parentId && (
-                    <p className="text-destructive text-sm">{errors.parentId.message}</p>
-                  )}
-                </FormItem>
+                {errors.parentId && (
+                  <p className="text-destructive text-sm">
+                    {errors.parentId.message}
+                  </p>
+                )}
+              </FormItem>
             )}
           />
         </div>

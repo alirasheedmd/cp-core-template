@@ -3,7 +3,7 @@
 import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
-import { ilike, or, isNull, not } from 'drizzle-orm/sql'
+import { ilike, or, isNull, not, and } from 'drizzle-orm/sql'
 import { cache } from 'react'
 import {
   users,
@@ -329,12 +329,15 @@ export async function createProduct(data: ProductFormValues) {
       customPrice: data.customPrice || null,
       tax: data.tax || null,
 
+      trackInventory: data.trackInventory || null,
       currentStock: data.currentStock || null,
-      lowStockThreshold: data.lowStock || null,
-      damageStock: data.damageProduct || null,
+      lowStockThreshold: data.lowStockThreshold || null,
+      damageStock: data.damageStock || null,
 
+      isPhysicalProduct: data.isPhysicalProduct || null,
       shippingPrice: data.shippingPrice || null,
       weight: data.weight || null,
+      weightUnit: data.weightUnit || null,
       height: data.height || null,
       width: data.width || null,
       length: data.length || null,
@@ -412,7 +415,7 @@ export async function updateProduct(id: string, data: ProductFormValues) {
 
     const publish_date = new Date(data.publishDate)
 
-    console.log('product creation begin')
+    console.log('Updating product')
     const insertPayload = {
       title: data.title,
       sku: data.sku,
@@ -430,12 +433,15 @@ export async function updateProduct(id: string, data: ProductFormValues) {
       customPrice: data.customPrice || null,
       tax: data.tax || null,
 
+      trackInventory: data.trackInventory || null,
       currentStock: data.currentStock || null,
-      lowStockThreshold: data.lowStock || null,
-      damageStock: data.damageProduct || null,
+      lowStockThreshold: data.lowStockThreshold || null,
+      damageStock: data.damageStock || null,
 
+      isPhysicalProduct: data.isPhysicalProduct || null,
       shippingPrice: data.shippingPrice || null,
       weight: data.weight || null,
+      weightUnit: data.weightUnit || null,
       height: data.height || null,
       width: data.width || null,
       length: data.length || null,
@@ -462,11 +468,10 @@ export async function updateProduct(id: string, data: ProductFormValues) {
       .where(eq(products.id, id))
       .returning()
     console.log('product updated', product)
+    const categoryIds = data.categories || []
+    console.log('Category IDs from input:', categoryIds)
 
-    const categoryIds = data.categories
-    console.log('category ids', categoryIds)
-
-    console.log('Checking Product-Category relations')
+    // Step 1: Fetch existing category relations for the product
     const existingRelations = await db.query.productCategories.findMany({
       where: (productCategories, { eq }) =>
         eq(productCategories.productId, product.id),
@@ -474,28 +479,53 @@ export async function updateProduct(id: string, data: ProductFormValues) {
 
     const existingCategoryIds = existingRelations.map((rel) => rel.categoryId)
 
-    // Filter out already existing relations
+    // Step 2: Find new category IDs to insert
     const newCategoryIds = categoryIds.filter(
       (id) => !existingCategoryIds.includes(id),
     )
 
-    console.log('New category IDs to insert', newCategoryIds)
+    // Step 3: Find obsolete category IDs to delete
+    const removedCategoryIds = existingCategoryIds.filter(
+      (id) => !categoryIds.includes(id),
+    )
 
-    console.log('Establishing product-category relation')
-    const productCategoryInserts = newCategoryIds.map((categoryId) => ({
-      productId: product.id, // Assuming product is not an array
-      categoryId,
-    }))
+    console.log('New category IDs to insert:', newCategoryIds)
+    console.log('Obsolete category IDs to delete:', removedCategoryIds)
 
-    if (productCategoryInserts.length > 0) {
+    // Step 4: Insert new relations
+    if (newCategoryIds.length > 0) {
+      const insertValues = newCategoryIds.map((categoryId) => ({
+        productId: product.id,
+        categoryId,
+      }))
+
       const inserted = await db
         .insert(productCategories)
-        .values(productCategoryInserts)
+        .values(insertValues)
         .returning()
 
-      console.log('P-C relation established', inserted)
+      console.log('Inserted product-category relations:', inserted)
     } else {
-      console.log('No new product-category relations to insert')
+      console.log('No new product-category relations to insert.')
+    }
+
+    if (removedCategoryIds.length > 0) {
+      const deleted = await db
+        .delete(productCategories)
+        .where(
+          and(
+            eq(productCategories.productId, product.id),
+            inArray(productCategories.categoryId, removedCategoryIds),
+          ),
+        )
+
+      console.log(
+        'Deleted obsolete product-category relations:',
+        removedCategoryIds,
+        deleted,
+      )
+    } else {
+      console.log('No obsolete product-category relations to delete.')
     }
 
     const imagesData = data.images

@@ -29,10 +29,23 @@ export async function createProduct(
       ? JSON.parse(formData.get('images') as string)
       : []
 
+    const track_inventory = formData.get('trackInventory')?.toString()
+    const trackInventory = Boolean(track_inventory)
+
+    const is_physical_product = formData.get('isPhysicalProduct')?.toString()
+    const isPhysicalProduct = Boolean(is_physical_product)
+
+    const recommendedProducts = formData.get('recommendedProducts')
+      ? JSON.parse(formData.get('recommendedProducts') as string)
+      : null
+
     const rawData = Object.fromEntries(formData.entries())
     const data = {
       ...rawData,
       categories,
+      trackInventory,
+      isPhysicalProduct,
+      recommendedProducts,
       images,
     }
 
@@ -86,10 +99,22 @@ export async function updateProduct(
       ? JSON.parse(formData.get('images') as string)
       : []
 
+    const track_inventory = formData.get('trackInventory')?.toString()
+    const trackInventory = Boolean(track_inventory)
+
+    const is_physical_product = formData.get('isPhysicalProduct')?.toString()
+    const isPhysicalProduct = Boolean(is_physical_product)
+    const recommendedProducts = formData.get('recommendedProducts')
+      ? JSON.parse(formData.get('recommendedProducts') as string)
+      : null
+
     const rawData = Object.fromEntries(formData.entries())
     const data = {
       ...rawData,
       categories,
+      trackInventory,
+      isPhysicalProduct,
+      recommendedProducts,
       images,
     }
 

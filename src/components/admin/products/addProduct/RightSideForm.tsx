@@ -1,7 +1,6 @@
 'use client'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -19,20 +18,27 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form'
+import { IProduct } from '@/types'
 
-export default function RightSideForm() {
+interface ProductFormProps {
+  recommendedProducts: IProduct[]
+}
+
+export default function RightSideForm({
+  recommendedProducts,
+}: ProductFormProps) {
   const {
     formState: { errors },
-    setValue,
+    // setValue,
     control,
-    watch,
+    // watch,
   } = useFormContext<ProductFormValues>()
 
   // const status = watch('status')
-  const publishDate = watch('publishDate')
+  // const publishDate = watch('publishDate')
 
   // Convert string date to Date object for the DatePicker
-  const dateValue = publishDate ? new Date(publishDate) : undefined
+  // const dateValue = publishDate ? new Date(publishDate) : undefined
 
   return (
     <div className="space-y-4">
@@ -106,7 +112,9 @@ export default function RightSideForm() {
       </AdminContainer>
 
       {/* Recommended Product */}
-      <RecommendedProduct />
+      <RecommendedProduct
+        recommendedProducts={recommendedProducts as IProduct[]}
+      />
 
       {/* Product Organization */}
       <ProductOrganization />

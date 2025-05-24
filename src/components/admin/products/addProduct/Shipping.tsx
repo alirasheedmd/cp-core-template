@@ -2,7 +2,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useFormContext } from 'react-hook-form'
-import { useEffect, useState } from 'react'
 import { ProductFormValues } from './ProductInfo'
 import {
   Select,
@@ -18,40 +17,50 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
 
 export default function Shipping() {
-  const [trackProduct, setTrackProduct] = useState(false)
   const {
     register,
+    control,
     watch,
     formState: { errors },
   } = useFormContext<ProductFormValues>()
 
-  const shippingPrice = watch('shippingPrice')
-
-  useEffect(() => {
-    if (
-      shippingPrice !== null &&
-      shippingPrice !== undefined &&
-      trackProduct === false
-    ) {
-      setTrackProduct(true)
-    }
-  }, [shippingPrice, trackProduct])
+  const trackProduct = watch('isPhysicalProduct', true)
 
   return (
     <AdminContainer>
       <h2 className="mb-4 text-sm font-semibold">Shipping</h2>
 
       <div className="flex items-center space-x-2">
-        <Checkbox
-          id="trackProduct"
-          checked={trackProduct}
-          onCheckedChange={(checked) => setTrackProduct(checked as boolean)}
+        <FormField
+          control={control}
+          name="isPhysicalProduct"
+          render={({ field }) => (
+            <FormItem className="flex flex-row">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={(checked) => field.onChange(checked)}
+                />
+              </FormControl>
+              <Label htmlFor="isPhysicalProduct" className="font-normal">
+                Track physical product
+              </Label>
+              <input
+                type="hidden"
+                name="isPhysicalProduct"
+                value={field.value ? 'true' : 'false'}
+              />
+            </FormItem>
+          )}
         />
-        <Label htmlFor="trackProduct" className="font-normal">
-          Track physical product
-        </Label>
       </div>
 
       <div
@@ -110,17 +119,36 @@ export default function Shipping() {
             </div>
 
             {/* Weight select */}
-            <Select defaultValue="kg">
-              <SelectTrigger className="mt-auto border-black">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="kg">kg</SelectItem>
-                <SelectItem value="g">g</SelectItem>
-                <SelectItem value="lb">lb</SelectItem>
-                <SelectItem value="litre">litre</SelectItem>
-              </SelectContent>
-            </Select>
+            <FormField
+              control={control}
+              name="weightUnit"
+              render={({ field }) => (
+                <FormItem className="mt-2 mr-1 w-full">
+                  <FormLabel htmlFor="weightUnit" className="text-sm">
+                    Weight Unit
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    {...field}
+                    defaultValue="kg"
+                  >
+                    <FormControl>
+                      <SelectTrigger
+                        className={`${errors.weightUnit ? 'border-destructive' : 'border-black'} w-full`}
+                      >
+                        <SelectValue placeholder="Select weight unit" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="kg">kg</SelectItem>
+                      <SelectItem value="g">g</SelectItem>
+                      <SelectItem value="lb">lb</SelectItem>
+                      <SelectItem value="litre">litre</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
           </div>
 
           {/* Third Row */}
