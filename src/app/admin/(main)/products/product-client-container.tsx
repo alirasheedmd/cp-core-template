@@ -49,12 +49,14 @@ export default function ProductClientContainer({
   }, [products])
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product: IProduct) => {
-      const queryLower = query.toLowerCase()
-      const statusMatch =
-        selectedTab === 'all-products' || product.status === selectedTab
-      return statusMatch && product.title.toLowerCase().includes(queryLower)
-    })
+    return products
+      .filter((product: IProduct) => {
+        const queryLower = query.toLowerCase()
+        const statusMatch =
+          selectedTab === 'all-products' || product.status === selectedTab
+        return statusMatch && product.title.toLowerCase().includes(queryLower)
+      })
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
   }, [products, query, selectedTab])
 
   const handleDeleteAction = async () => {

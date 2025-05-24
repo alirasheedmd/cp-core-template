@@ -126,6 +126,7 @@ export async function getAllProducts() {
       status: products.status,
       currentStock: products.currentStock,
       createdAt: products.createdAt,
+      updatedAt: products.updatedAt,
     })
     .from(products)
 
@@ -165,6 +166,7 @@ export async function getAllProducts() {
         status: product.status,
         currentStock: product.currentStock,
         createdAt: product.createdAt,
+        updatedAt: product.updatedAt,
       }
     }),
   )
@@ -593,6 +595,7 @@ export async function getAllCategories() {
       slug: category.slug,
       status: category.status,
       parentId: category.parentId,
+      updatedAt: category.updatedAt,
     }
   })
 
