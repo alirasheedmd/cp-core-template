@@ -24,6 +24,7 @@ export const routes = {
     orders: '/admin/orders',
     products: '/admin/products',
     categories: '/admin/categories',
+    customers: '/admin/customers',
     settings: '/admin/settings',
     signin: '/admin/signin',
     // Dynamic routes
@@ -32,10 +33,12 @@ export const routes = {
     categoryEdit: (categoryId: string) => `/admin/categories/${categoryId}`,
     subcategoryEdit: (subcategoryId: string) =>
       `/admin/categories/subcategories/${subcategoryId}`,
+    customerEdit: (customerId: string) => `/admin/customers/${customerId}`,
     addProduct: '/admin/products/add',
     addCategory: '/admin/categories/add',
     addSubcategory: (parentId: string) =>
       `/admin/categories/subcategories/add/${parentId}`,
+    addCustomer: '/admin/customers/add',
     // Helper functions for dynamic routes
     orderDetails: (orderId: string) => `/admin/orders/${orderId}`,
   },

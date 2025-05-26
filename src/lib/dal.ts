@@ -690,7 +690,7 @@ export async function deleteCategory(id: string) {
 export async function deleteCategories(ids: string[]) {
   await db.delete(categories).where(inArray(categories.id, ids))
 
-  console.log('category deleted')
+  console.log('categories deleted')
   revalidatePath(routes.admin.categories)
 }
 
@@ -898,6 +898,14 @@ export async function updateSubcategory(
   return category
 }
 
+export async function getAllCustomers() {
+  const customers = await db
+    .select()
+    .from(users)
+    .where(eq(users.isAdmin, false))
+  return customers
+}
+
 export async function getCustomerProfileInfo(userId: string) {
   const user = await db
     .select({
@@ -919,6 +927,15 @@ export async function getCustomerProfileInfo(userId: string) {
     .where(eq(users.id, userId))
 
   return user
+}
+
+export async function getCustomer(customerId: string) {
+  const customer = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, customerId),
+  })
+  if (!customer) return null
+
+  return customer
 }
 
 export async function updateUserInfo(data: CustomerInfoFormValues) {
@@ -958,6 +975,13 @@ export async function deleteUserInfo() {
     .returning()
 
   return result[0]
+}
+
+export async function deleteCustomers(ids: string[]) {
+  await db.delete(users).where(inArray(users.id, ids))
+
+  console.log('customers deleted')
+  revalidatePath(routes.admin.customers)
 }
 
 export async function getMyCart() {
@@ -1340,13 +1364,23 @@ export async function createOrder(data: CheckoutFormValues) {
 }
 
 export async function getOrderById(orderId: string) {
-  const order = db.query.orders.findFirst({
+  const order = await db.query.orders.findFirst({
     where: (orders, { eq }) => eq(orders.id, orderId),
     with: {
       orderItems: true,
       user: {
         columns: { email: true },
       },
+    },
+  })
+  return order
+}
+export async function getOrdersByUserId(userId: string) {
+  const order = await db.query.orders.findMany({
+    where: (orders, { eq }) => eq(orders.userId, userId),
+    columns: {
+      id: true,
+      totalPrice: true,
     },
   })
   return order

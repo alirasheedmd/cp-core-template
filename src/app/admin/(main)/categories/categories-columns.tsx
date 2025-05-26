@@ -98,8 +98,8 @@ export const categoriesColumns: ColumnDef<ICategory>[] = [
       const type = isCategory ? 'Category' : 'Subcategory'
       return (
         <div
-          className={`mr-5 rounded-full px-1 py-0.5 text-center text-sm ${
-            type === 'Category' ? 'bg-green-200' : 'bg-yellow-200'
+          className={`rounded-full px-1 py-0.5 text-center text-sm ${
+            type === 'Category' ? 'w-18 bg-green-200' : 'w-24 bg-yellow-200'
           }`}
         >
           {type.charAt(0).toUpperCase() + type.slice(1)}
