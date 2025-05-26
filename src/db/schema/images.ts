@@ -10,8 +10,12 @@ export const images = pgTable('images', {
   src: text('src').notNull(),
   blurhash: text('blurhash').notNull(),
   isMain: boolean('is_main').default(false),
-  productId: text('product_id').references(() => products.id),
-  categoryId: text('category_id').references(() => categories.id),
+  productId: text('product_id').references(() => products.id, {
+    onDelete: 'cascade',
+  }),
+  categoryId: text('category_id').references(() => categories.id, {
+    onDelete: 'cascade',
+  }),
 })
 
 export type Image = InferSelectModel<typeof images>

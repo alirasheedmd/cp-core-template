@@ -11,6 +11,7 @@ import ProductListMobile from '@/components/admin/products/productTable/ProductL
 import EmptyProductView from '@/components/admin/products/productTable/EmptyProductView'
 import { ProductsDataTable } from './products-data-table'
 import { routes } from '@/config/routes'
+import { deleteProducts } from '@/lib/dal'
 
 interface ProductClientContainerProps {
   products: IProduct[]
@@ -48,12 +49,14 @@ export default function ProductClientContainer({
   }, [products])
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product: IProduct) => {
-      const queryLower = query.toLowerCase()
-      const statusMatch =
-        selectedTab === 'all-products' || product.status === selectedTab
-      return statusMatch && product.title.toLowerCase().includes(queryLower)
-    })
+    return products
+      .filter((product: IProduct) => {
+        const queryLower = query.toLowerCase()
+        const statusMatch =
+          selectedTab === 'all-products' || product.status === selectedTab
+        return statusMatch && product.title.toLowerCase().includes(queryLower)
+      })
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
   }, [products, query, selectedTab])
 
   const handleDeleteAction = async () => {
@@ -63,8 +66,7 @@ export default function ProductClientContainer({
         selectedRows.map((row) => row.id || ''),
       )
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      // await deleteProducts(selectedRows.map((row) => row._id || ""));
-      // await fetchProducts();
+      await deleteProducts(selectedRows.map((row) => row.id || ''))
       setSelectedRows([])
       setClearSelectionTrigger((prev) => !prev)
     } catch (error) {

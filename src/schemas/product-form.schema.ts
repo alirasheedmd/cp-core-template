@@ -4,19 +4,21 @@ export const productSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   sku: z.string().min(1, 'SKU is required'),
   barcode: z.string().optional(),
+  slug: z.string().min(1, 'Slug is required'),
   description: z.string().min(1, 'Description is required'),
   status: z.enum(['active', 'inactive']),
   publishDate: z.string().min(1, 'Publish date is required'),
   categories: z.array(z.string()).min(1, 'Select at least one category'),
-  subcategories: z.array(z.string()).default([]),
   images: z
     .array(
       z.object({
         src: z.string(),
         alt: z.string(),
+        base64: z.string(),
       }),
     )
     .min(1, 'At least one image is required'),
+
   price: z.string().min(1, 'Price is required'),
   pricePerItem: z.string().optional(),
   profit: z.string().optional(),
@@ -24,11 +26,16 @@ export const productSchema = z.object({
   defaultPrice: z.string().optional(),
   customPrice: z.string().optional(),
   tax: z.string().optional(),
+
+  trackInventory: z.boolean(),
   currentStock: z.string().optional(),
-  lowStock: z.string().optional(),
-  damageProduct: z.string().optional(),
+  lowStockThreshold: z.string().optional(),
+  damageStock: z.string().optional(),
+
+  isPhysicalProduct: z.boolean(),
   shippingPrice: z.string().optional(),
   weight: z.string().optional(),
+  weightUnit: z.string().optional(),
   width: z.string().optional(),
   length: z.string().optional(),
   height: z.string().optional(),
@@ -50,7 +57,7 @@ export const productSchema = z.object({
   recommendedProducts: z
     .array(
       z.object({
-        _id: z.string(),
+        id: z.string(),
         name: z.string(),
       }),
     )

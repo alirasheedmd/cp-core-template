@@ -63,7 +63,7 @@ export default function MultiImageUploader<
       alt: (field as { alt?: string }).alt || '',
       key: '',
       src: (field as { src?: string }).src || '',
-      base64: '',
+      base64: (field as { base64?: string }).base64 || '',
       done: true,
     })),
   )
@@ -151,6 +151,7 @@ export default function MultiImageUploader<
               clone.map((item) => ({
                 src: item.src,
                 alt: item.alt,
+                base64: item.base64,
               })) as unknown as TFieldValues[TName],
             )
             setIsUploading(false)
@@ -195,6 +196,17 @@ export default function MultiImageUploader<
           )}
         />
       </div>
+      <input
+        type="hidden"
+        name="images"
+        value={JSON.stringify(
+          items.map((item) => ({
+            src: item.src,
+            alt: item.alt,
+            base64: item.base64,
+          })),
+        )}
+      />
     </div>
   )
 }

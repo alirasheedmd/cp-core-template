@@ -10,7 +10,12 @@ const EditSubcategoryComponent = async ({ subcategoryId }: EditSubcategoryProps)
   const subcategory = await getCategory(subcategoryId)
   const categories = await getAllCategories()  
   return (
-   <SubcategoryInfo  data={subcategory as SubcategoryFormValues} categories={categories as IWebCategory[]}/>
+    <SubcategoryInfo
+      data={subcategory as SubcategoryFormValues}
+      categories={categories as IWebCategory[]}
+      id={subcategoryId}
+      isEditing
+    />
   )
 }
 

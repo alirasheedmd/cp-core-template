@@ -8,10 +8,13 @@ export const subCategorySchema = z.object({
       z.object({
         src: z.string(),
         alt: z.string(),
+        base64: z.string(),
       }),
     )
-    .min(1, 'At least one image is required').optional(),
-  status: z.enum(['enable', 'disable'], { required_error: 'Status is required' }),
+    .min(1, 'At least one image is required'),
+  status: z.enum(['enable', 'disable'], {
+    required_error: 'Status is required',
+  }),
   slug: z.string().min(1, 'Slug is required'),
   pageTitle: z
     .string()
@@ -31,15 +34,16 @@ export const subCategorySchema = z.object({
 
 export const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required'),
-  images: z
-    .array(
-      z.object({
-        src: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .optional(),
-  status: z.enum(['enable', 'disable'], { required_error: 'Status is required' }),
+  images: z.array(
+    z.object({
+      src: z.string(),
+      alt: z.string(),
+      base64: z.string(),
+    }),
+  ),
+  status: z.enum(['enable', 'disable'], {
+    required_error: 'Status is required',
+  }),
   slug: z.string().min(1, 'Slug is required'),
   pageTitle: z
     .string()

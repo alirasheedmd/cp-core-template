@@ -13,7 +13,7 @@ export type CategoryStatus = (typeof categoryStatusEnum.enumValues)[number]
 // Categories table
 export const categories = pgTable('categories', {
   id: text('id').primaryKey(),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
   status: categoryStatusEnum('status').notNull().default('enable'),
   slug: text('slug').unique().notNull(),
   parentId: text('parent_id'),

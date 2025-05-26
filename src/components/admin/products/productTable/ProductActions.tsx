@@ -105,6 +105,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
                 onCancel={() => setOpen(false)}
                 onSave={handleDelete}
                 isLoading={isDeleting}
+                loadingText="Deleting..."
                 saveText="Yes"
                 cancelText="No"
               />

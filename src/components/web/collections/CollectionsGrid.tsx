@@ -11,7 +11,7 @@ export default async function CollectionsGrid() {
   return (
     <Suspense fallback={<GridSkeleton count={8} />}>
       <GridWrapper
-        data={categories}
+        data={categories as IWebCategory[]}
         CardComponent={CategoryCard}
         cardProps={(category: IWebCategory) => ({ category })}
       />

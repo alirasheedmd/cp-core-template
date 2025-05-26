@@ -9,10 +9,10 @@ export const productCategories = pgTable(
   {
     productId: text('product_id')
       .notNull()
-      .references(() => products.id), // Lazy reference to avoid circular issues
+      .references(() => products.id, { onDelete: 'cascade' }), // Lazy reference to avoid circular issues
     categoryId: text('category_id')
       .notNull()
-      .references(() => categories.id), // Lazy reference
+      .references(() => categories.id, { onDelete: 'cascade' }), // Lazy reference
   },
   (table) => [primaryKey({ columns: [table.productId, table.categoryId] })],
 )

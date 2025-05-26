@@ -49,12 +49,14 @@ export default function CategoryClientContainer({
     }, [categories])
   
   const filteredCategories = useMemo(() => {
-    return categories.filter((category: ICategory) => {
-      const queryLower = query.toLowerCase()
-       const statusMatch =
-       selectedTab === 'all-categories' || category.status === selectedTab
-      return statusMatch && category.name.toLowerCase().includes(queryLower)
-    })
+    return categories
+      .filter((category: ICategory) => {
+        const queryLower = query.toLowerCase()
+        const statusMatch =
+          selectedTab === 'all-categories' || category.status === selectedTab
+        return statusMatch && category.name.toLowerCase().includes(queryLower)
+      })
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
   }, [categories, query, selectedTab])
 
   const emptyViewMessage = useMemo(() => {

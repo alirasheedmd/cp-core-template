@@ -15,6 +15,7 @@ export interface ICategory {
   images: string[]
   productCount?: number
   subcategoryCount?: number
+  updatedAt: Date
 }
 
 export interface IAdditionalDetailChild {
@@ -54,6 +55,7 @@ export interface IProduct {
   // reviews: IReview[]
   // overallRating: number
   createdAt: Date
+  updatedAt: Date
   status: string
 }
 
@@ -122,7 +124,7 @@ export interface IWebCategory {
   id: string
   name: string
   slug: string
-  image: string | null
+  images: string[]
   parentId: string
   status: string
 }

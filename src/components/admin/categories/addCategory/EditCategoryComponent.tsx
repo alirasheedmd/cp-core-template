@@ -8,7 +8,11 @@ interface EditCategoryProps {
 const EditCategoryComponent = async ({ categoryId }: EditCategoryProps) => {
     const category = await getCategory(categoryId)
   return (
-   <CategoryInfo  data={category as CategoryFormValues}/>
+    <CategoryInfo
+      data={category as CategoryFormValues}
+      id={categoryId}
+      isEditing
+    />
   )
 }
 
