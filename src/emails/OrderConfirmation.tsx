@@ -1,90 +1,151 @@
 import { OrderItem } from "@/db/schema";
-import { Body, Column, Container, Head, Heading, Html, Img, Link, Row, Section, Tailwind, Text } from "@react-email/components";
-import * as React from "react";
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Link,
+  Tailwind,
+  Text,
+} from '@react-email/components'
+import * as React from 'react'
 
 interface OrderConfirmationProps {
-    fullName: string
-    orderId: string
-    items: OrderItem[]
-    totalAmount: number
-    contactEmail?: string
-    supportUrl?: string
-    shippingCost?: number
+  fullName: string
+  orderId: string
+  items: OrderItem[]
+  totalAmount: number
+  contactEmail?: string
+  supportUrl?: string
+  shippingCost?: number
 }
 
-export default function OrderConfirmation({ fullName, orderId, items, totalAmount, contactEmail, shippingCost, supportUrl }: OrderConfirmationProps) {
+export default function OrderConfirmation({
+  fullName,
+  orderId,
+  items,
+  totalAmount,
+  contactEmail,
+  shippingCost,
+  supportUrl,
+}: OrderConfirmationProps) {
   return (
-      <Html>
-            <Head/>
-            <Tailwind>
-                <Body>
-                <Container className=" font-sans leading-6 flex justify-center">
-                    <Container className="max-w-[600px] w-full p-5 m-auto">
-                        <Container className="text-center mb-5">
-                            <Link href="https://www.localhost:3000" className="no-underline text-center">
-                                <Img src={'#'} alt="Curious Packet Logo" width={40} height={37} className="max-w-[150px]" />
-                            </Link>
-                        </Container>
-                        <Heading as="h2" className="text-center text-gray-700">
-                            Thank you for your order, {fullName}!
-                        </Heading>
-                        <Text className="text-center text-gray-600 text-lg">Your order ID is <strong>{orderId}</strong> </Text>
-                        <Text>Here are the details of your order:</Text>
-                        <Section className="w-full max-w-[600px] border-collapse mt-5">
-                            <Row className="border-DarkGrey">
-                                <Column className="p-2 border-gray-300 bg-gray-50 text-center w-20"> Image </Column>
-                                <Column className="p-2 border-gray-300 bg-gray-50 w-44 max-w-52 "> Item </Column>
-                                <Column className="p-2 border-gray-300 bg-gray-50 text-center w-20"> Quantity </Column>
-                                <Column className="p-2 border-gray-300 bg-gray-50 text-right w-20"> Price </Column>
-                            </Row>
-                            {items &&
-                                items.map((item) => (
-                                    <Row key={item.productId} className="border-DarkGrey">
-                                        <Column className="p-2 border-gray-300 bg-gray-50 text-center w-20">
-                                            <Img src={item.image} alt={item.name} className="max-w-16 max-h-16" />
-                                        </Column>
-                                        <Column className="p-2 border-gray-300 bg-gray-50 w-44 max-w-52 ">
-                                            <Text>{item.name}</Text>
-                                        </Column>
-                                        <Column className="p-2 border-gray-300 bg-gray-50 text-center w-20">
-                                            <Text>    {item.quantity} </Text>
-                                        </Column>
-                                        <Column className="p-2 border-gray-300 bg-gray-50 text-right w-20">
-                                            <Text> SAR {item.price} </Text>
-                                        </Column>                                
-                                    </Row>
-                                ) )
-                            }
-                            <Row className="border-DarkGrey">
-                                <Column className="col-span-3 p-2 border-gray-300 text-right">
-                                    Shipping Cost:
-                                </Column>
-                                <Column className="p-2 border-gray-300 text-right">
-                                   <Text>SAR {shippingCost ?? '0'}</Text>
-                                </Column>
-                            </Row>
-                            <Row className="border-DarkGrey">
-                                <Column className="col-span-3 p-2 border-gray-300 text-right">
-                                    <strong> Total (including shipping): </strong>
-                                </Column>
-                                <Column className="p-2 border-gray-300 text-right">
-                                   <strong>SAR {totalAmount ?? '0'}</strong>
-                                </Column>
-                            </Row>  
-                        </Section>
-                        <Text className="mt-5">
-                            If you have any questions or need assistance, please contact us at
-                            <Link href={`mailto:${contactEmail}`} className="text-blue-700">{contactEmail}</Link>
-                            or visit our
-                            <Link href={`${supportUrl}`} className="text-blue-700">Support Center</Link>.
-                        </Text>
-                        <Text className="mt-5 text-center">
-                            &copy; {new Date().getFullYear()} Curious Packet LLP. All rights reserved.
-                        </Text>
-                    </Container>
-                </Container>
-            </Body>
-        </Tailwind>
+    <Html>
+      <Head />
+      <Tailwind>
+        <Body>
+          <Container className="flex justify-center font-sans leading-6">
+            <Container className="m-auto w-full max-w-[600px] p-5">
+              <Container className="mb-5 text-center">
+                <Link
+                  href="https://www.localhost:3000"
+                  className="text-center no-underline"
+                >
+                  <Img
+                    src={'#'}
+                    alt="Curious Packet Logo"
+                    width={40}
+                    height={37}
+                    className="max-w-[150px]"
+                  />
+                </Link>
+              </Container>
+              <Heading as="h2" className="text-center text-gray-700">
+                Thank you for your order, {fullName}!
+              </Heading>
+              <Text className="text-center text-lg text-gray-600">
+                Your order ID is <strong>{orderId}</strong>
+              </Text>
+              <Text>Here are the details of your order:</Text>
+              <table className="mt-5 w-full max-w-[600px] border-collapse">
+                <thead>
+                  <tr>
+                    <td className="w-20 border-gray-500 bg-gray-50 p-2 text-center">
+                      Image
+                    </td>
+                    <td className="w-44 max-w-52 border-gray-500 bg-gray-50 p-2">
+                      Item
+                    </td>
+                    <td className="w-20 border-gray-500 bg-gray-50 p-2 text-center">
+                      Quantity
+                    </td>
+                    <td className="w-20 border-gray-500 bg-gray-50 p-2 text-right">
+                      Price
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items &&
+                    items.map((item) => (
+                      <tr key={item.productId}>
+                        <td className="w-20 border-gray-500 bg-gray-50 p-2 text-center">
+                          <Img
+                            src={item.image}
+                            alt={item.name}
+                            width={64}
+                            height={64}
+                            className="max-h-16 max-w-16"
+                          />
+                        </td>
+                        <td className="w-44 max-w-52 border-gray-500 bg-gray-50 p-2">
+                          <Text>{item.name}</Text>
+                        </td>
+                        <td className="w-20 border-gray-500 bg-gray-50 p-2 text-center">
+                          <Text> {item.quantity} </Text>
+                        </td>
+                        <td className="w-20 border-gray-500 bg-gray-50 p-2 text-right">
+                          <Text> SAR {item.price} </Text>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="border-gray-500 bg-gray-50 p-2 text-right"
+                    >
+                      Shipping Cost:
+                    </td>
+                    <td className="border-gray-500 bg-gray-50 p-2 text-right">
+                      <Text>SAR {shippingCost ?? '0'}</Text>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="border-gray-500 bg-gray-50 p-2 text-right"
+                    >
+                      <strong> Total (including shipping): </strong>
+                    </td>
+                    <td className="border-gray-500 bg-gray-50 p-2 text-right">
+                      <strong>SAR {totalAmount ?? '0'}</strong>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+              <Text className="mt-5">
+                If you have any questions or need assistance, please contact us
+                at
+                <Link href={`mailto:${contactEmail}`} className="text-blue-700">
+                  {contactEmail}
+                </Link>
+                or visit our
+                <Link href={`${supportUrl}`} className="text-blue-700">
+                  Support Center
+                </Link>
+                .
+              </Text>
+              <Text className="mt-5 text-center">
+                &copy; {new Date().getFullYear()} Curious Packet LLP. All rights
+                reserved.
+              </Text>
+            </Container>
+          </Container>
+        </Body>
+      </Tailwind>
     </Html>
-  );
+  )
 }
