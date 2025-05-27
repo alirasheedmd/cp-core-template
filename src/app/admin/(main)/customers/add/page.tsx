@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { BiArrowBack } from 'react-icons/bi'
 import { routes } from '@/config/routes'
 import { Suspense } from 'react'
-import AddProductComponent from '@/components/admin/products/addProduct/AddProductComponent'
+import AddCustomerComponent from '@/components/admin/customers/addCustomer/AddCustomerComponent'
 
 export default function AddProductPage() {
   return (
@@ -14,7 +14,7 @@ export default function AddProductPage() {
         <h3 className="text-2xl font-semibold">Add Product</h3>
       </div>
       <Suspense>
-        <AddProductComponent />
+        <AddCustomerComponent />
       </Suspense>
     </div>
   )

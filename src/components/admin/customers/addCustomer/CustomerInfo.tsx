@@ -12,9 +12,11 @@ import {
 import { useRouter } from 'next/navigation'
 import { useRef, useEffect } from 'react'
 import { routes } from '@/config/routes'
-// import { customerSchema } from '@/schemas/customer-form.schema'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { customerSchema } from '@/schemas/update-user.schema'
+import LeftSideForm from './LeftSideForm'
+import RightSideForm from './RightSideForm'
 
 export type CustomerFormValues = z.infer<typeof customerSchema>
 
@@ -93,25 +95,10 @@ export default function CustomerInfo({
   const methods = useForm<CustomerFormValues>({
     resolver: zodResolver(customerSchema) as Resolver<CustomerFormValues>,
     defaultValues: {
-      status: state.data?.status ? state.data?.status : 'active',
-      categories: state.data?.categories ? state.data?.categories : [],
-      trackInventory: state.data?.trackInventory
-        ? state.data?.trackInventory
-        : true,
-      isPhysicalCustomer: state.data?.isPhysicalCustomer
-        ? state.data?.isPhysicalCustomer
-        : true,
-      recommendedCustomers: state.data?.recommendedCustomers
-        ? state.data?.recommendedCustomers
-        : [],
-      publishDate: state.data?.publishDate
-        ? state.data?.publishDate
-        : new Date(performance.now()).toISOString().split('T')[0],
       ...(state?.data ?? {}),
     },
   })
 
-  console.log('recommended customer', state.data?.recommendedCustomers)
   const { setError } = methods
 
   // Handle server-side validation errors
@@ -137,7 +124,15 @@ export default function CustomerInfo({
     <FormProvider {...methods}>
       <form ref={formRef} action={formAction}>
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
-          {/* Form */}
+          {/* Left Side */}
+          <div className="basis-[70%]">
+            <LeftSideForm />
+          </div>
+
+          {/* Right Side */}
+          <div className="basis-[30%] space-y-5">
+            <RightSideForm />
+          </div>
         </div>
 
         {/* Action Buttons */}

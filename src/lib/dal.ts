@@ -36,6 +36,8 @@ import { routes } from '@/config/routes'
 import { inArray } from 'drizzle-orm'
 import { SubcategoryFormValues } from '@/components/admin/categories/addSubCategory/SubcategoryInfo'
 import { ProductFormValues } from '@/components/admin/products/addProduct/ProductInfo'
+import { CustomerFormValues } from '@/components/admin/customers/addCustomer/CustomerInfo'
+import { sendOrderConfirmationEmail } from './email'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -929,6 +931,10 @@ export async function getCustomerProfileInfo(userId: string) {
   return user
 }
 
+export async function createCustomer(data: CustomerFormValues) {}
+
+export async function updateCustomer(data: CustomerFormValues) {}
+
 export async function getCustomer(customerId: string) {
   const customer = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.id, customerId),
@@ -1225,10 +1231,11 @@ export const clearCart = async () => {
   }
 }
 
-export async function createOrder(data: CheckoutFormValues) {
+export async function createOrder(data: CheckoutFormValues, fullName: string) {
   try {
     console.log('order data', data)
     const validatedAddress = checkoutFormSchema.parse(data)
+
     const user = await getCurrentUser()
     if (!user) {
       const existingUser = await getUserByEmail(validatedAddress.email)
@@ -1332,6 +1339,19 @@ export async function createOrder(data: CheckoutFormValues) {
     }
     console.log('inserted items')
 
+    await sendOrderConfirmationEmail({
+      email: data.email,
+      orderId: orderId,
+      fullName: fullName,
+      items: cart.items.map((item) => ({
+        ...item,
+        price: item.price.toLocaleString(),
+        quantity: item.qty,
+        orderId: orderId,
+      })),
+      totalAmount: Number(cart.totalPrice),
+      shippingCost: Number(cart.shippingPrice),
+    })
     await db
       .update(carts)
       .set({

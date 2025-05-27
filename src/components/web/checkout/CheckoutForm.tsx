@@ -95,8 +95,9 @@ export default function CheckoutFormPage(props: CheckoutFormProps) {
 
   const onSubmit = (data: CheckoutFormValues) => {
     startTransition(async () => {
+      const fullName = `${data.firstName} ${data.lastName}`
       try {
-        await createOrder(data)
+        await createOrder(data, fullName)
         // Log the order data
         console.log('Placing order:', {
           customerInfo: data,
@@ -107,7 +108,6 @@ export default function CheckoutFormPage(props: CheckoutFormProps) {
 
         // Simulate API call delay
         await new Promise((resolve) => setTimeout(resolve, 1000))
-
         // Clear cart and show success message
         clearCart()
         setNotification({

@@ -11,7 +11,8 @@
     "lint": "next lint",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx ./src/db/seed/seed.ts",
-    "seed:data": "tsx ./src/scripts/seed.ts"
+    "seed:data": "tsx ./src/scripts/seed.ts",
+    "email": "email dev --dir ./src/emails"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.787.0",
@@ -32,6 +33,7 @@
     "@radix-ui/react-select": "^2.2.2",
     "@radix-ui/react-separator": "^1.1.4",
     "@radix-ui/react-slot": "^1.2.0",
+    "@react-email/components": "0.0.41",
     "@tanstack/react-table": "^8.21.3",
     "@types/bcrypt": "^5.0.2",
     "@types/mime-types": "^2.1.4",
@@ -89,6 +91,7 @@
     "ignore-loader": "^0.1.2",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "react-email": "4.0.15",
     "tailwindcss": "^4",
     "tsx": "^4.19.3",
     "typescript": "^5"

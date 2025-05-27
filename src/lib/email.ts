@@ -1,3 +1,5 @@
+import { OrderItem } from '@/db/schema'
+import OrderConfirmation from '@/emails/OrderConfirmation'
 import { Resend } from 'resend'
 
 // Initialize Resend with your API key
@@ -42,7 +44,10 @@ export async function sendVerificationEmail(email: string, otp: string) {
 }
 
 //Forget Password Email verfication template with OTP
-export async function sendVerificationCodeForResetPassword(email: string, otp: string) {
+export async function sendVerificationCodeForResetPassword(
+  email: string,
+  otp: string,
+) {
   try {
     const { data, error } = await resend.emails.send({
       from: 'Your Store <noreply@paklitz.com>',
@@ -80,3 +85,63 @@ export async function sendVerificationCodeForResetPassword(email: string, otp: s
   }
 }
 
+interface SendOrderConfirmationProps {
+  email: string
+  orderId: string
+  fullName: string
+  items: OrderItem[]
+  totalAmount: number
+  contactEmail?: string
+  supportUrl?: string
+  shippingCost?: number
+}
+//Order Confirmation email template with OTP
+export async function sendOrderConfirmationEmail({
+  email,
+  orderId,
+  fullName,
+  items,
+  totalAmount,
+  shippingCost = 0,
+  contactEmail = 'support@paklitz.com',
+  supportUrl = 'https://www.paklitz.com/support',
+}: SendOrderConfirmationProps) {
+  try {
+    await Promise.all([
+      resend.emails.send({
+        from: 'Your Store <noreply@paklitz.com>',
+        to: email,
+        subject: `Order Confirmation #${orderId}`,
+        react: OrderConfirmation({
+          fullName,
+          orderId,
+          items,
+          totalAmount,
+          shippingCost,
+          contactEmail,
+          supportUrl,
+        }),
+      }),
+      resend.emails.send({
+        from: 'Your Store <noreply@paklitz.com>',
+        to: 'alirasheed@curiouspacket.com',
+        subject: `Order Confirmation #${orderId} (Admin Copy)`,
+        react: OrderConfirmation({
+          fullName,
+          orderId,
+          items,
+          totalAmount,
+          shippingCost,
+          contactEmail,
+          supportUrl,
+        }),
+      }),
+    ])
+
+    console.log('order confirmation email send successfully')
+    return { success: true }
+  } catch (error) {
+    console.error('Error sending verification email:', error)
+    return { success: false, error }
+  }
+}
