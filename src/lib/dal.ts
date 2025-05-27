@@ -36,6 +36,7 @@ import { routes } from '@/config/routes'
 import { inArray } from 'drizzle-orm'
 import { SubcategoryFormValues } from '@/components/admin/categories/addSubCategory/SubcategoryInfo'
 import { ProductFormValues } from '@/components/admin/products/addProduct/ProductInfo'
+import { CustomerFormValues } from '@/components/admin/customers/addCustomer/CustomerInfo'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -921,6 +922,22 @@ export async function getCustomerProfileInfo(userId: string) {
   return user
 }
 
+<<<<<<< Updated upstream
+=======
+export async function createCustomer(data: CustomerFormValues) {}
+
+export async function updateCustomer(data: CustomerFormValues) {}
+
+export async function getCustomer(customerId: string) {
+  const customer = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, customerId),
+  })
+  if (!customer) return null
+
+  return customer
+}
+
+>>>>>>> Stashed changes
 export async function updateUserInfo(data: CustomerInfoFormValues) {
   const user = await getCurrentUser()
   if (!user) return
