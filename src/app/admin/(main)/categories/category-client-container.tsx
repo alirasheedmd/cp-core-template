@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import ProductActions from '@/components/admin/categories/categoryTable/CategoryActions'
+import CategoryActions from '@/components/admin/categories/categoryTable/CategoryActions'
 import { routes } from '@/config/routes'
 import { ICategory } from '@/types'
 import { ColumnDef } from '@tanstack/react-table'
@@ -20,12 +20,12 @@ interface CategoryClientContainerProps {
 
 export default function CategoryClientContainer({
   categories,
-  columns
+  columns,
 }: CategoryClientContainerProps) {
-    const [selectedTab, setSelectedTab] = useState<string>(categoriesTabs[0].id)
-    const [query, setQuery] = useState<string>('')
-    const [selectedRows, setSelectedRows] = useState<ICategory[]>([])
-    const [clearSelectionTrigger, setClearSelectionTrigger] = useState(false)
+  const [selectedTab, setSelectedTab] = useState<string>(categoriesTabs[0].id)
+  const [query, setQuery] = useState<string>('')
+  const [selectedRows, setSelectedRows] = useState<ICategory[]>([])
+  const [clearSelectionTrigger, setClearSelectionTrigger] = useState(false)
 
   const clearInput = () => {
     setQuery('')
@@ -35,19 +35,19 @@ export default function CategoryClientContainer({
     setQuery(e.target.value)
   }
 
-   const categoriesCount = useMemo(() => {
-      return categoriesTabs.reduce(
-        (acc, tab) => {
-          acc[tab.id] = categories.filter(
-            (category: ICategory) =>
-              tab.id === 'all-categories' || category.status === tab.id,
-          ).length
-          return acc
-        },
-        {} as Record<string, number>,
-      )
-    }, [categories])
-  
+  const categoriesCount = useMemo(() => {
+    return categoriesTabs.reduce(
+      (acc, tab) => {
+        acc[tab.id] = categories.filter(
+          (category: ICategory) =>
+            tab.id === 'all-categories' || category.status === tab.id,
+        ).length
+        return acc
+      },
+      {} as Record<string, number>,
+    )
+  }, [categories])
+
   const filteredCategories = useMemo(() => {
     return categories
       .filter((category: ICategory) => {
@@ -80,7 +80,7 @@ export default function CategoryClientContainer({
         selectedRows.map((row) => row.id || ''),
       )
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      await deleteCategories(selectedRows.map((row) => row.id || ""));
+      await deleteCategories(selectedRows.map((row) => row.id || ''))
       setSelectedRows([])
       setClearSelectionTrigger((prev) => !prev)
     } catch (error) {
@@ -103,14 +103,14 @@ export default function CategoryClientContainer({
         </Link>
       </div>
 
-      <div className="flex flex-cal justify-between gap-y-3 rounded-t-xl bg-white p-2 md:gap-y-2 lg:bg-white xl:flex-row xl:items-center">
+      <div className="flex-cal flex justify-between gap-y-3 rounded-t-xl bg-white p-2 md:gap-y-2 lg:bg-white xl:flex-row xl:items-center">
         <CategoryTabs
           tabs={categoriesTabs}
           selectedTab={selectedTab}
           onSelectTab={setSelectedTab}
           categoriesCount={categoriesCount}
         />
-        <ProductActions
+        <CategoryActions
           query={query}
           onQueryChange={handleChange}
           onClearQuery={clearInput}
@@ -127,12 +127,12 @@ export default function CategoryClientContainer({
         ) : (
           <>
             <div className="hidden lg:block">
-               <CategoriesDataTable<ICategory, string | number>
-                    columns={columns}
-                    data={filteredCategories}
-                    onRowSelectionChange={setSelectedRows}
-                    clearSelectionTrigger={clearSelectionTrigger}
-                  />
+              <CategoriesDataTable<ICategory, string | number>
+                columns={columns}
+                data={filteredCategories}
+                onRowSelectionChange={setSelectedRows}
+                clearSelectionTrigger={clearSelectionTrigger}
+              />
             </div>
             <div className="block lg:hidden">
               <CategoryListMobile categories={filteredCategories} />

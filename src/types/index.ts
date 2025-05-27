@@ -84,10 +84,29 @@ export interface IOrderCustomer {
 }
 
 export interface ICustomerDetails {
-  fullName: string
+  id: string
+  firstName: string
+  lastName: string
   email: string
   phoneNumber: string
-  address: IOrderAddress
+  buildingNo: string
+  street: string
+  district: string
+  city: string
+  province: string
+  postalCode: string
+  secondaryNumber: string
+  shortAddress: string
+  unitNumber: string
+  country: string
+  ordersCount?: number
+  totalAmount?: number
+  paymentMethod: string
+  isPromotionalEmailFlag: boolean
+  isVerified: boolean
+  lastLoginAt: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface IOrder {
