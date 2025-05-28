@@ -1369,11 +1369,9 @@ export async function createOrder(data: CheckoutFormValues, fullName: string) {
     console.log('inserted order id', insertedOrderId)
     if (!insertedOrderId) throw new Error('Order not created')
     redirect(`/order-confirmation/${insertedOrderId}`)
-
-    // revalidatePath('/order-confirmation')
     return {
       success: true,
-      message: 'User updated successfully',
+      message: 'order created successfully',
     }
   } catch (error) {
     console.log('error creating order')
@@ -1438,5 +1436,27 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
 
   console.log('order updated', order[0])
 
+  revalidatePath(routes.admin.orders)
+}
+
+export async function updatePaidStatus(id: string, value: string) {
+  const isPaid = value === 'paid' ? true : false
+  const order = await db
+    .update(orders)
+    .set({
+      isPaid: isPaid,
+    })
+    .where(eq(orders.id, id))
+    .returning({ isPaid: orders.isPaid })
+
+  console.log('order updated', order[0])
+
+  revalidatePath(routes.admin.orderDetails(id))
+}
+
+export async function deleteOrder(id: string) {
+  await db.delete(orders).where(eq(orders.id, id))
+
+  console.log('order deleted')
   revalidatePath(routes.admin.orders)
 }

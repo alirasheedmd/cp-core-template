@@ -18,6 +18,7 @@ interface OrderSummaryProps {
   subtotal: number
   shippingFee: number
   total: number
+  tax: number
 }
 
 export default function OrderSummary({
@@ -25,6 +26,7 @@ export default function OrderSummary({
   subtotal,
   shippingFee,
   total,
+  tax,
 }: OrderSummaryProps) {
   return (
     <div className="mx-auto flex h-fit w-full flex-col gap-6 rounded-lg border bg-gray-50 p-6 lg:sticky lg:top-22 lg:max-w-md">
@@ -65,6 +67,10 @@ export default function OrderSummary({
         <div className="flex justify-between">
           <span>Subtotal</span>
           <CurrencySymbol amount={subtotal} />
+        </div>
+        <div className="flex justify-between">
+          <span>Tax</span>
+          <CurrencySymbol amount={tax} />
         </div>
         <div className="flex justify-between">
           <span>Shipping</span>

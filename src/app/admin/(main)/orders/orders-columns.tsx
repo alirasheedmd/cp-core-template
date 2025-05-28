@@ -15,6 +15,7 @@ import { IOrder, IOrderItem } from '@/types'
 import OrderStatusSelector from '@/components/admin/orders/orderDetails/OrderStatusSelector'
 import { routes } from '@/config/routes'
 import { ShippingAddress } from '@/schemas/checkout-form.schema'
+import CurrencySymbol from '@/components/common/CurrencySymbol'
 
 export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
   {
@@ -139,7 +140,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
     },
     cell: ({ row }) => {
       const price: number = row.getValue('totalPrice')
-      return <div>Rs. {price}</div>
+      return <CurrencySymbol amount={price} />
     },
   },
   // {

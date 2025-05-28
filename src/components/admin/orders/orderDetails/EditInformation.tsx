@@ -1,18 +1,14 @@
 'use client'
-// Internal component imports
 import EditContactInformation from '@/components/admin/orders/orderDetails/EditContactInformation'
 import EditShippingAddress from '@/components/admin/orders/orderDetails/EditShippingAddress'
-// UI component imports
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-// Icon imports
 import { BsThreeDots } from 'react-icons/bs'
-// Type imports
-import { ICustomerDetails } from '@/types'
 import { useState } from 'react'
+import { ShippingAddress } from '@/schemas/checkout-form.schema'
 
 export default function EditInformation({
   userEmail,
@@ -22,7 +18,7 @@ export default function EditInformation({
 }: {
   userEmail: string | undefined
   userPhoneNumber: string | undefined
-  userAddress: ICustomerDetails | undefined
+  userAddress: ShippingAddress | undefined
   orderId: string
 }) {
   const [open, setOpen] = useState(false)

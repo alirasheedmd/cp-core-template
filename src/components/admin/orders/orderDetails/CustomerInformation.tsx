@@ -18,15 +18,17 @@ export default function CustomerInformation({
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Customer</p>
           <EditInformation
-            userEmail={order?.customerDetails?.email}
-            userPhoneNumber={order?.customerDetails?.phoneNumber}
-            userAddress={order?.customerDetails}
+            userEmail={order.user.email}
+            userPhoneNumber={order.shippingAddress.phoneNumber}
+            userAddress={order.shippingAddress}
             orderId={orderId}
           />
         </div>
 
         <div className="mt-5 text-sm text-gray-700 lg:text-base">
-          <p>{order?.customerDetails?.fullName}</p>
+          <p>
+            {order.shippingAddress.firstName} {order.shippingAddress.lastName}
+          </p>
         </div>
 
         <div className="mt-5 space-y-1 text-base text-gray-700">
@@ -34,32 +36,34 @@ export default function CustomerInformation({
             Contact Information
           </p>
           <Link
-            href={`mailto:${order?.customerDetails?.email}`}
+            href={`mailto:${order.user.email}`}
             className="text-sm text-blue-500 hover:underline lg:text-base"
           >
-            {order?.customerDetails?.email}
+            {order.user.email}
           </Link>
           <p className="text-sm lg:text-base">
-            {order?.customerDetails?.phoneNumber}
+            {order.shippingAddress.phoneNumber}
           </p>
         </div>
 
         <div className="mt-5 space-y-1 text-sm text-gray-700 lg:text-base">
           <p className="text-base font-semibold text-black">Shipping Address</p>
-          <p>{order?.customerDetails?.fullName}</p>
-          <p>{order?.customerDetails?.address?.apartment}</p>
-          <p>{order?.customerDetails?.address?.street}</p>
-          <p>{order?.customerDetails?.address?.city}</p>
-          <p>{order?.customerDetails?.address?.postalCode}</p>
+          <p>
+            {order.shippingAddress.firstName} {order.shippingAddress.lastName}
+          </p>
+          <p>{order.shippingAddress.buildingNo}</p>
+          <p>{order.shippingAddress.street}</p>
+          <p>{order.shippingAddress.city}</p>
+          <p>{order.shippingAddress.postalCode}</p>
           <Link
-            href={`tel:${order?.customerDetails?.phoneNumber}`}
+            href={`tel:${order.shippingAddress.phoneNumber}`}
             className="block w-fit text-blue-500 hover:underline"
           >
-            {order?.customerDetails?.phoneNumber}
+            {order.shippingAddress.phoneNumber}
           </Link>
           <Link
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              `${order?.customerDetails?.address?.street}, ${order?.customerDetails?.address?.city}, ${order?.customerDetails?.address?.postalCode}`,
+              `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}`,
             )}`}
             target="_blank"
             className="block w-fit text-blue-500 hover:underline"

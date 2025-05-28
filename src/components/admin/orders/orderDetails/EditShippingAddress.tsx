@@ -28,6 +28,7 @@ import {
   type UpdateOrderShippingInfoState,
 } from '@/app/actions/admin/main/order'
 import { editShippingSchema } from '@/schemas/update-user.schema'
+import { ShippingAddress } from '@/schemas/checkout-form.schema'
 
 type EditShippingInfoFormValues = z.infer<typeof editShippingSchema>
 
@@ -36,7 +37,7 @@ export default function EditShippingAddress({
   orderId,
   onClose,
 }: {
-  userAddress: IOrderCustomer | undefined
+  userAddress: ShippingAddress | undefined
   orderId: string
   onClose: () => void
 }) {

@@ -7,13 +7,13 @@ import { format } from 'date-fns'
 interface PaymentInformationProps {
   order: IOrder
   orderId: string
-  onUploadResponse: (response: string) => void
+  // onUploadResponse: (response: string) => void
 }
 
 export default function PaymentInformation({
   order,
   orderId,
-  onUploadResponse,
+  // onUploadResponse,
 }: PaymentInformationProps) {
   return (
     <AdminContainer>
@@ -26,7 +26,7 @@ export default function PaymentInformation({
             .toLowerCase()
             .replace(/^./, (char) => char.toUpperCase())}
         </p>
-        <PaymentStatusSelector />
+        <PaymentStatusSelector orderId={orderId} isPaid={order.isPaid} />
       </div>
       <p className="text-sm lg:text-base">
         {order?.createdAt
@@ -34,8 +34,10 @@ export default function PaymentInformation({
           : ''}
       </p>
 
-      {order?.paymentMethod === 'ONLINE_PAYMENT' && (
-        <UploadInvoice onUploadResponse={onUploadResponse} />
+      {order?.paymentMethod === 'bank_transfer' && (
+        <UploadInvoice
+        // onUploadResponse={onUploadResponse}
+        />
       )}
     </AdminContainer>
   )

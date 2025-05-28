@@ -89,6 +89,7 @@ export default function OrderConfirmationComponent(props: OrderConfirmationProps
           subtotal={Number(order.itemsPrice)}
           shippingFee={Number(order.shippingPrice)}
           total={Number(order.totalPrice)}
+          tax={Number(order.taxPrice)}
         />
 
         {/* Buttons for mobile screen */}

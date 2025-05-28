@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { FaCircle } from 'react-icons/fa6'
 import PrintOrderButton from './PrintOrderButton'
 import { IOrder } from '@/types'
-import { routes } from '@/config/routes'
+// import { routes } from '@/config/routes'
 
 interface OrderHeaderProps {
   order: IOrder
@@ -11,16 +11,18 @@ interface OrderHeaderProps {
 }
 
 export default function OrderHeader({ order, orderId }: OrderHeaderProps) {
+  const formattedStatus =
+  order.status.charAt(0).toUpperCase() + order.status.slice(1)
   return (
     <div className="flex items-start justify-between px-5 lg:px-0">
       <div>
         <div className="flex gap-x-2">
           <p className="font-semibold">#{orderId}</p>
           <p className="bg-LightGrey flex items-center gap-x-1 rounded-lg px-2 py-1 text-xs">
-            <FaCircle className="text-[8px] text-neutral-600" /> Unpaid
+            <FaCircle className="text-[8px] text-neutral-600" /> {order.isPaid === true ? 'Paid' : 'Unpaid'}
           </p>
           <p className="bg-LightGrey flex items-center gap-x-1 rounded-lg px-2 py-1 text-xs">
-            <FaCircle className="text-[8px] text-neutral-600" /> Shipped
+            <FaCircle className="text-[8px] text-neutral-600" /> {formattedStatus}
           </p>
         </div>
         <p className="mt-1">
@@ -30,12 +32,12 @@ export default function OrderHeader({ order, orderId }: OrderHeaderProps) {
       </div>
 
       <div className="hidden items-center gap-x-4 lg:flex">
-        <Link
+        {/* <Link
           href={routes.admin.orderEdit(orderId)}
           className="bg-LightGrey hover:text-Orange w-16 rounded-xl py-1.5 text-center font-semibold transition-colors"
         >
           Edit
-        </Link>
+        </Link> */}
         <PrintOrderButton order={order} orderId={orderId} />
         <Link
           href="#"
