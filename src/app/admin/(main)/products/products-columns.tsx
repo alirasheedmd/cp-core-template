@@ -9,7 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { routes } from '@/config/routes'
-import { formatCurrency2 } from '@/lib/utils'
+import CurrencySymbol from '@/components/common/CurrencySymbol'
 
 export const productsColumns: ColumnDef<IProduct>[] = [
   // Checkbox column
@@ -141,7 +141,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
     },
     cell: ({ row }) => {
       const price = row.original.price
-      return <div>{formatCurrency2(price)}</div>
+      return <CurrencySymbol amount={price} />
     },
   },
   // Vendor column

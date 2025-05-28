@@ -1,9 +1,9 @@
-import UpdateOrderButton from './UpdateOrderButton'
+// import UpdateOrderButton from './UpdateOrderButton'
 import DeleteOrderButton from './DeleteOrderButton'
 
 interface OrderActionButtonsProps {
   orderId: string
-  uploadResponse: string | null
+  // uploadResponse: string | null
   className?: string
   onDelete: () => void
   isPending: boolean
@@ -11,7 +11,7 @@ interface OrderActionButtonsProps {
 
 export default function OrderActionButtons({
   orderId,
-  uploadResponse,
+  // uploadResponse,
   className = '',
   onDelete,
   isPending,
@@ -20,7 +20,7 @@ export default function OrderActionButtons({
     <div
       className={`mt-4 flex w-full gap-x-4 px-3 pb-4 lg:ml-auto lg:w-fit lg:px-0 lg:pb-0 ${className}`}
     >
-      <UpdateOrderButton orderId={orderId} uploadResponse={uploadResponse} />
+      {/* <UpdateOrderButton orderId={orderId} uploadResponse={uploadResponse} /> */}
       <DeleteOrderButton
         orderId={orderId}
         onDelete={onDelete}

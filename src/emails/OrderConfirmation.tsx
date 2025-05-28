@@ -44,7 +44,7 @@ export default function OrderConfirmation({
                   className="text-center no-underline"
                 >
                   <Img
-                    src={'#'}
+                    src={'/logo.svg'}
                     alt="Curious Packet Logo"
                     width={40}
                     height={37}

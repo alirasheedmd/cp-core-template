@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import OrderStatusSelector from './OrderStatusSelector'
 import { IOrder } from '@/types'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
+import CurrencySymbol from '@/components/common/CurrencySymbol'
 
 interface OrderItemsProps {
   order: IOrder
@@ -36,7 +37,7 @@ export default function OrderItems({ order, orderId }: OrderItemsProps) {
         <hr className="border-t-2 border-neutral-400 pb-4" />
 
         <div className="flex flex-col gap-y-2">
-          {order?.items?.map((item) => (
+          {order.orderItems.map((item) => (
             <div
               className="flex justify-between gap-x-3 px-2 pb-2 lg:px-4"
               key={item?.productId}
@@ -54,22 +55,22 @@ export default function OrderItems({ order, orderId }: OrderItemsProps) {
                   <p className="text-sm font-medium lg:text-base">
                     {item?.name}
                   </p>
-                  <p className="text-xs text-neutral-500 lg:text-sm">
-                    SKU: {item?.sku}
-                  </p>
                   <p className="text-xs text-neutral-500 lg:hidden">
-                    Rs. {item?.price} X {item?.quantity}
+                    <CurrencySymbol amount={item.price} /> X {item?.quantity}
                   </p>
                 </div>
               </div>
 
               <div className="flex lg:items-center lg:gap-x-6">
                 <p className="hidden text-neutral-500 lg:block">
-                  Rs. {item?.price} x {item?.quantity}
+                  <CurrencySymbol amount={item.price} />
+                  <span className="text-lg"> x {item?.quantity}</span>
                 </p>
 
                 <p className="text-sm text-nowrap text-neutral-500 lg:text-base">
-                  Rs. {(item?.price ?? 0) * (item?.quantity ?? 0)}
+                  <CurrencySymbol
+                    amount={(Number(item?.price) ?? 0) * (item?.quantity ?? 0)}
+                  />
                 </p>
               </div>
             </div>
@@ -77,10 +78,7 @@ export default function OrderItems({ order, orderId }: OrderItemsProps) {
         </div>
       </div>
       <div className="bg-LightGrey mt-4 ml-auto w-32 rounded-lg shadow-xs">
-        <OrderStatusSelector
-          orderId={orderId}
-          initialStatus={order?.status ?? ''}
-        />
+        <OrderStatusSelector orderId={orderId} status={order?.status ?? ''} />
       </div>
     </AdminContainer>
   )

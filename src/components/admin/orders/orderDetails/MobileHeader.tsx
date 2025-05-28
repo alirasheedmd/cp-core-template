@@ -28,12 +28,12 @@ export default function MobileHeader({ orderId, order }: MobileHeaderProps) {
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-44 space-y-3 text-sm" align="end">
-          <Link
+          {/* <Link
             href={routes.admin.orderEdit(orderId)}
             className="bg-LightGrey hover:text-Orange block w-full rounded-lg px-3 py-1.5 transition-colors"
           >
             Edit
-          </Link>
+          </Link> */}
           <PrintOrderButton
             order={order}
             orderId={orderId}

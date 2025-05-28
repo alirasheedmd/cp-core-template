@@ -57,13 +57,17 @@ export default function OrderClientContainer({
 
   // Filter orders based on the selected tab and query
   const filteredOrders = useMemo(() => {
-    return (
+    const filtered =
       orders?.filter((order: IOrder) => {
         const queryLower = query.toLowerCase()
         const statusMatch =
           selectedTab === 'all-orders' || order.status === selectedTab
         return statusMatch && order.orderId.toLowerCase().includes(queryLower)
       }) ?? []
+
+    return filtered.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
   }, [orders, query, selectedTab])
 

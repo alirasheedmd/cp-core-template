@@ -4,13 +4,15 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-interface UploadInvoiceProps {
-  onUploadResponse: (response: string) => void
-}
+// interface UploadInvoiceProps {
+//   onUploadResponse: (response: string) => void
+// }
 
-export default function UploadInvoice({
-  onUploadResponse,
-}: UploadInvoiceProps) {
+export default function UploadInvoice(
+//   {
+//   onUploadResponse,
+// }: UploadInvoiceProps
+) {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadResponse, setUploadResponse] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -40,12 +42,12 @@ export default function UploadInvoice({
       const result = await response.json()
       const successMessage = `File uploaded successfully: ${result.secure_url}`
       setUploadResponse(successMessage)
-      onUploadResponse(result.secure_url) // Send the API response link to the parent component
+      // onUploadResponse(result.secure_url) // Send the API response link to the parent component
     } catch (error) {
       console.error('Upload error:', error)
       const errorMessage = `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       setUploadResponse(errorMessage)
-      onUploadResponse(errorMessage)
+      // onUploadResponse(errorMessage)
     } finally {
       setIsUploading(false)
     }
