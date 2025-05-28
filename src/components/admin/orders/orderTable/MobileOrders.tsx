@@ -15,10 +15,13 @@ export default function MobileOrders({ orders }: { orders: IOrder[] }) {
           <div className="space-y-1">
             <p className="font-medium">#{order.orderId}</p>
             <div className="flex items-center gap-x-2">
-              <p>{order.customerDetails?.fullName}</p>
+              <p>
+                {order.shippingAddress?.firstName}{' '}
+                {order.shippingAddress.lastName}
+              </p>
               <p className="bg-LightGrey flex w-fit items-center gap-x-1 rounded-lg px-2 py-1 text-xs">
                 <FaCircle className="text-[8px] text-neutral-600" />{' '}
-                {`${order.items.length} ${order.items.length == 1 ? 'Item' : 'Items'}`}
+                {`${order.orderItems.length} ${order.orderItems.length == 1 ? 'Item' : 'Items'}`}
               </p>
             </div>
             <p className="bg-LightGrey flex w-fit items-center gap-x-1 rounded-lg px-2 py-1 text-xs">
@@ -32,7 +35,7 @@ export default function MobileOrders({ orders }: { orders: IOrder[] }) {
                 .replace(/^./, (char) => char.toUpperCase())}
             </p>
           </div>
-          <p>Rs. {order.totalAmount}</p>
+          <p>Rs. {order.totalPrice}</p>
         </Link>
       ))}
     </div>

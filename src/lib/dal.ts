@@ -15,6 +15,7 @@ import {
   orders,
   orderItems,
   type CategoryStatus,
+  OrderStatus,
 } from '@/db/schema'
 import { CustomerInfoFormValues } from '@/components/web/customer/CustomerForm'
 import { cookies } from 'next/headers'
@@ -1404,4 +1405,38 @@ export async function getOrdersByUserId(userId: string) {
     },
   })
   return order
+}
+
+export async function getAllOrders() {
+  const order = await db.query.orders.findMany({
+    with: {
+      orderItems: true,
+      user: {
+        columns: { email: true },
+      },
+    },
+  })
+
+  return order
+}
+
+export async function deleteOrders(ids: string[]) {
+  await db.delete(orders).where(inArray(orders.id, ids))
+
+  console.log('orders deleted')
+  revalidatePath(routes.admin.orders)
+}
+
+export async function updateOrderStatus(id: string, status: OrderStatus) {
+  const order = await db
+    .update(orders)
+    .set({
+      status: status,
+    })
+    .where(eq(orders.id, id))
+    .returning({ status: orders.status })
+
+  console.log('order updated', order[0])
+
+  revalidatePath(routes.admin.orders)
 }
