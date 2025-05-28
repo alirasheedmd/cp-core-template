@@ -1,4 +1,6 @@
+import { OrderItem } from '@/db/schema'
 import { cartItemSchema } from '@/schemas/cart.schema'
+import { ShippingAddress } from '@/schemas/checkout-form.schema'
 import { z } from 'zod'
 
 export interface IProductSlug {
@@ -111,7 +113,7 @@ export interface ICustomerDetails {
 
 export interface IOrder {
   orderId: string
-  createdAt: string
+  userId: string
   status:
     | 'pending'
     | 'confirmed'
@@ -119,11 +121,21 @@ export interface IOrder {
     | 'delivered'
     | 'cancelled'
     | 'returned'
-  paymentMethod: 'CASH_ON_DELIVERY' | 'ONLINE_PAYMENT'
-  totalAmount: number
-  shippingCost: number
-  customerDetails: IOrderCustomer
-  items: IOrderItem[]
+  paymentMethod: 'cash_on_delivery' | 'bank_transfer'
+  shippingAddress: ShippingAddress
+  itemsPrice: number | string
+  taxPrice: number | string
+  shippingPrice: number | string
+  totalPrice: number | string
+  orderItems: OrderItem[]
+  user: {
+    email: string
+  }
+  isPaid: boolean
+  paidAt: Date
+  deliveredAt: Date
+  orderNotes?: string
+  createdAt: Date
 }
 
 /////////// Web Interfaces ///////////

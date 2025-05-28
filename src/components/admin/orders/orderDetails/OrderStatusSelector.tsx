@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import {
   Select,
   SelectTrigger,
@@ -9,26 +8,26 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/components/ui/select'
+import { updateOrderStatus } from '@/lib/dal'
+import { OrderStatus } from '@/db/schema'
 
 const OrderStatusSelector = ({
   orderId,
-  initialStatus,
+  status,
   mutate,
 }: {
   orderId: string
-  initialStatus: string
+  status: string
   mutate?: () => void
 }) => {
-  const [status, setStatus] = useState<string>(initialStatus)
-
-  const handleStatusChange = (newStatus: string) => {
-    setStatus(newStatus)
+  const handleStatusChange = async (value: string) => {
+    await updateOrderStatus(orderId, value as OrderStatus)
     console.log(orderId)
     mutate?.() // Call mutate if provided
   }
 
   return (
-    <Select value={status} onValueChange={handleStatusChange}>
+    <Select value={status} onValueChange={(v) => handleStatusChange(v)}>
       <SelectTrigger className="hover:text-Orange w-30 transition-colors">
         <SelectValue placeholder={status} />
       </SelectTrigger>

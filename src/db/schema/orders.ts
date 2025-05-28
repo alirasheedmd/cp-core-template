@@ -6,16 +6,29 @@ import {
   boolean,
   json,
   numeric,
+  pgEnum,
 } from 'drizzle-orm/pg-core'
 import { users } from './users'
 import { orderItems } from './orderItems'
 import { PaymentResult, ShippingAddress } from '@/schemas/checkout-form.schema'
+
+export const orderStatusEnum = pgEnum('order_status', [
+  'pending',
+  'confirmed',
+  'shipped',
+  'delivered',
+  'cancelled',
+  'returned',
+])
+
+export type OrderStatus = (typeof orderStatusEnum.enumValues)[number]
 
 export const orders = pgTable('orders', {
   id: text('id').primaryKey(),
   userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
+  status: orderStatusEnum('status').notNull().default('pending'),
   shippingAddress: json('shippingAddress').$type<ShippingAddress>().notNull(),
   paymentMethod: text('paymentMethod').notNull(),
   paymentResult: json('paymentResult').$type<PaymentResult>(),
@@ -29,7 +42,6 @@ export const orders = pgTable('orders', {
   totalPrice: numeric('totalPrice', { precision: 12, scale: 2 }).notNull(),
   isPaid: boolean('isPaid').notNull().default(false),
   paidAt: timestamp('paidAt'),
-  isDelivered: boolean('isDelivered').notNull().default(false),
   deliveredAt: timestamp('deliveredAt'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
