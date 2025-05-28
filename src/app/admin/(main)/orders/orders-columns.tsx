@@ -67,6 +67,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
         </Link>
       )
     },
+    enableSorting: false,
   },
   {
     accessorKey: 'createdAt',
