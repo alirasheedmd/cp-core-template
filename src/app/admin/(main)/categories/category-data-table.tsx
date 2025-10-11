@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/table'
 
 import { DataTablePagination } from '@/components/common/DataTablePagination'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -55,13 +55,13 @@ export function CategoriesDataTable<TData, TValue>({
 
   const selectedRows = useMemo(
     () => table.getSelectedRowModel().rows.map((row) => row.original),
-    [rowSelection, table],
+    [table],
   )
 
-  const clearSelection = () => {
+  const clearSelection = useCallback(() => {
     setRowSelection({})
     onRowSelectionChange([])
-  }
+  }, [])
 
   useEffect(() => {
     if (
@@ -71,7 +71,7 @@ export function CategoriesDataTable<TData, TValue>({
       clearSelection()
       setLastClearTrigger(clearSelectionTrigger)
     }
-  }, [clearSelectionTrigger, lastClearTrigger])
+  }, [clearSelectionTrigger, lastClearTrigger, clearSelection])
 
   useEffect(() => {
     onRowSelectionChange(selectedRows)
