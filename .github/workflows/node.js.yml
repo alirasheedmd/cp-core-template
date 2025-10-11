@@ -59,4 +59,4 @@ jobs:
 
       # Restart the PM2 process (ensure PM2 is installed on your server and configured)
       - name: Start PM2 Process
-        run: pm2 start "npm run dev" --name "cp-core-admin-fs"
+        run: pm2 restart cp-core-admin-fs
