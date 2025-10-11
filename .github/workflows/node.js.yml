@@ -42,7 +42,7 @@ jobs:
       # Create the .env file from repository secrets
       - name: Create .env File
         run: |
-          cat <<EOF > .env
+          cat <<EOF > .env.local
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
@@ -54,8 +54,8 @@ jobs:
           NEXT_PUBLIC_S3_URL=${{ secrets.NEXT_PUBLIC_S3_URL }}
           NEXT_PUBLIC_IMGIX_URL=${{ secrets.NEXT_PUBLIC_IMGIX_URL }}
           EOF
-          echo "Created .env file:"
-          cat .env
+          echo "Created .env.local file:"
+          cat .env.local
 
       # Restart the PM2 process (ensure PM2 is installed on your server and configured)
       - name: Start PM2 Process
