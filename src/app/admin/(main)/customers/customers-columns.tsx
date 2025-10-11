@@ -59,7 +59,9 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
           href={routes.admin.customerEdit(id)}
           className="hover:text-Orange ml-3 flex w-fit items-center gap-x-2 transition-colors"
         >
-          <p>{firstName} {lastName}</p>
+          <p>
+            {firstName} {lastName}
+          </p>
         </Link>
       )
     },
@@ -67,7 +69,7 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
       const a = rowA.getValue(columnId) as string
       const b = rowB.getValue(columnId) as string
       return a.localeCompare(b)
-    }
+    },
   },
   // Email Subscription column
   {
@@ -79,7 +81,7 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
       const isSubscribed = row.original.isPromotionalEmailFlag
       return (
         <div
-          className={` rounded-full px-1 py-0.5 text-center text-sm ${
+          className={`rounded-full px-1 py-0.5 text-center text-sm ${
             isSubscribed === true ? 'w-22 bg-green-200' : 'w-28 bg-yellow-200'
           }`}
         >
@@ -96,11 +98,13 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
     },
     cell: ({ row }) => {
       const city = row.original.city
-      const country = row.original.country      
+      const country = row.original.country
       return (
         <div>
-          { city && country ? (
-            <p>{city} {', '} {country} </p>
+          {city && country ? (
+            <p>
+              {city} {', '} {country}{' '}
+            </p>
           ) : (
             <p>Not Provided</p>
           )}
@@ -117,11 +121,7 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
     cell: ({ row }) => {
       const ordersCount = row.original.ordersCount || 0
 
-      return (
-        <div>
-          {ordersCount} orders
-        </div>
-      )
+      return <div>{ordersCount} orders</div>
     },
   },
   // AmountSpend column
@@ -132,7 +132,11 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
     },
     cell: ({ row }) => {
       const amountSpend = row.original.totalAmount
-      return <div>{ amountSpend ? formatCurrency2(amountSpend) : formatCurrency2(0)}</div>
+      return (
+        <div>
+          {amountSpend ? formatCurrency2(amountSpend) : formatCurrency2(0)}
+        </div>
+      )
     },
   },
   // Created At column
@@ -156,8 +160,8 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
       return <div className="ml-3">{formatted}</div>
     },
     sortingFn: (rowA, rowB, columnId) => {
-      const a: any = rowA.getValue(columnId)
-      const b: any = rowB.getValue(columnId)
+      const a: Date = rowA.getValue(columnId)
+      const b: Date = rowB.getValue(columnId)
       const dateA = a instanceof Date ? a : new Date(a)
       const dateB = b instanceof Date ? b : new Date(b)
       return dateA.getTime() - dateB.getTime()
