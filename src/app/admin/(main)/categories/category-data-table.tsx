@@ -61,6 +61,7 @@ export function CategoriesDataTable<TData, TValue>({
   const clearSelection = useCallback(() => {
     setRowSelection({})
     onRowSelectionChange([])
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {

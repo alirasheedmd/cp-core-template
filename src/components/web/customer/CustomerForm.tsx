@@ -5,8 +5,8 @@ import { FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 import { useActionState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useRef, startTransition, useEffect } from 'react'
-import { ActionButtons } from '@/components/common/ActionButtons'
+import { useRef, useEffect } from 'react'
+// import { ActionButtons } from '@/components/common/ActionButtons'
 import { routes } from '@/config/routes'
 import { editContactInfoSchema } from '@/schemas/update-user.schema'
 import {
@@ -75,11 +75,7 @@ export default function CustomerInfo(props: CustomerInfoProps) {
     },
   })
 
-  const {
-    handleSubmit,
-    setError,
-    formState: { isSubmitting },
-  } = methods
+  const { setError } = methods
 
   // const onSubmit = () => {
   //   if (!formRef.current) return

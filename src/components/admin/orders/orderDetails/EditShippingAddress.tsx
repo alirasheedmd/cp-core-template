@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog'
 import { ActionButtons } from '@/components/common/ActionButtons'
 // Type imports
-import { IOrderCustomer } from '@/types'
+
 // Data imports
 import { dummyOrders } from '@/data/dummyOrders'
 // Server action imports

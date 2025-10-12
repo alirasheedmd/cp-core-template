@@ -932,9 +932,13 @@ export async function getCustomerProfileInfo(userId: string) {
   return user
 }
 
-export async function createCustomer(data: CustomerFormValues) {}
+export async function createCustomer(data: CustomerFormValues) {
+  console.log(data)
+}
 
-export async function updateCustomer(data: CustomerFormValues) {}
+export async function updateCustomer(data: CustomerFormValues) {
+  console.log(data)
+}
 
 export async function getCustomer(customerId: string) {
   const customer = await db.query.users.findFirst({

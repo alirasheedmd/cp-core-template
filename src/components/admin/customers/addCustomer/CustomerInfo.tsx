@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { customerSchema } from '@/schemas/update-user.schema'
 import LeftSideForm from './LeftSideForm'
-import RightSideForm from './RightSideForm'
+// import RightSideForm from './RightSideForm'
 
 export type CustomerFormValues = z.infer<typeof customerSchema>
 
@@ -130,9 +130,9 @@ export default function CustomerInfo({
           </div>
 
           {/* Right Side */}
-          <div className="basis-[30%] space-y-5">
+          {/* <div className="basis-[30%] space-y-5">
             <RightSideForm />
-          </div>
+          </div> */}
         </div>
 
         {/* Action Buttons */}

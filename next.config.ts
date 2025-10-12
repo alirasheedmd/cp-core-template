@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   // Add webpack configuration to handle Node.js modules
   webpack: (config, { isServer }) => {
     if (!isServer) {

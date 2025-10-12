@@ -175,7 +175,9 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       return <div className="ml-3">{formatted}</div>
     },
     sortingFn: (rowA, rowB, columnId) => {
+      // eslint-disable-next-line
       const a: any = rowA.getValue(columnId)
+      // eslint-disable-next-line
       const b: any = rowB.getValue(columnId)
       const dateA = a instanceof Date ? a : new Date(a)
       const dateB = b instanceof Date ? b : new Date(b)

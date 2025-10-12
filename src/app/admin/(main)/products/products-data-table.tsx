@@ -55,6 +55,7 @@ export function ProductsDataTable<TData, TValue>({
 
   const selectedRows = useMemo(
     () => table.getSelectedRowModel().rows.map((row) => row.original),
+    // eslint-disable-next-line
     [rowSelection, table],
   )
 
@@ -71,6 +72,7 @@ export function ProductsDataTable<TData, TValue>({
       clearSelection()
       setLastClearTrigger(clearSelectionTrigger)
     }
+    // eslint-disable-next-line
   }, [clearSelectionTrigger, lastClearTrigger])
 
   useEffect(() => {
