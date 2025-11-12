@@ -2,12 +2,17 @@ import { OrderItem } from '@/db/schema'
 import OrderConfirmation from '@/emails/OrderConfirmation'
 import { Resend } from 'resend'
 
-// Initialize Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Initialize Resend with your API key only if it exists
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 // Email verification template with OTP
 export async function sendVerificationEmail(email: string, otp: string) {
   try {
+    if (!resend) {
+      console.warn('Resend API key not configured')
+      return { success: false, error: 'Email service not configured' }
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'Your Store <noreply@paklitz.com>',
       to: email,
@@ -49,6 +54,11 @@ export async function sendVerificationCodeForResetPassword(
   otp: string,
 ) {
   try {
+    if (!resend) {
+      console.warn('Resend API key not configured')
+      return { success: false, error: 'Email service not configured' }
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'Your Store <noreply@paklitz.com>',
       to: email,
@@ -107,6 +117,11 @@ export async function sendOrderConfirmationEmail({
   supportUrl = 'https://www.paklitz.com/support',
 }: SendOrderConfirmationProps) {
   try {
+    if (!resend) {
+      console.warn('Resend API key not configured')
+      return { success: false, error: 'Email service not configured' }
+    }
+
     await Promise.all([
       resend.emails.send({
         from: 'Your Store <noreply@paklitz.com>',
