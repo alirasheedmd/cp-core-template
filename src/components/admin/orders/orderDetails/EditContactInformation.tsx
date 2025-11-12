@@ -18,8 +18,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ActionButtons } from '@/components/common/ActionButtons'
-// Data imports
-import { dummyOrders } from '@/data/dummyOrders'
 // Server action imports
 import {
   updateOrderContactInfo,
@@ -45,13 +43,10 @@ export default function EditContactInformation({
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  // Find the order from dummy data
-  const order = dummyOrders.find((order) => order.orderId === orderId)
-
   const form = useForm<EditContactInfoFormValues>({
     resolver: zodResolver(editContactInfoSchema),
     defaultValues: {
-      phoneNumber: order?.customerDetails.phoneNumber || userPhoneNumber || '',
+      phoneNumber: userPhoneNumber || '',
     },
   })
 

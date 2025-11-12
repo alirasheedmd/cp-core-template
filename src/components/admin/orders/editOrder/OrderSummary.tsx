@@ -33,7 +33,7 @@ export default function OrderSummary({
             <p className="my-4">Update total amount</p>
             <div className="grid grid-cols-2 gap-y-2">
               <p>Previous amount:</p>
-              <p>Rs. {order?.totalAmount}</p>
+              <p>Rs. {Number(order?.totalPrice) || 0}</p>
               <p>Difference:</p>
               <p>
                 {difference >= 0 ? '+ ' : ''}

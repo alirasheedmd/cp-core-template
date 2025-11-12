@@ -50,14 +50,14 @@ const SearchProducts = ({
     const fetchData = async () => {
       const allSuggestions = products.map((product: IProduct) => ({
         type: 'product' as const,
-        _id: product._id || '',
-        name: product.name,
-        slug: product.slug.current,
-        categoryId: product.category?._id,
-        categoryName: product.category?.name,
-        categorySlug: product.category?.slug.current,
-        price: product.discountPrice || product.originalPrice || 0,
-        stock: product.stock || 0,
+        _id: product.id,
+        name: product.title,
+        slug: product.slug,
+        categoryId: undefined,
+        categoryName: undefined,
+        categorySlug: undefined,
+        price: Number(product.price) || 0,
+        stock: Number(product.currentStock) || 0,
         image: product.images[0] || '',
         sku: product.sku || '',
       }))

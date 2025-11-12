@@ -7,9 +7,6 @@ interface OrderConfirmationPageProps {
   }>
 }
 
-// Disable static generation for dynamic routes
-export const dynamic = 'force-dynamic'
-
 const OrderConfirmationPage = async ({
   params,
 }: OrderConfirmationPageProps) => {

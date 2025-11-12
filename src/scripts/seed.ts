@@ -60,9 +60,9 @@ interface InsertedProduct {
   id: string
   title: string
   sku: string
-  price: number
+  price: string
   slug: string
-  status: string
+  status: 'active' | 'inactive'
   createdAt: Date
   updatedAt: Date
 }
@@ -152,7 +152,7 @@ async function seedProducts(categories: InsertedCategory[]): Promise<void> {
       id,
       title: product.name,
       sku: product.sku,
-      price: product.price,
+      price: product.price.toString(),
       slug: slugify(product.name, { lower: true }),
       status: 'active',
       createdAt: new Date(),

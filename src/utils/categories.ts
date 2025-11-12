@@ -2,22 +2,14 @@ import { ICategory } from '@/types'
 
 /**
  * Extracts all subcategories from a list of categories into a flat array
+ * Subcategories are identified by having a parentId
  * @param categories Array of categories that may contain subcategories
  * @returns Array of all subcategories
  */
 export const getAllSubcategories = (categories: ICategory[]): ICategory[] => {
-  const subcategories: ICategory[] = []
-
-  const extractSubcategories = (category: ICategory) => {
-    if (category.subcategories && category.subcategories.length > 0) {
-      subcategories.push(...category.subcategories)
-      // Recursively extract subcategories of subcategories if needed
-      category.subcategories.forEach(extractSubcategories)
-    }
-  }
-
-  categories.forEach(extractSubcategories)
-  return subcategories
+  return categories.filter(
+    (category) => category.parentId && category.parentId !== '',
+  )
 }
 
 /**
