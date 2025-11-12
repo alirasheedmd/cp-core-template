@@ -33,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "22.11.0"
+          node-version: '22.11.0'
 
       # Install dependencies using npm
       - name: Install Dependencies
@@ -57,6 +57,12 @@ jobs:
           echo "Created .env.local file:"
           cat .env.local
 
+        # Clean previous build artifacts and build the application
+      - name: Build Application
+        run: |
+          rm -rf .next/
+          npm run build
+
       # Restart the PM2 process (ensure PM2 is installed on your server and configured)
       - name: Start PM2 Process
-        run: pm2 restart cp-core-admin-fs
+        run: pm2 start npm --name "cp-core-template" -- start
