@@ -14,51 +14,57 @@ export default function LeftSideForm() {
   return (
     <div className="space-y-5">
       <AdminContainer className="space-y-7">
-        {/* Title */}
+        {/* Tag */}
         <div className="space-y-2">
-          <Label htmlFor="title" className="text-sm">
-            Title
+          <Label htmlFor="tag" className="text-sm">
+            Tag<span className="font-normal text-gray-500">(Optional)</span>
           </Label>
           <Input
-            id="title"
-            {...register('title')}
-            placeholder="Enter customer title"
-            className={`${errors.title ? 'border-destructive' : 'border-black'}`}
+            id="tag"
+            {...register('tag')}
+            placeholder="Enter customer tag"
+            className={`${errors.tag ? 'border-destructive' : 'border-black'}`}
           />
-          {errors.title && (
-            <p className="text-destructive text-sm">{errors.title.message}</p>
+          {errors.tag && (
+            <p className="text-destructive text-sm">{errors.tag.message}</p>
           )}
         </div>
 
-        {/* SKU */}
+        {/* Secondary Number */}
         <div className="space-y-2">
-          <Label htmlFor="sku" className="text-sm">
-            SKU
+          <Label htmlFor="secondaryNumber" className="text-sm">
+            Secondary Number
+            <span className="font-normal text-gray-500">(Optional)</span>
           </Label>
           <Input
-            id="sku"
-            {...register('sku')}
-            placeholder="Enter customer sku"
-            className={`${errors.sku ? 'border-destructive' : 'border-black'}`}
+            id="secondaryNumber"
+            {...register('secondaryNumber')}
+            placeholder="Enter secondary number"
+            className={`${errors.secondaryNumber ? 'border-destructive' : 'border-black'}`}
           />
-          {errors.sku && (
-            <p className="text-destructive text-sm">{errors.sku.message}</p>
+          {errors.secondaryNumber && (
+            <p className="text-destructive text-sm">
+              {errors.secondaryNumber.message}
+            </p>
           )}
         </div>
 
-        {/* Barcode */}
+        {/* Short Address */}
         <div className="space-y-2">
-          <Label htmlFor="barcode" className="text-sm">
-            Barcode<span className="font-normal text-gray-500">(Optional)</span>
+          <Label htmlFor="shortAddress" className="text-sm">
+            Short Address
+            <span className="font-normal text-gray-500">(Optional)</span>
           </Label>
           <Input
-            id="barcode"
-            {...register('barcode')}
-            placeholder="Enter customer barcode"
-            className={`${errors.barcode ? 'border-destructive' : 'border-black'}`}
+            id="shortAddress"
+            {...register('shortAddress')}
+            placeholder="Enter short address"
+            className={`${errors.shortAddress ? 'border-destructive' : 'border-black'}`}
           />
-          {errors.barcode && (
-            <p className="text-destructive text-sm">{errors.barcode.message}</p>
+          {errors.shortAddress && (
+            <p className="text-destructive text-sm">
+              {errors.shortAddress.message}
+            </p>
           )}
         </div>
       </AdminContainer>

@@ -9,10 +9,10 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 const publicPaths = [
   routes.admin.signin,
   routes.home,
-  routes.products,
-  routes.categories,
-  routes.about,
+  routes.collections,
+  routes.cart,
   routes.contact,
+  routes.catalog,
   // Add other public paths
 ]
 

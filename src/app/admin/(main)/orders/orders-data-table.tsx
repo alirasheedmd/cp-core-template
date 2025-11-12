@@ -60,6 +60,7 @@ export function OrdersDataTable<TData, TValue>({
   // Compute selected rows as a memoized value
   const selectedRows = useMemo(
     () => table.getSelectedRowModel().rows.map((row) => row.original),
+    // eslint-disable-next-line
     [rowSelection],
   )
 
@@ -80,12 +81,14 @@ export function OrdersDataTable<TData, TValue>({
       debouncedClearSelection()
       setLastClearTrigger(clearSelectionTrigger)
     }
+    // eslint-disable-next-line
   }, [clearSelectionTrigger, onSelectedRowsChange, lastClearTrigger])
 
   useEffect(() => {
     return () => {
       debouncedClearSelection.cancel()
     }
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {

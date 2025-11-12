@@ -14,10 +14,13 @@ export default async function seedCategories() {
       name: name,
       createdAt: faker.date.anytime(),
       updatedAt: faker.date.anytime(),
-      isActive: false,
-      description: null,
+      status: 'enable',
       parentId: null,
       slug: categoryNameSlug,
+      pageTitle: null,
+      metaKeyword: null,
+      metaDescription: null,
+      urlHandle: null,
     })
   }
 

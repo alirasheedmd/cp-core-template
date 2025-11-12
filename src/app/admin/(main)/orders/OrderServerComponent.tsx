@@ -6,19 +6,17 @@ import { IOrder } from '@/types'
 
 // Function to fetch products with caching
 async function getOrders() {
-  'use cache'
-    const orders = await getAllOrders()
-    
-    const orderData = orders.map((order) => ({
-        ...order,
-        orderId: order.id
-    }))
+  const orders = await getAllOrders()
+
+  const orderData = orders.map((order) => ({
+    ...order,
+    orderId: order.id,
+  }))
   return orderData
 }
 
 // Function to get columns with caching
 async function getColumns() {
-  'use cache'
   return ordersColumns
 }
 

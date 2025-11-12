@@ -21,7 +21,14 @@ import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { useRouter } from 'next/navigation'
 
-const fetcher = () => getAllCategories()
+const fetcher = async () => {
+  const categories = await getAllCategories()
+  return categories.map((cat) => ({
+    ...cat,
+    images: cat.images || [],
+    parentId: cat.parentId || '',
+  }))
+}
 
 export default function WebHamburgerMenu() {
   const router = useRouter()

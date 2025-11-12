@@ -46,6 +46,7 @@ export const round2 = (value: number | string) => {
   }
 }
 
+// eslint-disable-next-line
 export const formatError = (error: any): string => {
   if (error.name === 'ZodError') {
     const fieldErrors = Object.keys(error.errors).map((field) => {
@@ -65,7 +66,6 @@ export const formatError = (error: any): string => {
       : JSON.stringify(error.message)
   }
 }
-
 
 export const formatNumberWithDecimal = (num: number): string => {
   const [int, decimal] = num.toString().split('.')

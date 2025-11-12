@@ -18,10 +18,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { ActionButtons } from '@/components/common/ActionButtons'
-// Type imports
-import { IOrderCustomer } from '@/types'
-// Data imports
-import { dummyOrders } from '@/data/dummyOrders'
 // Server action imports
 import {
   updateOrderShippingInfo,
@@ -46,29 +42,20 @@ export default function EditShippingAddress({
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  // Find the order from dummy data
-  const order = dummyOrders.find((order) => order.orderId === orderId)
-
   const methods = useForm<EditShippingInfoFormValues>({
     resolver: zodResolver(editShippingSchema),
     defaultValues: {
-      fullName: order?.customerDetails.fullName || userAddress?.fullName || '',
-      phoneNumber:
-        order?.customerDetails.phoneNumber || userAddress?.phoneNumber || '',
-      street:
-        order?.customerDetails.address.street ||
-        userAddress?.address?.street ||
-        '',
-      apartment:
-        order?.customerDetails.address.apartment ||
-        userAddress?.address?.apartment ||
-        '',
-      city:
-        order?.customerDetails.address.city || userAddress?.address?.city || '',
-      postalCode:
-        order?.customerDetails.address.postalCode ||
-        userAddress?.address?.postalCode ||
-        '',
+      phoneNumber: userAddress?.phoneNumber || '',
+      buildingNo: userAddress?.buildingNo || '',
+      street: userAddress?.street || '',
+      district: userAddress?.district || '',
+      city: userAddress?.city || '',
+      province: userAddress?.province || '',
+      postalCode: userAddress?.postalCode || '',
+      country: userAddress?.country || '',
+      secondaryNumber: userAddress?.secondaryNumber || '',
+      shortAddress: userAddress?.shortAddress || '',
+      unitNumber: userAddress?.unitNumber || '',
     },
   })
 
@@ -79,10 +66,8 @@ export default function EditShippingAddress({
     async (_prevState, formData) =>
       updateOrderShippingInfo({
         orderId: formData.get('orderId') as string,
-        fullName: formData.get('fullName') as string,
         phoneNumber: formData.get('phoneNumber') as string,
         street: formData.get('street') as string,
-        apartment: formData.get('apartment') as string,
         city: formData.get('city') as string,
         postalCode: formData.get('postalCode') as string,
         updateProfile: formData.get('updateProfile') === 'true',
@@ -93,10 +78,8 @@ export default function EditShippingAddress({
   const handleSave = async (data: EditShippingInfoFormValues) => {
     const formData = new FormData()
     formData.append('orderId', orderId)
-    formData.append('fullName', data.fullName)
     formData.append('phoneNumber', data.phoneNumber)
     formData.append('street', data.street)
-    formData.append('apartment', data.apartment || '')
     formData.append('city', data.city)
     formData.append('postalCode', data.postalCode)
     formData.append('updateProfile', updateProfile.toString())
@@ -190,19 +173,24 @@ export default function EditShippingAddress({
               )}
             </div>
 
-            {/* Apartment/Suite */}
+            {/* District */}
             <div className="w-full space-y-1">
               <Label
-                htmlFor="apartment"
+                htmlFor="district"
                 className="text-right font-normal text-black"
               >
-                Apartment/Suite (Optional)
+                District
               </Label>
               <Input
-                id="apartment"
-                {...methods.register('apartment')}
+                id="district"
+                {...methods.register('district')}
                 className="w-full text-sm lg:text-base"
               />
+              {methods.formState.errors.district && (
+                <p className="text-sm text-red-500">
+                  {methods.formState.errors.district.message}
+                </p>
+              )}
             </div>
 
             {/* City */}
@@ -225,6 +213,66 @@ export default function EditShippingAddress({
               )}
             </div>
 
+            {/* Province */}
+            <div className="w-full space-y-1">
+              <Label
+                htmlFor="province"
+                className="text-right font-normal text-black"
+              >
+                Province
+              </Label>
+              <Input
+                id="province"
+                {...methods.register('province')}
+                className="w-full text-sm lg:text-base"
+              />
+              {methods.formState.errors.province && (
+                <p className="text-sm text-red-500">
+                  {methods.formState.errors.province.message}
+                </p>
+              )}
+            </div>
+
+            {/* Building No */}
+            <div className="w-full space-y-1">
+              <Label
+                htmlFor="buildingNo"
+                className="text-right font-normal text-black"
+              >
+                Building No
+              </Label>
+              <Input
+                id="buildingNo"
+                {...methods.register('buildingNo')}
+                className="w-full text-sm lg:text-base"
+              />
+              {methods.formState.errors.buildingNo && (
+                <p className="text-sm text-red-500">
+                  {methods.formState.errors.buildingNo.message}
+                </p>
+              )}
+            </div>
+
+            {/* Country */}
+            <div className="w-full space-y-1">
+              <Label
+                htmlFor="country"
+                className="text-right font-normal text-black"
+              >
+                Country
+              </Label>
+              <Input
+                id="country"
+                {...methods.register('country')}
+                className="w-full text-sm lg:text-base"
+              />
+              {methods.formState.errors.country && (
+                <p className="text-sm text-red-500">
+                  {methods.formState.errors.country.message}
+                </p>
+              )}
+            </div>
+
             {/* Postal Code */}
             <div className="w-full space-y-1">
               <Label
@@ -243,6 +291,51 @@ export default function EditShippingAddress({
                   {methods.formState.errors.postalCode.message}
                 </p>
               )}
+            </div>
+
+            {/* Secondary Number (Optional) */}
+            <div className="w-full space-y-1">
+              <Label
+                htmlFor="secondaryNumber"
+                className="text-right font-normal text-black"
+              >
+                Secondary Number (Optional)
+              </Label>
+              <Input
+                id="secondaryNumber"
+                {...methods.register('secondaryNumber')}
+                className="w-full text-sm lg:text-base"
+              />
+            </div>
+
+            {/* Short Address (Optional) */}
+            <div className="w-full space-y-1">
+              <Label
+                htmlFor="shortAddress"
+                className="text-right font-normal text-black"
+              >
+                Short Address (Optional)
+              </Label>
+              <Input
+                id="shortAddress"
+                {...methods.register('shortAddress')}
+                className="w-full text-sm lg:text-base"
+              />
+            </div>
+
+            {/* Unit Number (Optional) */}
+            <div className="w-full space-y-1">
+              <Label
+                htmlFor="unitNumber"
+                className="text-right font-normal text-black"
+              >
+                Unit Number (Optional)
+              </Label>
+              <Input
+                id="unitNumber"
+                {...methods.register('unitNumber')}
+                className="w-full text-sm lg:text-base"
+              />
             </div>
 
             <div className="flex justify-between gap-x-2">

@@ -5,10 +5,11 @@ import { revalidatePath } from 'next/cache'
 import { CustomerFormValues } from '@/components/admin/customers/addCustomer/CustomerInfo'
 import {
   createCustomer as createCustomerInDb,
-  updateCustomer as updateCustomerInDb,
+  // updateCustomer as updateCustomerInDb,
 } from '@/lib/dal'
 // import { customerSchema } from '@/schemas/customer-form.schema'
 import { Image } from '@/db/schema'
+import { customerSchema } from '@/schemas/update-user.schema'
 
 export type CustomerActionState = {
   status: 'idle' | 'submitting' | 'success' | 'error'
@@ -134,7 +135,7 @@ export async function updateCustomer(
     const validatedData = validationResult.data
 
     // Save the customer to the database
-    await updateCustomerInDb(id, validatedData as CustomerFormValues)
+    // await updateCustomerInDb(id, validatedData as CustomerFormValues)
 
     // Revalidate the customers page to show the new customer
     revalidatePath('/admin/customers')

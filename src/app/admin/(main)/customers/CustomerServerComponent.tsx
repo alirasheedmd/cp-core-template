@@ -5,33 +5,32 @@ import { ICustomerDetails } from '@/types'
 
 // Function to fetch customers with caching
 async function getCustomers() {
-  'use cache'
   const customers = await getAllCustomers()
   const customersWithMeta = await Promise.all(
-      customers.map(async (customer) => {
-        const orders = await getOrdersByUserId(customer.id)
-        const ordersCount = orders.length
-        const totalAmount = orders
-          .reduce(
-            (sum, order) => sum + (typeof order.totalPrice === 'string'
-              ? parseFloat(order.totalPrice)
-              : order.totalPrice || 0)
-            , 0
-          )
+    customers.map(async (customer) => {
+      const orders = await getOrdersByUserId(customer.id)
+      const ordersCount = orders.length
+      const totalAmount = orders.reduce(
+        (sum, order) =>
+          sum +
+          (typeof order.totalPrice === 'string'
+            ? parseFloat(order.totalPrice)
+            : order.totalPrice || 0),
+        0,
+      )
 
-        return {
-          ...customer,
-          ordersCount,
-          totalAmount
-        }
-      })
-    )
-    return customersWithMeta
+      return {
+        ...customer,
+        ordersCount,
+        totalAmount,
+      }
+    }),
+  )
+  return customersWithMeta
 }
 
 // Function to get columns with caching
 async function getColumns() {
-  'use cache'
   return customersColumns
 }
 
@@ -42,6 +41,9 @@ export default async function CustomerServerComponent() {
   const columns = await getColumns()
 
   return (
-      <CustomerClientContainer customers={customers as ICustomerDetails[]} columns={columns} />
+    <CustomerClientContainer
+      customers={customers as ICustomerDetails[]}
+      columns={columns}
+    />
   )
 }

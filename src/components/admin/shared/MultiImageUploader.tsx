@@ -135,7 +135,7 @@ export default function MultiImageUploader<
               setItems(clone)
             }
           })
-          .onError((error: Error) => {
+          .onError((error?: Error) => {
             setIsUploading(false)
             console.error(error)
           })

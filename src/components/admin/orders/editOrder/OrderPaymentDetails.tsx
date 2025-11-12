@@ -67,7 +67,7 @@ export default function OrderPaymentDetails({
 
             {/* Row 2 */}
             <p className="col-span-2">Shipping</p>
-            <p>Rs. {order?.shippingCost || 0}</p>
+            <p>Rs. {Number(order?.shippingPrice) || 0}</p>
 
             {/* Row 3 */}
             <p className="col-span-2">Total</p>

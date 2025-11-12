@@ -1,11 +1,20 @@
 import OrderConfirmation from '@/components/web/orderConfirmation/OrderConfirmationPage'
 import React, { Suspense } from 'react'
 
-const OrderConfirmationPage = async ({ params }: { params: { id: string } }) => {
-    const { id } = await params
+interface OrderConfirmationPageProps {
+  params: Promise<{
+    id: string
+  }>
+}
+
+const OrderConfirmationPage = async ({
+  params,
+}: OrderConfirmationPageProps) => {
+  const { id } = await params
+
   return (
     <Suspense>
-          <OrderConfirmation id={id} />
+      <OrderConfirmation id={id} />
     </Suspense>
   )
 }

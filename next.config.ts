@@ -1,9 +1,6 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  experimental: {
-    dynamicIO: true,
-  },
   images: {
     remotePatterns: [
       {
@@ -16,6 +13,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   // Add webpack configuration to handle Node.js modules
   webpack: (config, { isServer }) => {
     if (!isServer) {

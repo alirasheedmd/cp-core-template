@@ -5,14 +5,12 @@ import { IProduct } from '@/types'
 
 // Function to fetch products with caching
 async function getProducts() {
-  'use cache'
   const products = await getAllProducts()
   return products
 }
 
 // Function to get columns with caching
 async function getColumns() {
-  'use cache'
   return productsColumns
 }
 
@@ -23,6 +21,9 @@ export default async function ProductServerComponent() {
   const columns = await getColumns()
 
   return (
-      <ProductClientContainer products={products as IProduct[]} columns={columns} />
+    <ProductClientContainer
+      products={products as IProduct[]}
+      columns={columns}
+    />
   )
 }

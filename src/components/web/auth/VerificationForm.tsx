@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
-import { verifyEmailOTP, resendVerificationOTP } from '@/app/actions/web/auth/email-verification'
+import {
+  verifyEmailOTP,
+  resendVerificationOTP,
+} from '@/app/actions/web/auth/email-verification'
 import { getUserByEmail } from '@/lib/dal'
 import { createSession } from '@/lib/auth'
 
@@ -50,6 +53,7 @@ export function VerificationForm() {
         setError(result.error || 'Failed to verify email')
       }
     } catch (err) {
+      console.log(err)
       setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)
@@ -71,6 +75,7 @@ export function VerificationForm() {
         setError(result.error || 'Failed to resend verification code')
       }
     } catch (err) {
+      console.log(err)
       setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)
@@ -82,7 +87,7 @@ export function VerificationForm() {
       {error && <div className="text-sm text-red-500">{error}</div>}
 
       <p className="text-md mb-4 text-center">
-        We've sent a 6-digit code to <strong>{userEmail}</strong>.<br />
+        We have sent a 6-digit code to <strong>{userEmail}</strong>.<br />
         Enter the code below to verify your email.
       </p>
 
@@ -112,7 +117,7 @@ export function VerificationForm() {
 
       <div className="mt-2 text-center">
         <p>
-          Didn't receive a code?{' '}
+          Did not receive a code?{' '}
           <button
             type="button"
             onClick={handleResendCode}
