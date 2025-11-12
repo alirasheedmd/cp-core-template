@@ -65,4 +65,4 @@ jobs:
 
       # Restart the PM2 process (ensure PM2 is installed on your server and configured)
       - name: Start PM2 Process
-        run: pm2 start npm --name "cp-core-template" -- start
+        run: pm2 restart cp-core-template
