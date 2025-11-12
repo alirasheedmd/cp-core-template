@@ -3,7 +3,9 @@ import OrderConfirmation from '@/emails/OrderConfirmation'
 import { Resend } from 'resend'
 
 // Initialize Resend with your API key only if it exists
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null
 
 // Email verification template with OTP
 export async function sendVerificationEmail(email: string, otp: string) {
