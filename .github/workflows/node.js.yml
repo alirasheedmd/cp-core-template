@@ -1,0 +1,68 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  deployment:
+    runs-on: prod
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET}}
+      RESEND_API_KEY: ${{ secrets.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+      S3_BUCKET_ACCESS_KEY: ${{ secrets.S3_BUCKET_ACCESS_KEY }}
+      S3_BUCKET_SECRET_KEY: ${{ secrets.S3_BUCKET_SECRET_KEY }}
+      NEXT_PUBLIC_S3_BUCKET_NAME: ${{ secrets.NEXT_PUBLIC_S3_BUCKET_NAME }}
+      NEXT_PUBLIC_S3_BUCKET_REGION: ${{ secrets.NEXT_PUBLIC_S3_BUCKET_REGION }}
+      NEXT_PUBLIC_S3_URL: ${{ secrets.NEXT_PUBLIC_S3_URL }}
+      NEXT_PUBLIC_IMGIX_URL: ${{ secrets.NEXT_PUBLIC_IMGIX_URL }}
+
+    steps:
+      # Check out the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment (adjust node-version as needed)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.11.0'
+
+      # Install dependencies using npm
+      - name: Install Dependencies
+        run: npm install
+
+      # Create the .env file from repository secrets
+      - name: Create .env File
+        run: |
+          cat <<EOF > .env.local
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
+          NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+          S3_BUCKET_ACCESS_KEY=${{ secrets.S3_BUCKET_ACCESS_KEY }}
+          S3_BUCKET_SECRET_KEY=${{ secrets.S3_BUCKET_SECRET_KEY }}
+          NEXT_PUBLIC_S3_BUCKET_NAME=${{ secrets.NEXT_PUBLIC_S3_BUCKET_NAME }}
+          NEXT_PUBLIC_S3_BUCKET_REGION=${{ secrets.NEXT_PUBLIC_S3_BUCKET_REGION }}
+          NEXT_PUBLIC_S3_URL=${{ secrets.NEXT_PUBLIC_S3_URL }}
+          NEXT_PUBLIC_IMGIX_URL=${{ secrets.NEXT_PUBLIC_IMGIX_URL }}
+          EOF
+          echo "Created .env.local file:"
+          cat .env.local
+
+        # Clean previous build artifacts and build the application
+      - name: Build Application
+        run: |
+          rm -rf .next/
+          npm run build
+
+      # Restart the PM2 process (ensure PM2 is installed on your server and configured)
+      - name: Start PM2 Process
+        run: pm2 restart cp-core-template

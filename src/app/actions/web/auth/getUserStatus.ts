@@ -1,26 +1,27 @@
 'use server'
 
 import { getCurrentUser } from '@/lib/dal'
+import { cache } from 'react'
 
-export async function getUserStatus() {
+export const getUserStatus = cache(async () => {
   try {
     const user = await getCurrentUser()
-    
+
     if (!user) {
       return { authenticated: false, user: null }
     }
-    
+
     // Don't send sensitive data to client
-    return { 
-      authenticated: true, 
+    return {
+      authenticated: true,
       user: {
         id: user.id,
         email: user.email,
-        isAdmin: user.isAdmin || false
-      }
+        isAdmin: user.isAdmin || false,
+      },
     }
   } catch (error) {
     console.error('Error getting user status:', error)
     return { authenticated: false, user: null }
   }
-} 
+})

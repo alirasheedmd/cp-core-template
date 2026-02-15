@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Pencil } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ProductFormValues } from './ProductInfo'
 import AdminContainer from '@/components/admin/shared/AdminContainer'
@@ -23,6 +23,20 @@ export default function SearchEngineListing() {
   const currentMetaDescriptionLength = metaDescription.length
 
   const urlHandle = watch('urlHandle') || ''
+
+  useEffect(() => {
+    if (
+      (pageTitle !== null ||
+        '' ||
+        undefined ||
+        metaDescription !== null ||
+        '' ||
+        undefined) &&
+      isEditing === false
+    ) {
+      setIsEditing(true)
+    }
+  }, [isEditing, metaDescription, pageTitle])
 
   return (
     <AdminContainer>

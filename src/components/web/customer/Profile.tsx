@@ -1,0 +1,27 @@
+import CustomerInfo, {
+  CustomerInfoFormValues,
+} from '@/components/web/customer/CustomerForm'
+import { getCurrentUser, getCustomerProfileInfo } from '@/lib/dal'
+import { redirect } from 'next/navigation'
+import WebContainer from '@/components/web/shared/WebContainer'
+
+const Profile = async () => {
+  const user = await getCurrentUser()
+
+  if (!user) {
+    return redirect('/')
+  }
+
+  const data = await getCustomerProfileInfo(user.id as string)
+  const customerInfo = data as unknown as CustomerInfoFormValues[]
+  console.log('Customer', customerInfo)
+
+  return (
+    <WebContainer>
+      <h1>Customer Profile Info</h1>
+      <CustomerInfo data={customerInfo} />
+    </WebContainer>
+  )
+}
+
+export default Profile

@@ -1,11 +1,20 @@
+import { OrderItem } from '@/db/schema'
+import OrderConfirmation from '@/emails/OrderConfirmation'
 import { Resend } from 'resend'
 
-// Initialize Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Initialize Resend with your API key only if it exists
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null
 
 // Email verification template with OTP
 export async function sendVerificationEmail(email: string, otp: string) {
   try {
+    if (!resend) {
+      console.warn('Resend API key not configured')
+      return { success: false, error: 'Email service not configured' }
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'Your Store <noreply@paklitz.com>',
       to: email,
@@ -35,6 +44,119 @@ export async function sendVerificationEmail(email: string, otp: string) {
     }
 
     return { success: true, data }
+  } catch (error) {
+    console.error('Error sending verification email:', error)
+    return { success: false, error }
+  }
+}
+
+//Forget Password Email verfication template with OTP
+export async function sendVerificationCodeForResetPassword(
+  email: string,
+  otp: string,
+) {
+  try {
+    if (!resend) {
+      console.warn('Resend API key not configured')
+      return { success: false, error: 'Email service not configured' }
+    }
+
+    const { data, error } = await resend.emails.send({
+      from: 'Your Store <noreply@paklitz.com>',
+      to: email,
+      subject: 'Reset Your Password',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h1 style="color: #333; text-align: center;">Verify Your Email</h1>
+          <p style="font-size: 16px; line-height: 1.5; color: #666;">
+            We received a request to reset the password for your YourShop account.
+          </p>
+          <p>Use the verification code below to continue:</p>
+          <div style="background-color: #f4f4f4; padding: 15px; text-align: center; margin: 20px 0;">
+            <h2 style="letter-spacing: 5px; font-size: 32px; color: #333; margin: 0;">${otp}</h2>
+          </div>
+          <p style="font-size: 16px; line-height: 1.5; color: #666;">
+            This code will expire in 10 minutes.
+          </p>
+          <p style="font-size: 16px; line-height: 1.5; color: #666;">
+            If you did not request a password reset, you can safely ignore this email.
+          </p>
+        </div>
+      `,
+    })
+
+    if (error) {
+      console.error('Error sending verification email:', error)
+      return { success: false, error }
+    }
+
+    return { success: true, data }
+  } catch (error) {
+    console.error('Error sending verification email:', error)
+    return { success: false, error }
+  }
+}
+
+interface SendOrderConfirmationProps {
+  email: string
+  orderId: string
+  fullName: string
+  items: OrderItem[]
+  totalAmount: number
+  contactEmail?: string
+  supportUrl?: string
+  shippingCost?: number
+}
+//Order Confirmation email template with OTP
+export async function sendOrderConfirmationEmail({
+  email,
+  orderId,
+  fullName,
+  items,
+  totalAmount,
+  shippingCost = 0,
+  contactEmail = 'support@paklitz.com',
+  supportUrl = 'https://www.paklitz.com/support',
+}: SendOrderConfirmationProps) {
+  try {
+    if (!resend) {
+      console.warn('Resend API key not configured')
+      return { success: false, error: 'Email service not configured' }
+    }
+
+    await Promise.all([
+      resend.emails.send({
+        from: 'Your Store <noreply@paklitz.com>',
+        to: email,
+        subject: `Order Confirmation #${orderId}`,
+        react: OrderConfirmation({
+          fullName,
+          orderId,
+          items,
+          totalAmount,
+          shippingCost,
+          contactEmail,
+          supportUrl,
+        }),
+      }),
+      resend.emails.send({
+        from: 'Your Store <noreply@paklitz.com>',
+        to: 'alirasheed@curiouspacket.com',
+        subject: `Order Confirmation #${orderId} (Admin Copy)`,
+        react: OrderConfirmation({
+          fullName,
+          orderId,
+          items,
+          totalAmount,
+          shippingCost,
+          contactEmail,
+          supportUrl,
+        }),
+      }),
+    ])
+
+    console.log('order confirmation email send successfully')
+    return { success: true }
   } catch (error) {
     console.error('Error sending verification email:', error)
     return { success: false, error }

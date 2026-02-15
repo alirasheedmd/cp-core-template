@@ -25,6 +25,7 @@ html body[data-scroll-locked] {
   --color-LightMediumGrey: #b8b8b8;
   --color-LightWhite: #f1f1f1;
   --color-Blue: #0f65d6;
+  --color-Red: #fe0000;
 }
 
 @layer base {

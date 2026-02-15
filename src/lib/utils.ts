@@ -1,9 +1,10 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import prettyBytes from "pretty-bytes";
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+import prettyBytes from 'pretty-bytes'
+import { CartItem } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
 
 export const convertToMb = (bytes: number) => {
@@ -11,5 +12,83 @@ export const convertToMb = (bytes: number) => {
     bits: false,
     maximumFractionDigits: 1,
     space: false,
-  });
-};
+  })
+}
+
+export const formatCurrency = (amount: number | string) => {
+  const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount
+  return numericAmount?.toFixed(2)
+}
+
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-SA', {
+  currency: 'SAR',
+  style: 'currency',
+  minimumFractionDigits: 2,
+})
+
+export function formatCurrency2(amount: number | string | null) {
+  if (typeof amount === 'number') {
+    return CURRENCY_FORMATTER.format(amount)
+  } else if (typeof amount === 'string') {
+    return CURRENCY_FORMATTER.format(Number(amount))
+  } else {
+    return 'NaN'
+  }
+}
+
+export const round2 = (value: number | string) => {
+  if (typeof value === 'number') {
+    return Math.round((value + Number.EPSILON) * 100) / 100 // avoid rounding errors
+  } else if (typeof value === 'string') {
+    return Math.round((Number(value) + Number.EPSILON) * 100) / 100
+  } else {
+    throw new Error('value is not a number nor a string')
+  }
+}
+
+// eslint-disable-next-line
+export const formatError = (error: any): string => {
+  if (error.name === 'ZodError') {
+    const fieldErrors = Object.keys(error.errors).map((field) => {
+      const errorMessage = error.errors[field].message
+      return `${error.errors[field].path}: ${errorMessage}` // field: errorMessage
+    })
+    return fieldErrors.join('. ')
+  } else if (error.name === 'ValidationError') {
+    const fieldErrors = Object.keys(error.errors).map((field) => {
+      const errorMessage = error.errors[field].message
+      return errorMessage
+    })
+    return fieldErrors.join('. ')
+  } else {
+    return typeof error.message === 'string'
+      ? error.message
+      : JSON.stringify(error.message)
+  }
+}
+
+export const formatNumberWithDecimal = (num: number): string => {
+  const [int, decimal] = num.toString().split('.')
+  return decimal ? `${int}.${decimal.padEnd(2, '0')}` : int //12.1 => 12.10
+}
+
+export const calcPrice = (items: CartItem[]) => {
+  const itemsPrice = round2(
+      items.reduce((acc, item) => acc + item.price * item.qty, 0),
+    ),
+    shippingPrice = round2(
+      itemsPrice > 999
+        ? 0
+        : items.reduce((acc, item) => acc + item.shippingPrice * item.qty, 0),
+    ),
+    taxPrice = round2(
+      items.reduce((acc, item) => acc + item.tax * item.qty, 0),
+    ),
+    totalPrice = round2(itemsPrice + shippingPrice + taxPrice)
+  return {
+    itemsPrice: itemsPrice.toFixed(2),
+    shippingPrice: shippingPrice.toFixed(2),
+    taxPrice: taxPrice.toFixed(2),
+    totalPrice: totalPrice.toFixed(2),
+  }
+}

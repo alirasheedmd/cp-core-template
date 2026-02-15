@@ -1,4 +1,4 @@
-import { InferSelectModel, relations } from 'drizzle-orm';
+import { InferSelectModel, relations } from 'drizzle-orm'
 import { pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
 import { products } from './products' // Import products
 import { categories } from './categories' // Import categories
@@ -9,10 +9,10 @@ export const productCategories = pgTable(
   {
     productId: text('product_id')
       .notNull()
-      .references(() => products.id), // Lazy reference to avoid circular issues
+      .references(() => products.id, { onDelete: 'cascade' }), // Lazy reference to avoid circular issues
     categoryId: text('category_id')
       .notNull()
-      .references(() => categories.id), // Lazy reference
+      .references(() => categories.id, { onDelete: 'cascade' }), // Lazy reference
   },
   (table) => [primaryKey({ columns: [table.productId, table.categoryId] })],
 )
@@ -21,13 +21,16 @@ export const productCategories = pgTable(
 export type ProductCategoryJoin = InferSelectModel<typeof productCategories>
 
 // Relations
-export const productCategoryRelations = relations(productCategories, ({ one }) => ({
-  product: one(products, {
-    fields: [productCategories.productId],
-    references: [products.id],
+export const productCategoryRelations = relations(
+  productCategories,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productCategories.productId],
+      references: [products.id],
+    }),
+    category: one(categories, {
+      fields: [productCategories.categoryId],
+      references: [categories.id],
+    }),
   }),
-  category: one(categories, {
-    fields: [productCategories.categoryId],
-    references: [categories.id],
-  }),
-}));
+)

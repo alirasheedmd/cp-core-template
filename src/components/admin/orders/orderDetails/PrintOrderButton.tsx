@@ -14,10 +14,7 @@ export default function PrintOrderButton({
 }: PrintOrderButtonProps) {
   const handlePrintOrder = () => {
     // Calculate the total
-    const total: number | undefined = order?.items?.reduce(
-      (sum, item) => sum + (item?.price ?? 0) * item.quantity,
-      0,
-    )
+    const total: number | undefined = Number(order?.itemsPrice)
 
     const orderContent: string = `
       <html>
@@ -102,7 +99,7 @@ export default function PrintOrderButton({
         <body>
           <div class="container">
             <div class="header">
-              <h1>Shopiko</h1>
+              <h1>Curious Packet LLP</h1>
               <h2>Order Details</h2>
               <p>Order #${orderId}</p>
               <p>Date: ${new Date(order?.createdAt ?? '').toLocaleDateString()}</p>
@@ -120,14 +117,14 @@ export default function PrintOrderButton({
                     </tr>
                   </thead>
                   <tbody>
-                    ${order?.items
+                    ${order?.orderItems
                       ?.map(
                         (item) => `
                       <tr>
                         <td>${item.name}</td>
                         <td>${item.quantity}</td>
-                        <td>Rs. ${item?.price?.toLocaleString('en-PK')}</td>
-                        <td>Rs. ${(item?.price ?? 0 * item.quantity).toLocaleString('en-PK')}</td>
+                        <td>SAR ${item.price}</td>
+                        <td>SAR ${item?.price ?? 0 * item.quantity}</td>
                       </tr>
                     `,
                       )
@@ -136,7 +133,7 @@ export default function PrintOrderButton({
                   <tfoot>
                     <tr>
                       <td colspan="4" style="text-align: right;">Total:</td>
-                      <td>Rs. ${total?.toLocaleString('en-PK')}</td>
+                      <td>SAR ${total?.toLocaleString('en-PK')}</td>
                     </tr>
                   </tfoot>
                 </table>
@@ -144,18 +141,18 @@ export default function PrintOrderButton({
               <div class="shipping-info">
                 <h2>Shipping Information</h2>
                 <dl>
-                  <dt>Name:</dt><dd>${order?.customerDetails?.fullName}</dd>
-                  <dt>Email:</dt><dd>${order?.customerDetails?.email}</dd>
-                  <dt>Phone:</dt><dd>${order?.customerDetails?.phoneNumber}</dd>
+                  <dt>Name:</dt><dd>${order?.shippingAddress.firstName} ${order?.shippingAddress.lastName}</dd>
+                  <dt>Email:</dt><dd>${order?.user?.email}</dd>
+                  <dt>Phone:</dt><dd>${order?.shippingAddress?.phoneNumber}</dd>
                   <dt>Address:</dt><dd>
-                    ${order?.customerDetails?.address.street}<br/>
+                    ${order?.shippingAddress.street}<br/>
                     ${
-                      order?.customerDetails?.address.apartment
-                        ? order.customerDetails.address.apartment + '<br/>'
+                      order?.shippingAddress.buildingNo
+                        ? order?.shippingAddress.buildingNo + '<br/>'
                         : ''
                     }
-                    ${order?.customerDetails?.address.city}, 
-                    ${order?.customerDetails?.address.postalCode}
+                    ${order?.shippingAddress.city}, 
+                    ${order?.shippingAddress.postalCode}
                   </dd>
                 </dl>
               </div>

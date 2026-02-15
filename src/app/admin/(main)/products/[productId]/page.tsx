@@ -1,7 +1,8 @@
-import ProductInfo from '@/components/admin/products/addProduct/ProductInfo'
 import Link from 'next/link'
 import { BiArrowBack } from 'react-icons/bi'
 import { routes } from '@/config/routes'
+import EditProductComponent from '@/components/admin/products/addProduct/EditProductComponent'
+import { Suspense } from 'react'
 
 export default async function EditProductPage({
   params,
@@ -19,7 +20,9 @@ export default async function EditProductPage({
         </Link>
         <h3 className="text-2xl font-semibold">Edit Product {productId}</h3>
       </div>
-      <ProductInfo />
+      <Suspense>
+        <EditProductComponent productId={productId} />
+      </Suspense>
     </div>
   )
 }

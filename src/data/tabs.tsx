@@ -7,7 +7,8 @@ interface IAdminTab {
 
 import { BiCart } from 'react-icons/bi'
 import { BsTag } from 'react-icons/bs'
-import { GoHome } from 'react-icons/go'
+import { GoHome, GoStar } from 'react-icons/go'
+import { HiOutlineUser } from 'react-icons/hi2'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { routes } from '@/config/routes'
 
@@ -26,6 +27,16 @@ export const adminTabs: IAdminTab[] = [
     name: 'Products',
     icon: <BsTag className="text-xl" />,
     href: routes.admin.products,
+  },
+  {
+    name: 'Categories',
+    icon: <GoStar className="text-xl" />,
+    href: routes.admin.categories,
+  },
+  {
+    name: 'Customers',
+    icon: <HiOutlineUser className="text-xl" />,
+    href: routes.admin.customers,
   },
 ]
 
@@ -61,4 +72,16 @@ export const orderTabs: IOrderTab[] = [
   { name: 'Delivered', id: 'delivered' },
   { name: 'Returned', id: 'returned' },
   { name: 'Cancelled', id: 'cancelled' },
+]
+
+///////////////////////////////////// Category tabs //////////////////////////////////////
+interface ICategoryTab {
+  name: string
+  id: string
+}
+
+export const categoriesTabs: ICategoryTab[] = [
+  { name: 'All categories', id: 'all-categories' },
+  { name: 'Enable', id: 'enable' },
+  { name: 'Disable', id: 'disable' },
 ]

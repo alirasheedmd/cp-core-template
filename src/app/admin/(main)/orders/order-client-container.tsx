@@ -9,6 +9,7 @@ import MobileOrders from '@/components/admin/orders/orderTable/MobileOrders'
 import OrderTabs from '@/components/admin/orders/orderTable/OrderTabs'
 import OrderActions from '@/components/admin/orders/orderTable/OrderActions'
 import EmptyOrderView from '@/components/admin/orders/orderTable/EmptyOrderView'
+import { deleteOrders } from '@/lib/dal'
 
 interface OrderClientContainerProps {
   orders: IOrder[]
@@ -56,18 +57,22 @@ export default function OrderClientContainer({
 
   // Filter orders based on the selected tab and query
   const filteredOrders = useMemo(() => {
-    return (
+    const filtered =
       orders?.filter((order: IOrder) => {
         const queryLower = query.toLowerCase()
         const statusMatch =
           selectedTab === 'all-orders' || order.status === selectedTab
         return statusMatch && order.orderId.toLowerCase().includes(queryLower)
       }) ?? []
+
+    return filtered.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
   }, [orders, query, selectedTab])
 
   // Delete orders by order ID
-  const handleAction = async () => {
+  const handleDeleteAction = async () => {
     setIsDeleting(true)
     try {
       // In a real app, this would call an API
@@ -75,6 +80,8 @@ export default function OrderClientContainer({
         'Deleting orders:',
         selectedRows.map((row) => row.orderId),
       )
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await deleteOrders(selectedRows.map((row) => row.orderId || ''))
       setSelectedRows([]) // Clear the selection
       setClearSelectionTrigger((prev) => !prev) // Toggle the trigger to clear the table selection
       mutate() // Re-fetch the orders
@@ -120,7 +127,7 @@ export default function OrderClientContainer({
           onQueryChange={handleChange}
           onClearQuery={clearInput}
           selectedRowCount={selectedRows.length}
-          onDelete={handleAction}
+          onDelete={handleDeleteAction}
           isDeleting={isDeleting}
           open={open}
           setOpen={setOpen}

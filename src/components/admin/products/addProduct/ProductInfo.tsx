@@ -8,105 +8,118 @@ import { z } from 'zod'
 import { useActionState } from 'react'
 import {
   createProduct,
+  updateProduct,
   type ProductActionState,
 } from '@/app/actions/admin/main/product'
 import { useRouter } from 'next/navigation'
-import { useRef, startTransition, useEffect } from 'react'
-import { ActionButtons } from '@/components/common/ActionButtons'
+import { useRef, useEffect } from 'react'
 import { routes } from '@/config/routes'
-
-export const productSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  sku: z.string().min(1, 'SKU is required'),
-  barcode: z.string().optional(),
-  description: z.string().min(1, 'Description is required'),
-  status: z.enum(['active', 'inactive']),
-  publishDate: z.string().min(1, 'Publish date is required'),
-  categories: z.array(z.string()).min(1, 'Select at least one category'),
-  subcategories: z.array(z.string()).default([]),
-  images: z
-    .array(
-      z.object({
-        src: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .min(1, 'At least one image is required'),
-  price: z.string().min(1, 'Price is required'),
-  pricePerItem: z.string().optional(),
-  profit: z.string().optional(),
-  margin: z.string().optional(),
-  defaultPrice: z.string().optional(),
-  customPrice: z.string().optional(),
-  tax: z.string().optional(),
-  currentStock: z.string().optional(),
-  lowStock: z.string().optional(),
-  damageProduct: z.string().optional(),
-  shippingPrice: z.string().optional(),
-  weight: z.string().optional(),
-  width: z.string().optional(),
-  length: z.string().optional(),
-  height: z.string().optional(),
-  country: z.string().optional(),
-  hsCode: z.string().optional(),
-  pageTitle: z
-    .string()
-    .max(70, 'Page title must be 70 characters or less')
-    .optional(),
-  metaDescription: z
-    .string()
-    .max(100, 'Meta description must be 100 characters or less')
-    .optional(),
-  urlHandle: z.string().optional(),
-  type: z.string().optional(),
-  collection: z.string().optional(),
-  organization: z.string().optional(),
-  tag: z.string().optional(),
-  recommendedProducts: z
-    .array(
-      z.object({
-        _id: z.string(),
-        name: z.string(),
-      }),
-    )
-    .default([])
-    .optional(),
-})
+import { productSchema } from '@/schemas/product-form.schema'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { IProduct, IWebCategory } from '@/types'
 
 export type ProductFormValues = z.infer<typeof productSchema>
 
-export default function ProductInfo() {
+interface ProductInfoProps {
+  data?: ProductFormValues
+  id?: string
+  categories: IWebCategory[]
+  isEditing?: boolean
+  recommendedProducts: IProduct[]
+}
+
+export default function ProductInfo({
+  data,
+  categories,
+  recommendedProducts,
+  id,
+  isEditing,
+}: ProductInfoProps) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
-  const [state, formAction] = useActionState<ProductActionState, FormData>(
-    async (_prevState, formData) => createProduct(_prevState, formData),
-    { status: 'idle' },
-  )
 
+  const InitialProductInfoState: ProductActionState = {
+    status: 'idle',
+    errors: undefined,
+    message: '',
+    data: data ?? undefined,
+  }
+
+  const [state, formAction, isPending] = useActionState<
+    ProductActionState,
+    FormData
+  >(async (prevState: ProductActionState, formData: FormData) => {
+    try {
+      // Call the appropriate action based on whether we're editing or creating
+      const result = isEditing
+        ? await updateProduct(id as string, formData)
+        : await createProduct(formData)
+
+      // Handle successful submission
+      if (result.status === 'success') {
+        router.push(routes.admin.products)
+      }
+
+      return result
+    } catch (err) {
+      return {
+        status: 'error',
+        message: (err as Error).message || 'An error occurred',
+        errors: undefined,
+      }
+    }
+  }, InitialProductInfoState)
+
+  function SaveButton() {
+    return (
+      <Button
+        type="submit"
+        className="hover:bg-LightGrey ml-2 bg-white font-normal text-black"
+        disabled={isPending}
+      >
+        {isPending ? (
+          'Saving...'
+        ) : (
+          <span className="flex items-center gap-2">Save</span>
+        )}
+      </Button>
+    )
+  }
+  function DiscardButton() {
+    return (
+      <Link href={routes.admin.categories}>
+        <Button className="hover:bg-LightGrey mr-2 bg-white font-normal text-black">
+          <span className="flex items-center gap-2">Discard</span>
+        </Button>
+      </Link>
+    )
+  }
+
+  console.log('data:', state.data)
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
-      status: 'active',
-      publishDate: new Date(performance.now()).toISOString().split('T')[0],
+      status: state.data?.status ? state.data?.status : 'active',
+      categories: state.data?.categories ? state.data?.categories : [],
+      trackInventory: state.data?.trackInventory
+        ? state.data?.trackInventory
+        : true,
+      isPhysicalProduct: state.data?.isPhysicalProduct
+        ? state.data?.isPhysicalProduct
+        : true,
+      recommendedProducts: state.data?.recommendedProducts
+        ? state.data?.recommendedProducts
+        : [],
+      publishDate: state.data?.publishDate
+        ? state.data?.publishDate
+        : new Date(performance.now()).toISOString().split('T')[0],
       ...(state?.data ?? {}),
     },
   })
 
-  const {
-    handleSubmit,
-    setError,
-    formState: { isSubmitting },
-  } = methods
-
-  const onSubmit = () => {
-    if (!formRef.current) return
-    const formData = new FormData(formRef.current)
-    const formValues = methods.getValues()
-    console.log('Form Values:', formValues)
-    startTransition(() => {
-      formAction(formData)
-    })
-  }
+  console.log('recommended product', state.data?.recommendedProducts)
+  const { setError } = methods
 
   // Handle server-side validation errors
   useEffect(() => {
@@ -127,30 +140,27 @@ export default function ProductInfo() {
     }
   }, [state?.status, router])
 
-  const isPending = state?.status === 'submitting'
-
   return (
     <FormProvider {...methods}>
-      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} action={formAction}>
         <div className="mt-5 flex flex-col gap-5 lg:flex-row">
           {/* Left Side */}
           <div className="basis-[70%]">
-            <LeftSideForm />
+            <LeftSideForm categories={categories} />
           </div>
 
           {/* Right Side */}
           <div className="basis-[30%] space-y-5">
-            <RightSideForm />
+            <RightSideForm
+              recommendedProducts={recommendedProducts as IProduct[]}
+            />
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8">
-          <ActionButtons
-            onCancel={() => router.push(routes.admin.products)}
-            onSave={handleSubmit(onSubmit)}
-            isLoading={isPending || isSubmitting}
-          />
+        <div className="mt-8 flex flex-row justify-center">
+          <DiscardButton />
+          <SaveButton />
         </div>
 
         {/* Show general error message */}

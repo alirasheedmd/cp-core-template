@@ -62,7 +62,17 @@ export default function EditOrderPage() {
         setIsLoading(true)
         const data = await fetchOrder(orderId)
         setOrder(data)
-        setOrderItems(data.items)
+        // Map OrderItem to IOrderItem
+        const mappedItems: IOrderItem[] = data.orderItems.map((item) => ({
+          productId: item.productId,
+          name: item.name,
+          sku: '', // Not available in OrderItem schema
+          price: Number(item.price),
+          quantity: item.quantity,
+          image: item.image,
+          stock: 0, // Not available in OrderItem schema
+        }))
+        setOrderItems(mappedItems)
       } catch (err) {
         setError(err as Error)
       } finally {
@@ -96,7 +106,7 @@ export default function EditOrderPage() {
   const subtotal = selectedItemsSubtotal + orderItemsSubtotal
 
   // Total amount including shipping
-  const totalAmount = subtotal + (order?.shippingCost || 0)
+  const totalAmount = subtotal + (Number(order?.shippingPrice) || 0)
 
   const handleProductsSelected = (products: ISuggestion[]) => {
     const productsWithDefaults = products.map((product) => {
@@ -147,14 +157,14 @@ export default function EditOrderPage() {
   useEffect(() => {
     if (
       order &&
-      JSON.stringify(order.items) === JSON.stringify(orderItems) &&
+      JSON.stringify(order.orderItems) === JSON.stringify(orderItems) &&
       selectedItems.length === 0
     ) {
       setHasChanges(false)
     }
   }, [orderItems, selectedItems, order])
 
-  const difference = totalAmount - (order?.totalAmount || 0)
+  const difference = totalAmount - (Number(order?.totalPrice) || 0)
 
   const updateOrderHandler = async () => {
     const updatedItems = [

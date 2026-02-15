@@ -11,9 +11,11 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ICustomerDetails, IOrder, IOrderItem } from '@/types'
+import { IOrder, IOrderItem } from '@/types'
 import OrderStatusSelector from '@/components/admin/orders/orderDetails/OrderStatusSelector'
 import { routes } from '@/config/routes'
+import { ShippingAddress } from '@/schemas/checkout-form.schema'
+import CurrencySymbol from '@/components/common/CurrencySymbol'
 
 export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
   {
@@ -65,6 +67,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
         </Link>
       )
     },
+    enableSorting: false,
   },
   {
     accessorKey: 'createdAt',
@@ -87,28 +90,29 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
     },
   },
   {
-    accessorKey: 'customerDetails',
+    accessorKey: 'shippingAddress',
     header: () => {
       return <h6 className="font-semibold">Customer</h6>
     },
     cell: ({ row }) => {
-      const customerDetails: ICustomerDetails = row.getValue('customerDetails')
+      const shippingAddress: ShippingAddress = row.getValue('shippingAddress')
+      const userEmail = row.original.user.email
       return (
         <div>
           <Popover>
             <PopoverTrigger asChild>
               <button className="hover:text-Orange h-full w-full text-left transition-colors">
-                {customerDetails?.fullName}
+                {shippingAddress?.firstName} {shippingAddress.lastName}
               </button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-fit rounded-lg">
               <div className="space-y-1 text-sm">
-                <p className="font-semibold">{customerDetails?.fullName}</p>
-                <p>{customerDetails?.address?.city}</p>
-                <p className="mt-2">{customerDetails?.phoneNumber}</p>
-                <p className="text-muted-foreground mt-2">
-                  {customerDetails?.email}
+                <p className="font-semibold">
+                  {shippingAddress?.firstName} {shippingAddress.lastName}
                 </p>
+                <p>{shippingAddress.city}</p>
+                <p className="mt-2">{shippingAddress.phoneNumber}</p>
+                <p className="text-muted-foreground mt-2">{userEmail}</p>
               </div>
             </PopoverContent>
           </Popover>
@@ -131,13 +135,13 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
     },
   },
   {
-    accessorKey: 'totalAmount',
+    accessorKey: 'totalPrice',
     header: () => {
       return <h6 className="font-semibold">Price</h6>
     },
     cell: ({ row }) => {
-      const price: number = row.getValue('totalAmount')
-      return <div>Rs. {price.toLocaleString('en-PK')}</div>
+      const price: number = row.getValue('totalPrice')
+      return <CurrencySymbol amount={price} />
     },
   },
   // {
@@ -155,12 +159,12 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
   //   },
   // },
   {
-    accessorKey: 'items',
+    accessorKey: 'orderItems',
     header: () => {
       return <h6 className="font-semibold">Item</h6>
     },
     cell: ({ row }) => {
-      const item: IOrderItem[] = row.getValue('items')
+      const item: IOrderItem[] = row.getValue('orderItems')
       const status: string = row.getValue('status')
       const length = item?.length
       return (
@@ -213,7 +217,7 @@ export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
       return (
         <OrderStatusSelector
           orderId={orderId}
-          initialStatus={status}
+          status={status}
           mutate={mutate}
         />
       )

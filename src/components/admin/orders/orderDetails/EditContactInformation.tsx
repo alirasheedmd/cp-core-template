@@ -18,29 +18,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ActionButtons } from '@/components/common/ActionButtons'
-// Data imports
-import { dummyOrders } from '@/data/dummyOrders'
 // Server action imports
 import {
   updateOrderContactInfo,
   type UpdateOrderContactInfoState,
 } from '@/app/actions/admin/main/order'
+import { editContactInfoSchema } from '@/schemas/update-user.schema'
 
-const formSchema = z.object({
-  phoneNumber: z
-    .string()
-    .min(1, 'Phone number is required')
-    .transform((val) => val.replace(/[\s\-\(\)]/g, '')) // Remove spaces, dashes, and parentheses
-    .pipe(
-      z
-        .string()
-        .regex(/^\+?[0-9]+$/, 'Must contain only numbers and optional + prefix')
-        .min(8, 'Phone number must be at least 8 digits')
-        .max(20, 'Phone number must not exceed 20 digits'),
-    ),
-})
-
-type EditContactInfoFormValues = z.infer<typeof formSchema>
+type EditContactInfoFormValues = z.infer<typeof editContactInfoSchema>
 
 export default function EditContactInformation({
   userEmail,
@@ -58,13 +43,10 @@ export default function EditContactInformation({
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
-  // Find the order from dummy data
-  const order = dummyOrders.find((order) => order.orderId === orderId)
-
   const form = useForm<EditContactInfoFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(editContactInfoSchema),
     defaultValues: {
-      phoneNumber: order?.customerDetails.phoneNumber || userPhoneNumber || '',
+      phoneNumber: userPhoneNumber || '',
     },
   })
 

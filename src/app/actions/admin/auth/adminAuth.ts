@@ -1,6 +1,5 @@
 'use server'
 
-import { z } from 'zod'
 import { nanoid } from 'nanoid'
 import { createAdminUser } from '@/lib/dal'
 import { getUserByEmail } from '@/lib/dal'
@@ -9,19 +8,10 @@ import { deleteSession } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { verifyPassword, createSession } from '@/lib/auth'
 import { routes } from '@/config/routes'
+import { createUserSchema, signinSchema } from '@/schemas/auth.schema'
 
 /////// CREATE NEW ADMIN USER /////////
-
-// Form validation schema
-const createUserSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(100, 'Password must be less than 100 characters'),
-})
-
-interface CreateUserState {
+export interface CreateUserState {
   success: boolean
   error: string
   fields?: {
@@ -106,13 +96,6 @@ export async function createNewAdminUser(
 }
 
 ///////// SIGN IN //////////
-
-// Form validation schema
-const signinSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
-})
-
 interface SignInState {
   error: string
 }

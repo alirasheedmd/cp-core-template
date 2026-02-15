@@ -1,5 +1,6 @@
 'use server'
 
+import { deleteOrder as deleteOrderInDB } from '@/lib/dal'
 import { revalidatePath } from 'next/cache'
 
 /**
@@ -153,7 +154,7 @@ export async function deleteOrder(
   orderId: string,
 ): Promise<OrderActionResponse> {
   try {
-    // TODO: Replace with actual database/API call to delete the order
+    await deleteOrderInDB(orderId)
     console.log('Deleting order:', orderId)
 
     // Invalidate/revalidate the orders list and order detail page

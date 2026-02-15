@@ -7,14 +7,19 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/components/ui/select'
-import { useState } from 'react'
+import { updatePaidStatus } from '@/lib/dal'
 
-export default function PaymentStatusSelector() {
-  const [status, setStatus] = useState<string>('unpaid')
-
-  const handleStatusChange = (newStatus: string) => {
-    setStatus(newStatus)
-    // console.log("Payment status changed to:", newStatus);
+interface PaymentStatusSelectorProps {
+  orderId: string
+  isPaid: boolean
+}
+export default function PaymentStatusSelector({
+  orderId,
+  isPaid,
+}: PaymentStatusSelectorProps) {
+  const status = isPaid ? 'paid' : 'unpaid'
+  const handleStatusChange = async (value: string) => {
+    await updatePaidStatus(orderId, value)
   }
   return (
     <div className="w-fit">
