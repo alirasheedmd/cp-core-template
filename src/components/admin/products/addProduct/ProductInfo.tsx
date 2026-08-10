@@ -21,6 +21,8 @@ import { IProduct, IWebCategory } from '@/types'
 
 export type ProductFormValues = z.infer<typeof productSchema>
 
+const currentDate = new Date().toISOString().split('T')[0]
+
 interface ProductInfoProps {
   data?: ProductFormValues
   id?: string
@@ -113,7 +115,7 @@ export default function ProductInfo({
         : [],
       publishDate: state.data?.publishDate
         ? state.data?.publishDate
-        : new Date(performance.now()).toISOString().split('T')[0],
+        : currentDate,
       ...(state?.data ?? {}),
     },
   })

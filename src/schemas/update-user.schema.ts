@@ -27,7 +27,7 @@ export const customerSchema = z.object({
   unitNumber: z.string().optional(),
   country: z.string().min(1, 'Country is required'),
   tag: z.string().optional(),
-  notes: z.string().optional()
+  notes: z.string().optional(),
 })
 
 ////////////// Edit Contact Information //////////////

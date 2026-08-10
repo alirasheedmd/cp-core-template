@@ -1,13 +1,10 @@
 'use client'
 
 import {
-  ColumnDef,
   flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
+  type RowData,
   SortingState,
-  getSortedRowModel,
-  useReactTable,
+  useTable,
 } from '@tanstack/react-table'
 
 import {
@@ -20,32 +17,31 @@ import {
 } from '@/components/ui/table'
 
 import { DataTablePagination } from '@/components/common/DataTablePagination'
+import { dataTableFeatures, type DataTableColumnDef } from '@/lib/data-table'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData extends RowData> {
+  columns: DataTableColumnDef<TData>[]
   data: TData[]
   onRowSelectionChange: (selectedData: TData[]) => void
   clearSelectionTrigger?: boolean
 }
 
-export function CategoriesDataTable<TData, TValue>({
+export function CategoriesDataTable<TData extends RowData>({
   columns,
   data,
   onRowSelectionChange,
   clearSelectionTrigger,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [lastClearTrigger, setLastClearTrigger] = useState(false)
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,

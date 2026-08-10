@@ -5,7 +5,7 @@ import Link from 'next/link'
 import CategoryActions from '@/components/admin/categories/categoryTable/CategoryActions'
 import { routes } from '@/config/routes'
 import { ICategory } from '@/types'
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import EmptyProductView from '@/components/admin/products/productTable/EmptyProductView'
 import CategoryListMobile from '@/components/admin/categories/categoryTable/CategoryListMobile'
 import { CategoriesDataTable } from '@/app/admin/(main)/categories/category-data-table'
@@ -15,7 +15,7 @@ import { categoriesTabs } from '@/data/tabs'
 
 interface CategoryClientContainerProps {
   categories: ICategory[]
-  columns: ColumnDef<ICategory, string | number>[]
+  columns: DataTableColumnDef<ICategory>[]
 }
 
 export default function CategoryClientContainer({
@@ -127,7 +127,7 @@ export default function CategoryClientContainer({
         ) : (
           <>
             <div className="hidden lg:block">
-              <CategoriesDataTable<ICategory, string | number>
+              <CategoriesDataTable<ICategory>
                 columns={columns}
                 data={filteredCategories}
                 onRowSelectionChange={setSelectedRows}

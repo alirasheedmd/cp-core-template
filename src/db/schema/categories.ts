@@ -27,7 +27,6 @@ export const categories = pgTable('categories', {
 
 export type Category = InferSelectModel<typeof categories>
 
-
 export type ProductCategory = InferSelectModel<typeof productCategories>
 
 export const categoryRelations = relations(categories, ({ many, one }) => ({

@@ -3,7 +3,7 @@ import OrderClientComponent from './OrderClientComponent'
 import { IOrder } from '@/types'
 
 interface OrderComponentProps {
-    orderId: string
+  orderId: string
 }
 
 const OrderDetailServerComponent = async ({ orderId }: OrderComponentProps) => {
@@ -11,11 +11,9 @@ const OrderDetailServerComponent = async ({ orderId }: OrderComponentProps) => {
 
   const orderData = {
     ...order,
-    orderId: order?.id
+    orderId: order?.id,
   }
-  return (
-      <OrderClientComponent orderId={orderId} order={orderData as IOrder}/>
-  )
+  return <OrderClientComponent orderId={orderId} order={orderData as IOrder} />
 }
 
 export default OrderDetailServerComponent

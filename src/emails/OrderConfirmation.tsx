@@ -1,4 +1,4 @@
-import { OrderItem } from "@/db/schema";
+import { OrderItem } from '@/db/schema'
 import {
   Body,
   Container,

@@ -98,7 +98,7 @@ export async function customerSignUp(formData: FormData): Promise<AuthState> {
 
   if (!validatedFields.success) {
     return {
-      error: validatedFields.error.errors[0].message || 'Invalid input',
+      error: validatedFields.error.issues[0].message || 'Invalid input',
     }
   }
 

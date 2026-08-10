@@ -1,4 +1,4 @@
-import { customerSignOut } from "@/app/actions/web/auth/webAuth"
+import { customerSignOut } from '@/app/actions/web/auth/webAuth'
 
 const SignoutButton = () => {
   const handleLogout = async () => {

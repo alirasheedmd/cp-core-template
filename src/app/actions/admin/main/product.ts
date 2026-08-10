@@ -65,7 +65,7 @@ export async function createProduct(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string[]> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         const path = err.path[0] as string
         if (!errors[path]) {
           errors[path] = []
@@ -147,7 +147,7 @@ export async function updateProduct(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string[]> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         const path = err.path[0] as string
         if (!errors[path]) {
           errors[path] = []

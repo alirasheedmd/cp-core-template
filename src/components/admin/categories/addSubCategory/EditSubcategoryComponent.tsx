@@ -3,12 +3,14 @@ import SubcategoryInfo, { SubcategoryFormValues } from './SubcategoryInfo'
 import { IWebCategory } from '@/types'
 
 interface EditSubcategoryProps {
-    subcategoryId: string
+  subcategoryId: string
 }
 
-const EditSubcategoryComponent = async ({ subcategoryId }: EditSubcategoryProps) => {
+const EditSubcategoryComponent = async ({
+  subcategoryId,
+}: EditSubcategoryProps) => {
   const subcategory = await getCategory(subcategoryId)
-  const categories = await getAllCategories()  
+  const categories = await getAllCategories()
   return (
     <SubcategoryInfo
       data={subcategory as SubcategoryFormValues}

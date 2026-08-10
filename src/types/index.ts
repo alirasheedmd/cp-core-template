@@ -115,12 +115,7 @@ export interface IOrder {
   orderId: string
   userId: string
   status:
-    | 'pending'
-    | 'confirmed'
-    | 'shipped'
-    | 'delivered'
-    | 'cancelled'
-    | 'returned'
+    'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled' | 'returned'
   paymentMethod: 'cash_on_delivery' | 'bank_transfer'
   shippingAddress: ShippingAddress
   itemsPrice: number | string

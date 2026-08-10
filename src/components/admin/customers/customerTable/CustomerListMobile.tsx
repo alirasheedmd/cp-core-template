@@ -7,7 +7,9 @@ interface CustomerListMobileProps {
   customers: ICustomerDetails[]
 }
 
-const CustomerListMobile: React.FC<CustomerListMobileProps> = ({ customers }) => {
+const CustomerListMobile: React.FC<CustomerListMobileProps> = ({
+  customers,
+}) => {
   return (
     <div className="space-y-4 p-2">
       {customers.map((customer) => (
@@ -16,19 +18,25 @@ const CustomerListMobile: React.FC<CustomerListMobileProps> = ({ customers }) =>
           className="rounded-lg bg-white p-4 shadow-sm"
         >
           <Link href={routes.admin.customerEdit(customer.id)}>
-            <h3 className="text-lg font-semibold">{customer.firstName}{' '}{customer.lastName}</h3>
-            </Link>
-          <div className=" flex items-start">
+            <h3 className="text-lg font-semibold">
+              {customer.firstName} {customer.lastName}
+            </h3>
+          </Link>
+          <div className="flex items-start">
             <span className="text-sm font-medium">
-              {customer.city || ''}{customer.city && customer.country ? ', ' : ''}{customer.country || ''}
+              {customer.city || ''}
+              {customer.city && customer.country ? ', ' : ''}
+              {customer.country || ''}
             </span>
           </div>
           <div>
-            <span className="text-sm font-medium text-gray-900 mr-5">
-              {customer.ordersCount} orders 
+            <span className="mr-5 text-sm font-medium text-gray-900">
+              {customer.ordersCount} orders
             </span>
             <span className="text-sm font-medium text-gray-900">
-              {customer.totalAmount ? formatCurrency2(customer.totalAmount) : formatCurrency2(0)} 
+              {customer.totalAmount
+                ? formatCurrency2(customer.totalAmount)
+                : formatCurrency2(0)}
             </span>
           </div>
         </div>

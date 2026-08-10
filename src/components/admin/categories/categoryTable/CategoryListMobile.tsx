@@ -6,7 +6,9 @@ interface CategoryListMobileProps {
   categories: ICategory[]
 }
 
-const CategoryListMobile: React.FC<CategoryListMobileProps> = ({ categories }) => {
+const CategoryListMobile: React.FC<CategoryListMobileProps> = ({
+  categories,
+}) => {
   return (
     <div className="space-y-4 p-2">
       {categories.map((category) => {

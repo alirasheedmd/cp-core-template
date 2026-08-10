@@ -1,8 +1,9 @@
 @font-face {
   font-family: 'SaudiRiyalSymbol';
-  src: url('/fonts/saudiriyal.woff2') format('woff2'),
-       url('/fonts/saudiriyal.woff') format('woff'),
-       url('/fonts/saudiriyal.ttf') format('truetype');
+  src:
+    url('/fonts/saudiriyal.woff2') format('woff2'),
+    url('/fonts/saudiriyal.woff') format('woff'),
+    url('/fonts/saudiriyal.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -13,4 +14,4 @@
   font-weight: normal;
   color: inherit;
   font-size: inherit;
-} 
+}

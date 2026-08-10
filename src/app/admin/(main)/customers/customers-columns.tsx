@@ -1,7 +1,7 @@
 'use client'
 
 import { ICustomerDetails } from '@/types'
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -10,7 +10,7 @@ import { format } from 'date-fns'
 import { routes } from '@/config/routes'
 import { formatCurrency2 } from '@/lib/utils'
 
-export const customersColumns: ColumnDef<ICustomerDetails>[] = [
+export const customersColumns: DataTableColumnDef<ICustomerDetails>[] = [
   // Checkbox column
   {
     id: 'select',
@@ -65,7 +65,7 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
         </Link>
       )
     },
-    sortingFn: (rowA, rowB, columnId) => {
+    sortFn: (rowA, rowB, columnId) => {
       const a = rowA.getValue(columnId) as string
       const b = rowB.getValue(columnId) as string
       return a.localeCompare(b)
@@ -159,7 +159,7 @@ export const customersColumns: ColumnDef<ICustomerDetails>[] = [
       const formatted = format(date, 'dd/MM/yyyy')
       return <div className="ml-3">{formatted}</div>
     },
-    sortingFn: (rowA, rowB, columnId) => {
+    sortFn: (rowA, rowB, columnId) => {
       const a: Date = rowA.getValue(columnId)
       const b: Date = rowB.getValue(columnId)
       const dateA = a instanceof Date ? a : new Date(a)

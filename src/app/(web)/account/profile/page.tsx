@@ -4,8 +4,8 @@ import React, { Suspense } from 'react'
 const ProfilePage = () => {
   return (
     <Suspense fallback={<div>Loading</div>}>
-      <Profile/>
-  </Suspense>
+      <Profile />
+    </Suspense>
   )
 }
 

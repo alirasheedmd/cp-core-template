@@ -154,4 +154,3 @@ export async function resendVerificationOTPForResetPassword(email: string) {
     }
   }
 }
-

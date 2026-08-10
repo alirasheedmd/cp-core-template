@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import Link from 'next/link'
 import CustomerActions from '@/components/admin/customers/customerTable/CustomerActions'
 import CustomerListMobile from '@/components/admin/customers/customerTable/CustomerListMobile'
@@ -13,7 +13,7 @@ import { deleteCustomers } from '@/lib/dal'
 
 interface CustomerClientContainerProps {
   customers: ICustomerDetails[]
-  columns: ColumnDef<ICustomerDetails, string | number>[]
+  columns: DataTableColumnDef<ICustomerDetails>[]
 }
 
 export default function CustomerClientContainer({
@@ -36,7 +36,10 @@ export default function CustomerClientContainer({
     return customers
       .filter((customer: ICustomerDetails) => {
         const queryLower = query.toLowerCase()
-        return customer.firstName.toLowerCase().includes(queryLower) || customer.lastName.toLowerCase().includes(queryLower)
+        return (
+          customer.firstName.toLowerCase().includes(queryLower) ||
+          customer.lastName.toLowerCase().includes(queryLower)
+        )
       })
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
   }, [customers, query])
@@ -96,7 +99,7 @@ export default function CustomerClientContainer({
         ) : (
           <>
             <div className="hidden lg:block">
-              <CustomersDataTable<ICustomerDetails, string | number>
+              <CustomersDataTable<ICustomerDetails>
                 columns={columns}
                 data={filteredCustomers}
                 onRowSelectionChange={setSelectedRows}

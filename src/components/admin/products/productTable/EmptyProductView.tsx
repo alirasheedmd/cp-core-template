@@ -1,7 +1,7 @@
-import { PiPackageThin } from "react-icons/pi";
+import { PiPackageThin } from 'react-icons/pi'
 
 interface EmptyProductViewProps {
-  message: string;
+  message: string
 }
 
 const EmptyProductView: React.FC<EmptyProductViewProps> = ({ message }) => {
@@ -10,7 +10,7 @@ const EmptyProductView: React.FC<EmptyProductViewProps> = ({ message }) => {
       <PiPackageThin className="text-[6rem] text-gray-300" />
       <p className="text-sm">{message}</p>
     </div>
-  );
-};
+  )
+}
 
-export default EmptyProductView;
+export default EmptyProductView

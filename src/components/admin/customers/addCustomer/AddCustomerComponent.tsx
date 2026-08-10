@@ -1,9 +1,7 @@
 import CustomerInfo from './CustomerInfo'
 
 const AddCustomerComponent = async () => {
-  return (
-    <CustomerInfo />
-  )
+  return <CustomerInfo />
 }
 
 export default AddCustomerComponent

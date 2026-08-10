@@ -33,9 +33,8 @@ const CategoryActions: React.FC<CategoryActionsProps> = ({
   selectedRowCount,
   onDelete,
   sortConfig,
-  onSortChange
+  onSortChange,
 }) => {
-  
   const [open, setOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -51,7 +50,7 @@ const CategoryActions: React.FC<CategoryActionsProps> = ({
       setOpen(false)
     }
   }
-  
+
   return (
     <div className="mb-3 flex items-center gap-x-3 lg:mb-0">
       {/* Search Input */}

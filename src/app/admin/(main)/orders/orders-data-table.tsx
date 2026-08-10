@@ -1,13 +1,10 @@
 'use client'
 
 import {
-  ColumnDef,
   flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
+  type RowData,
   SortingState,
-  getSortedRowModel,
-  useReactTable,
+  useTable,
 } from '@tanstack/react-table'
 
 import {
@@ -20,22 +17,23 @@ import {
 } from '@/components/ui/table'
 
 import { DataTablePagination } from '@/components/common/DataTablePagination'
+import { dataTableFeatures, type DataTableColumnDef } from '@/lib/data-table'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { debounce } from 'lodash'
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData extends RowData> {
+  columns: DataTableColumnDef<TData>[]
   data: TData[]
   onSelectedRowsChange: (selectedData: TData[]) => void
   clearSelectionTrigger?: boolean
 }
 
-export function OrdersDataTable<TData, TValue>({
+export function OrdersDataTable<TData extends RowData>({
   columns,
   data,
   onSelectedRowsChange,
   clearSelectionTrigger,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   // Initialize sorting state with a default sort by orderId
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'orderId', desc: false },
@@ -43,13 +41,11 @@ export function OrdersDataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = useState({})
   const [lastClearTrigger, setLastClearTrigger] = useState(false)
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,

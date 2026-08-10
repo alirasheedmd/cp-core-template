@@ -52,11 +52,12 @@ const bankDetails = {
 // }
 
 interface OrderConfirmationProps {
-    order: OrderData
+  order: OrderData
 }
 
-export default function OrderConfirmationComponent(props: OrderConfirmationProps) {
-  
+export default function OrderConfirmationComponent(
+  props: OrderConfirmationProps,
+) {
   const { order } = props
   return (
     <WebContainer className="py-8">

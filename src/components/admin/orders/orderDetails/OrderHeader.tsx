@@ -12,17 +12,19 @@ interface OrderHeaderProps {
 
 export default function OrderHeader({ order, orderId }: OrderHeaderProps) {
   const formattedStatus =
-  order.status.charAt(0).toUpperCase() + order.status.slice(1)
+    order.status.charAt(0).toUpperCase() + order.status.slice(1)
   return (
     <div className="flex items-start justify-between px-5 lg:px-0">
       <div>
         <div className="flex gap-x-2">
           <p className="font-semibold">#{orderId}</p>
           <p className="bg-LightGrey flex items-center gap-x-1 rounded-lg px-2 py-1 text-xs">
-            <FaCircle className="text-[8px] text-neutral-600" /> {order.isPaid === true ? 'Paid' : 'Unpaid'}
+            <FaCircle className="text-[8px] text-neutral-600" />{' '}
+            {order.isPaid === true ? 'Paid' : 'Unpaid'}
           </p>
           <p className="bg-LightGrey flex items-center gap-x-1 rounded-lg px-2 py-1 text-xs">
-            <FaCircle className="text-[8px] text-neutral-600" /> {formattedStatus}
+            <FaCircle className="text-[8px] text-neutral-600" />{' '}
+            {formattedStatus}
           </p>
         </div>
         <p className="mt-1">

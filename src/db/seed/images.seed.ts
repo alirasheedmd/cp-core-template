@@ -44,7 +44,6 @@ export default async function seedImages() {
     })
   }
 
-
   const result = await db.insert(schema.images).values(imagesData)
 
   console.log(`Seeding completed successfully! ${result}`)

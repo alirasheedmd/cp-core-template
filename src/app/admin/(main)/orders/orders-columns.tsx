@@ -1,6 +1,6 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import {
   Popover,
   PopoverContent,
@@ -17,7 +17,9 @@ import { routes } from '@/config/routes'
 import { ShippingAddress } from '@/schemas/checkout-form.schema'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
 
-export const ordersColumns = (mutate: () => void): ColumnDef<IOrder>[] => [
+export const ordersColumns = (
+  mutate: () => void,
+): DataTableColumnDef<IOrder>[] => [
   {
     id: 'select',
     header: ({ table }) => (

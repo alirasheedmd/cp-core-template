@@ -17,7 +17,10 @@ interface OrderClientComponentProps {
   order: IOrder
 }
 
-export default function OrderClientComponent({ orderId, order }: OrderClientComponentProps) {
+export default function OrderClientComponent({
+  orderId,
+  order,
+}: OrderClientComponentProps) {
   // const [uploadResponse, setUploadResponse] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 

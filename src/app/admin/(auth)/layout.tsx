@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { routes } from '@/config/routes'
 
+const currentYear = new Date().getFullYear()
+
 export default function AdminAuthLayout({
   children,
 }: {
@@ -40,8 +42,7 @@ export default function AdminAuthLayout({
       <footer className="bg-black py-4">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-gray-500">
-            &copy; {new Date(performance.now()).getFullYear()} Curious Packet.
-            All rights reserved.
+            &copy; {currentYear} Curious Packet. All rights reserved.
           </p>
         </div>
       </footer>

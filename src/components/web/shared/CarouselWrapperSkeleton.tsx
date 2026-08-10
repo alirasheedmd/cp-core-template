@@ -14,7 +14,7 @@ export default function CarouselWrapperSkeleton() {
           </div>
 
           <div>
-            <div className="relative -mx-3 overflow-x-auto pb-3 pl-6 [-ms-overflow-style:none] [scrollbar-width:none] md:-mx-5 md:pl-10 xl:pl-9 [&::-webkit-scrollbar]:hidden">
+            <div className="relative -mx-3 [scrollbar-width:none] overflow-x-auto pb-3 pl-6 [-ms-overflow-style:none] md:-mx-5 md:pl-10 xl:pl-9 [&::-webkit-scrollbar]:hidden">
               <div className="flex gap-3 pb-4 md:gap-5">
                 {[...Array(5)].map((_, index) => (
                   <div key={index} className="w-45 flex-shrink-0 md:w-57">

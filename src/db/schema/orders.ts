@@ -46,8 +46,7 @@ export const orders = pgTable('orders', {
   createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
-export type Order = InferSelectModel<typeof orders> 
-  
+export type Order = InferSelectModel<typeof orders>
 
 export const orderRelations = relations(orders, ({ one, many }) => ({
   user: one(users, {

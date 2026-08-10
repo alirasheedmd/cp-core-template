@@ -28,7 +28,7 @@ export default function CarouselWrapper<T>({
 
       <div className="w-full">
         <div className="mx-auto max-w-[1365px] overflow-visible">
-          <div className="relative -mx-3 overflow-x-auto pb-3 pl-6 [-ms-overflow-style:none] [scrollbar-width:none] md:-mx-5 md:pl-12 [&::-webkit-scrollbar]:hidden">
+          <div className="relative -mx-3 [scrollbar-width:none] overflow-x-auto pb-3 pl-6 [-ms-overflow-style:none] md:-mx-5 md:pl-12 [&::-webkit-scrollbar]:hidden">
             <div className="flex gap-3 pb-4 md:gap-5">
               {data.slice(0, itemsToShow).map((item, index) => (
                 <div key={index} className="w-45 flex-shrink-0 md:w-57">

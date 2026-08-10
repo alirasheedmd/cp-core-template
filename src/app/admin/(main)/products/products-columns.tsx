@@ -1,7 +1,7 @@
 'use client'
 
 import { IProduct } from '@/types'
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -11,7 +11,7 @@ import { format } from 'date-fns'
 import { routes } from '@/config/routes'
 import CurrencySymbol from '@/components/common/CurrencySymbol'
 
-export const productsColumns: ColumnDef<IProduct>[] = [
+export const productsColumns: DataTableColumnDef<IProduct>[] = [
   // Checkbox column
   {
     id: 'select',
@@ -174,7 +174,7 @@ export const productsColumns: ColumnDef<IProduct>[] = [
       const formatted = format(date, 'dd/MM/yyyy')
       return <div className="ml-3">{formatted}</div>
     },
-    sortingFn: (rowA, rowB, columnId) => {
+    sortFn: (rowA, rowB, columnId) => {
       // eslint-disable-next-line
       const a: any = rowA.getValue(columnId)
       // eslint-disable-next-line

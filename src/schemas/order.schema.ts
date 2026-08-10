@@ -1,8 +1,8 @@
-import { z } from "zod"
-import { editContactInfoSchema } from "./update-user.schema"
-import { orders } from "@/db/schema/orders"
-import { orderItems } from "@/db/schema/orderItems"
-import { createInsertSchema } from "drizzle-zod"
+import { z } from 'zod'
+import { editContactInfoSchema } from './update-user.schema'
+import { orders } from '@/db/schema/orders'
+import { orderItems } from '@/db/schema/orderItems'
+import { createInsertSchema } from 'drizzle-zod'
 
 export const insertOrderSchema = createInsertSchema(orders, {
   shippingAddress: editContactInfoSchema,
@@ -17,5 +17,5 @@ export const insertOrderSchema = createInsertSchema(orders, {
 })
 
 export const insertOrderItemSchema = createInsertSchema(orderItems, {
-    price: z.number(),
+  price: z.number(),
 })

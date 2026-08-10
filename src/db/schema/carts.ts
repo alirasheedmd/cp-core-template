@@ -1,7 +1,7 @@
-import { json, numeric, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { InferSelectModel, relations } from "drizzle-orm";
-import { CartItem } from "@/types";
+import { json, numeric, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { users } from './users'
+import { InferSelectModel, relations } from 'drizzle-orm'
+import { CartItem } from '@/types'
 
 export const carts = pgTable('carts', {
   id: text('id').primaryKey(),
@@ -20,10 +20,9 @@ export const carts = pgTable('carts', {
 
 export type Cart = InferSelectModel<typeof carts>
 
-
 export const cartsRelations = relations(carts, ({ one }) => ({
-    user: one(users, {
-        fields: [carts.userId],
-        references: [users.id]
-    })
-}));
+  user: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+}))

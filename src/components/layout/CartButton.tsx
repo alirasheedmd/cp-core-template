@@ -4,8 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { routes } from '@/config/routes'
 import { Cart } from '@/db/schema'
 
-export default function CartButton({cart} : { cart: Cart} ) {
-
+export default function CartButton({ cart }: { cart: Cart }) {
   return (
     <Link href={routes.cart}>
       <ShoppingBag className="mr-1" />

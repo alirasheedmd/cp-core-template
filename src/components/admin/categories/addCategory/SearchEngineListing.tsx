@@ -27,18 +27,16 @@ export default function SearchEngineListing() {
 
   return (
     <AdminContainer>
-        <h2 className="mb-4 text-sm font-semibold">Search Engine Listing</h2>
+      <h2 className="mb-4 text-sm font-semibold">Search Engine Listing</h2>
 
       <p className="text-xs">
         Add a title and description to see how this product might appear in a
         search engine listing
       </p>
 
-      <hr className='mt-5'/>
+      <hr className="mt-5" />
 
-      <div
-        className='mt-6 space-y-5 overflow-hidden px-1 max-h-[1000px] opacity-100 duration-300'
-      >
+      <div className="mt-6 max-h-[1000px] space-y-5 overflow-hidden px-1 opacity-100 duration-300">
         {/* Page Title */}
         <div className="space-y-2">
           <Label htmlFor="pageTitle" className="text-sm">
@@ -75,7 +73,8 @@ export default function SearchEngineListing() {
           />
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-700">
-              {currentMetaKeywordLength} out of {metaKeywordLength} characters used
+              {currentMetaKeywordLength} out of {metaKeywordLength} characters
+              used
             </p>
             {errors.metaKeyword && (
               <p className="text-destructive text-sm">

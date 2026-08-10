@@ -13,7 +13,7 @@ export const subCategorySchema = z.object({
     )
     .min(1, 'At least one image is required'),
   status: z.enum(['enable', 'disable'], {
-    required_error: 'Status is required',
+    error: 'Status is required',
   }),
   slug: z.string().min(1, 'Slug is required'),
   pageTitle: z
@@ -42,7 +42,7 @@ export const categorySchema = z.object({
     }),
   ),
   status: z.enum(['enable', 'disable'], {
-    required_error: 'Status is required',
+    error: 'Status is required',
   }),
   slug: z.string().min(1, 'Slug is required'),
   pageTitle: z
@@ -59,4 +59,3 @@ export const categorySchema = z.object({
     .optional(),
   urlHandle: z.string().optional(),
 })
-

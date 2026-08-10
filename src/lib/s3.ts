@@ -3,12 +3,11 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3'
-import { Credentials } from 'aws-sdk/lib/core'
 
-const credentials = new Credentials({
+const credentials = {
   accessKeyId: process.env.S3_BUCKET_ACCESS_KEY!,
   secretAccessKey: process.env.S3_BUCKET_SECRET_KEY!,
-})
+}
 
 export const s3 = new S3Client({
   region: process.env.NEXT_PUBLIC_S3_BUCKET_REGION,

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import { productsTabs } from '@/data/tabs'
 import { IProduct } from '@/types'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ import { deleteProducts } from '@/lib/dal'
 
 interface ProductClientContainerProps {
   products: IProduct[]
-  columns: ColumnDef<IProduct, string | number>[]
+  columns: DataTableColumnDef<IProduct>[]
 }
 
 export default function ProductClientContainer({
@@ -127,7 +127,7 @@ export default function ProductClientContainer({
         ) : (
           <>
             <div className="hidden lg:block">
-              <ProductsDataTable<IProduct, string | number>
+              <ProductsDataTable<IProduct>
                 columns={columns}
                 data={filteredProducts}
                 onRowSelectionChange={setSelectedRows}

@@ -4,7 +4,6 @@ import CurrencySymbol from '@/components/common/CurrencySymbol'
 import { QuantitySelector } from '@/components/web/shared/QuantitySelector'
 import PrimaryButton from '@/components/common/PrimaryButton'
 import { round2 } from '@/lib/utils'
-import { CartItem } from '@/types'
 import { useState } from 'react'
 import AddToCartButton from '@/components/web/shared/AddToCartButton'
 
@@ -39,19 +38,8 @@ export default function ProductInfo({
   // const quantity = cart?.items?.length
   //   ? cart.items.find((pId) => pId.productId === id)?.qty ?? 1
   //   : 1
-  const item: CartItem = {
-    productId: id,
-    name: title,
-    slug: slug,
-    qty: quantity,
-    image: image as string,
-    price: round2(price),
-    shippingPrice: Number(shippingPrice),
-    tax: Number(tax),
-  }
   const onQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) return
-    item.qty = newQuantity
     return setQuantity(newQuantity)
   }
   return (

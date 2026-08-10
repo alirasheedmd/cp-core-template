@@ -15,5 +15,4 @@ const Checkout = async () => {
   return <CheckoutForm user={user as User} cart={cart as Cart} />
 }
 
-
 export default Checkout

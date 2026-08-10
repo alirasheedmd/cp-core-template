@@ -1,4 +1,4 @@
-"use server";
+'use server'
 
 import { CategoryFormValues } from '@/components/admin/categories/addCategory/CategoryInfo'
 import { categorySchema, subCategorySchema } from '@/schemas/category.schema'
@@ -56,7 +56,7 @@ export async function createCategory(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string[]> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         const path = err.path[0] as string
         if (!errors[path]) {
           errors[path] = []
@@ -121,7 +121,7 @@ export async function updateCategory(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string[]> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         const path = err.path[0] as string
         if (!errors[path]) {
           errors[path] = []
@@ -175,7 +175,7 @@ export async function createSubcategory(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string[]> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         const path = err.path[0] as string
         if (!errors[path]) {
           errors[path] = []
@@ -245,7 +245,7 @@ export async function updateSubcategory(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string[]> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         const path = err.path[0] as string
         if (!errors[path]) {
           errors[path] = []

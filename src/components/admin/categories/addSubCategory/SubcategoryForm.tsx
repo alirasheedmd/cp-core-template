@@ -11,9 +11,14 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select'
-import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
 import { SubcategoryFormValues } from './SubcategoryInfo'
 import { IWebCategory } from '@/types'
 
@@ -21,7 +26,7 @@ interface CategoryFormProps {
   categories: IWebCategory[]
 }
 
-export default function SubcategoryForm({ categories,  }: CategoryFormProps) {
+export default function SubcategoryForm({ categories }: CategoryFormProps) {
   const {
     register,
     control,
@@ -30,7 +35,6 @@ export default function SubcategoryForm({ categories,  }: CategoryFormProps) {
   } = useFormContext<SubcategoryFormValues>()
 
   const name = watch('name') || ''
-
 
   return (
     <div className="space-y-5">

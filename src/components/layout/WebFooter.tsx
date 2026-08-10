@@ -3,7 +3,6 @@ import { FaFacebook } from 'react-icons/fa'
 import { GrInstagram } from 'react-icons/gr'
 import { BsTwitterX } from 'react-icons/bs'
 import { Separator } from '@/components/ui/separator'
-import { useState, useEffect } from 'react'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import { LuDot } from 'react-icons/lu'
@@ -32,13 +31,9 @@ const footerLinks = [
   },
 ]
 
+const currentYear = new Date().getFullYear()
+
 export default function WebFooter() {
-  const [year, setYear] = useState<number>(2025)
-
-  useEffect(() => {
-    setYear(new Date().getFullYear())
-  }, [])
-
   return (
     <div className="my-10 w-full">
       <div className="text-Red mb-10 flex items-center justify-center gap-x-5 text-xl">
@@ -51,7 +46,7 @@ export default function WebFooter() {
       <Separator className="my-5" />
       <WebContainer>
         <div className="text-Red flex flex-wrap items-center justify-center gap-2 text-sm">
-          <p className="text-center">&copy; {year} Safety Vision</p>
+          <p className="text-center">&copy; {currentYear} Safety Vision</p>
           {footerLinks.map((link) => (
             <div key={link.label} className="flex items-center">
               <LuDot />

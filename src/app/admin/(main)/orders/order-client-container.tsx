@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { type DataTableColumnDef } from '@/lib/data-table'
 import { orderTabs } from '@/data/tabs'
 import { IOrder } from '@/types'
 import { OrdersDataTable } from './orders-data-table'
@@ -13,7 +13,7 @@ import { deleteOrders } from '@/lib/dal'
 
 interface OrderClientContainerProps {
   orders: IOrder[]
-  columns: (mutate: () => void) => ColumnDef<IOrder, string | number>[]
+  columns: (mutate: () => void) => DataTableColumnDef<IOrder>[]
 }
 
 export default function OrderClientContainer({

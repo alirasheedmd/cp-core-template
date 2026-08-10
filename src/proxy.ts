@@ -28,7 +28,7 @@ const isPublicPath = (path: string) => {
   )
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Skip middleware for public routes

@@ -12,9 +12,14 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select'
-import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
 
 export default function CategoryForm() {
   const {
@@ -26,14 +31,14 @@ export default function CategoryForm() {
 
   const name = watch('name') || ''
 
-
   return (
     <div className="space-y-5">
       <AdminContainer className="space-y-7">
-
         {/* Name */}
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm">Name</Label>
+          <Label htmlFor="name" className="text-sm">
+            Name
+          </Label>
           <Input
             id="name"
             {...register('name')}
@@ -51,30 +56,38 @@ export default function CategoryForm() {
             control={control}
             name="status"
             render={({ field }) => (
-              <FormItem className='mt-2 w-full mr-1'>
-                <FormLabel htmlFor="status" className="text-sm">Status</FormLabel>
+              <FormItem className="mt-2 mr-1 w-full">
+                <FormLabel htmlFor="status" className="text-sm">
+                  Status
+                </FormLabel>
                 <Select onValueChange={field.onChange} {...field}>
                   <FormControl>
-                      <SelectTrigger className={`${errors.status ? 'border-destructive' : 'border-black'} w-full`}>
-                          <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
+                    <SelectTrigger
+                      className={`${errors.status ? 'border-destructive' : 'border-black'} w-full`}
+                    >
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                      <SelectItem value="enable">Enable</SelectItem>
-                      <SelectItem value="disable">Disable</SelectItem>
+                    <SelectItem value="enable">Enable</SelectItem>
+                    <SelectItem value="disable">Disable</SelectItem>
                   </SelectContent>
                 </Select>
-                 {errors.status && (
-                    <p className="text-destructive text-sm">{errors.status.message}</p>
-                  )}
-                </FormItem>
+                {errors.status && (
+                  <p className="text-destructive text-sm">
+                    {errors.status.message}
+                  </p>
+                )}
+              </FormItem>
             )}
           />
         </div>
 
         {/* Slug */}
         <div className="space-y-2">
-          <Label htmlFor="slug" className="text-sm">Slug</Label>
+          <Label htmlFor="slug" className="text-sm">
+            Slug
+          </Label>
           <Input
             id="slug"
             {...register('slug')}
@@ -92,7 +105,9 @@ export default function CategoryForm() {
 
         {/* Media */}
         <div className="space-y-2">
-          <Label htmlFor="images" className="text-sm">Media</Label>
+          <Label htmlFor="images" className="text-sm">
+            Media
+          </Label>
           <MultiImageUploader<CategoryFormValues>
             name="images"
             form={useFormContext<CategoryFormValues>()}
