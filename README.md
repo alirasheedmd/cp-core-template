@@ -8,6 +8,26 @@ CP Core combines a customer storefront, commerce workflows, and an administrativ
 
 > This public repository is a portfolio version of a product foundation developed by a small cross-functional team that I assembled and led. It demonstrates the product and technical approach; the public Git history is not intended to represent the full original collaboration.
 
+## Product preview
+
+### Customer storefront
+
+![CP Core customer storefront](docs/images/storefront.png)
+
+### Administrative platform
+
+#### Dashboard
+
+![CP Core admin dashboard](docs/images/admin-dashboard.png)
+
+#### Product management
+
+![CP Core product management](docs/images/admin-products.png)
+
+#### Order management
+
+![CP Core order management](docs/images/admin-orders.png)
+
 ## My role
 
 **Founder · architecture, backend engineering, and delivery leadership**
@@ -208,7 +228,7 @@ npm run db:seed
 npm run local-dev
 ```
 
-Before submitting a change, run the same core checks used by continuous integration:
+Before submitting a change, run the core validation checks:
 
 ```bash
 npm run lint
