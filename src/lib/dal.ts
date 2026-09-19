@@ -39,6 +39,7 @@ import { SubcategoryFormValues } from '@/components/admin/categories/addSubCateg
 import { ProductFormValues } from '@/components/admin/products/addProduct/ProductInfo'
 import { CustomerFormValues } from '@/components/admin/customers/addCustomer/CustomerInfo'
 import { sendOrderConfirmationEmail } from './email'
+import { normalizeImageUrl } from './imgix-loader'
 // import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
@@ -161,7 +162,9 @@ export async function getAllProducts() {
         categories: categories,
         price: product.price,
         images:
-          productImages.length > 0 ? productImages.map((img) => img.src) : null,
+          productImages.length > 0
+            ? productImages.map((img) => normalizeImageUrl(img.src))
+            : null,
         slug: product.slug,
         shippingPrice: product.shippingPrice as string,
         tax: product.tax as string,
@@ -232,7 +235,10 @@ export async function getProductsByCategory(categorySlug: string) {
         description: product.description,
         categories: categories,
         price: product.price,
-        image: productImages.length > 0 ? productImages[0].src : null,
+        image:
+          productImages.length > 0
+            ? normalizeImageUrl(productImages[0].src)
+            : null,
         slug: product.slug,
         shippingPrice: product.shippingPrice as string,
         tax: product.tax as string,
@@ -276,7 +282,7 @@ export async function getOneProduct(productSlug: string) {
 
   return {
     ...product,
-    images: productImages.map((img) => img.src),
+    images: productImages.map((img) => normalizeImageUrl(img.src)),
   }
 }
 
@@ -597,7 +603,10 @@ export async function getProduct(productId: string) {
     publishDate: product.publishDate
       ? product.publishDate.toISOString().split('T')[0]
       : product.publishDate,
-    images: productImages,
+    images: productImages.map((image) => ({
+      ...image,
+      src: normalizeImageUrl(image.src),
+    })),
     categories: categories.map((c) => c.id),
   }
 }
@@ -624,7 +633,9 @@ export async function getAllCategories() {
       id: category.id,
       name: category.name,
       images:
-        categoryImages.length > 0 ? categoryImages.map((img) => img.src) : null,
+        categoryImages.length > 0
+          ? categoryImages.map((img) => normalizeImageUrl(img.src))
+          : null,
       slug: category.slug,
       status: category.status,
       parentId: category.parentId,
@@ -659,7 +670,10 @@ export async function getSubcategoriesByParentId(parentId: string) {
     return {
       id: category.id,
       name: category.name,
-      image: categoryImages.length > 0 ? categoryImages[0].src : null,
+      image:
+        categoryImages.length > 0
+          ? normalizeImageUrl(categoryImages[0].src)
+          : null,
       slug: category.slug,
       status: category.status,
       parentId: category.parentId,
@@ -712,7 +726,7 @@ export async function getOneCategory(categorySlug: string) {
 
   return {
     ...category,
-    images: categoryImages.map((img) => img.src),
+    images: categoryImages.map((img) => normalizeImageUrl(img.src)),
   }
 }
 
@@ -730,7 +744,10 @@ export async function getCategory(categoryId: string) {
 
   return {
     ...category,
-    images: categoryImages,
+    images: categoryImages.map((image) => ({
+      ...image,
+      src: normalizeImageUrl(image.src),
+    })),
   }
 }
 
@@ -1012,6 +1029,14 @@ export async function getMyCart() {
     })
 
     return cart
+      ? {
+          ...cart,
+          items: cart.items.map((item) => ({
+            ...item,
+            image: normalizeImageUrl(item.image),
+          })),
+        }
+      : cart
   } catch (error) {
     // Handle cookie errors during server rendering
     if (error instanceof Error && error.message.includes('cookies')) {
@@ -1397,6 +1422,14 @@ export async function getOrderById(orderId: string) {
     },
   })
   return order
+    ? {
+        ...order,
+        orderItems: order.orderItems.map((item) => ({
+          ...item,
+          image: normalizeImageUrl(item.image),
+        })),
+      }
+    : order
 }
 export async function getOrdersByUserId(userId: string) {
   const order = await db.query.orders.findMany({
@@ -1419,7 +1452,13 @@ export async function getAllOrders() {
     },
   })
 
-  return order
+  return order.map((item) => ({
+    ...item,
+    orderItems: item.orderItems.map((orderItem) => ({
+      ...orderItem,
+      image: normalizeImageUrl(orderItem.image),
+    })),
+  }))
 }
 
 export async function deleteOrders(ids: string[]) {
